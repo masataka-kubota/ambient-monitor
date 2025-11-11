@@ -1,0 +1,6 @@
+# firmware
+firmware/**/secrets.h
+isrgrootx1.pem
+
+# misc
+.DS_Store
