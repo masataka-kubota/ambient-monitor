@@ -1,0 +1,13 @@
+source "$(dirname "$0")/common/functions.sh"
+
+current_branch=$(git symbolic-ref --short HEAD)
+base_branch=$(get_base_branch)
+repo_root="$(git rev-parse --show-toplevel)"
+
+# Only run on backend directory.
+if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^backend/')" ]; then
+  cd "$repo_root/backend"
+  bun run type-check
+  bun run lint
+  # bun run test:ci
+fi
