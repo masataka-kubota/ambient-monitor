@@ -1,3 +1,6 @@
+# root
+node_modules
+
 # firmware
 firmware/**/secrets.h
 isrgrootx1.pem
