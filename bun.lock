@@ -13,6 +13,7 @@
         "hono": "^4.10.4",
       },
       "devDependencies": {
+        "@cloudflare/workers-types": "^4.20251111.0",
         "@hono/eslint-config": "^2.0.3",
         "eslint": "^9.39.1",
         "eslint-plugin-import": "^2.32.0",
