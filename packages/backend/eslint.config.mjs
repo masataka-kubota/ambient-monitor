@@ -28,7 +28,7 @@ export default [
               position: 'before',
             },
           ],
-          pathGroupsExcludedImportTypes: ['hono'],
+          pathGroupsExcludedImportTypes: [],
           alphabetize: { order: 'asc', caseInsensitive: true },
           'newlines-between': 'always',
           warnOnUnassignedImports: true,
@@ -38,6 +38,6 @@ export default [
   },
 
   {
-    ignores: ['node_modules', '/.wrangler', 'eslint.config.mjs'],
+    ignores: ['node_modules', '/.wrangler', 'eslint.config.mjs', 'vitest.config.ts'],
   },
 ]
