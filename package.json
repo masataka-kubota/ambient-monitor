@@ -1,9 +1,16 @@
 {
+  "name": "ambient-monitor",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {},
   "devDependencies": {
     "husky": "^9.1.7"
   },
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev:backend": "bun run --workspace backend dev",
+    "dev:firmware": "bun run --workspace firmware dev"
   }
 }
