@@ -11,6 +11,10 @@ WiFiClientSecure wifiClient;
 PubSubClient client(wifiClient);
 Adafruit_BME280 bme;
 
+unsigned long lastPublishToHiveMQ = 0;
+const unsigned long PUBLISH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+// unsigned long lastSendBLE = 0;
+
 // 📶 Wi-Fi connection
 void connectToWiFi() {
   Serial.print("Connecting to WiFi: ");
@@ -84,11 +88,15 @@ void setup() {
 }
 
 void loop() {
+  unsigned long now = millis();
+
   if (!client.connected()) {
     connectToMQTT(); // reconnect
   }
   client.loop();
 
-  publishSensorData(); // send sensor data
-  delay(60000);        // wait for 1 minute
+  if (now - lastPublishToHiveMQ >= PUBLISH_INTERVAL_MS) {
+    publishSensorData();
+    lastPublishToHiveMQ = now;
+  }
 }
