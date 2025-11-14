@@ -5,8 +5,8 @@ base_branch=$(get_base_branch)
 repo_root="$(git rev-parse --show-toplevel)"
 
 # Only run on backend directory.
-if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^backend/')" ]; then
-  cd "$repo_root/backend"
+if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^packages/backend/')" ]; then
+  cd "$repo_root/packages/backend"
   bun run type-check
   bun run lint
   # bun run test:ci
