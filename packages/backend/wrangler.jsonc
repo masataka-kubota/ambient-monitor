@@ -2,7 +2,15 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "backend",
   "main": "src/index.ts",
-  "compatibility_date": "2025-11-11"
+  "compatibility_date": "2025-11-11",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ambient-monitor-prod",
+      "database_id": "ae105b4e-7ecf-44b5-8e8f-ed2bc9c510c6",
+      "migrations_dir": "drizzle/migrations",
+    },
+  ],
   // "compatibility_flags": [
   //   "nodejs_compat"
   // ],
@@ -19,13 +27,6 @@
   //   {
   //     "binding": "MY_BUCKET",
   //     "bucket_name": "my-bucket"
-  //   }
-  // ],
-  // "d1_databases": [
-  //   {
-  //     "binding": "MY_DB",
-  //     "database_name": "my-database",
-  //     "database_id": ""
   //   }
   // ],
   // "ai": {
