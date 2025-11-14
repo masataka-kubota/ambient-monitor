@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 
-const app = new Hono().get('/', (c) => {
-  return c.json({ message: 'Hello Hono!' })
-})
+import rootApp from '@/rootApp'
+
+const app = new Hono().route('/', rootApp)
 
 export default app

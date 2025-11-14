@@ -2,11 +2,11 @@ import { testClient } from 'hono/testing'
 
 import { describe, it, expect } from 'vitest'
 
-import app from '@/index'
+import rootApp from '@/rootApp'
 
 describe('GET /', () => {
   // Create the test client from the app instance
-  const client = testClient(app)
+  const client = testClient(rootApp)
 
   it('should return 200 response', async () => {
     const res = await client.index.$get()
