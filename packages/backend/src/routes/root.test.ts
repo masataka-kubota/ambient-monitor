@@ -1,8 +1,7 @@
 import { testClient } from 'hono/testing'
-
 import { describe, it, expect } from 'vitest'
 
-import rootApp from '@/rootApp'
+import rootApp from '@/routes/root'
 
 describe('GET /', () => {
   // Create the test client from the app instance
