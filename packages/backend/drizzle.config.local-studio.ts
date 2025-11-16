@@ -1,4 +1,5 @@
 import { defineConfig } from 'drizzle-kit'
+
 import { execSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 
@@ -17,7 +18,7 @@ function findD1Database(): string {
     return dbPath
   } catch (error) {
     console.error('Failed to find D1 database:', error)
-    process.exit(1)
+    throw error
   }
 }
 
