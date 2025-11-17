@@ -1,8 +1,7 @@
 import { Hono } from 'hono'
 import { ZodError } from 'zod'
 
-import measurementsApp from '@/routes/measurements'
-import rootApp from '@/routes/root'
+import { measurementsApp, rootApp } from '@/routes'
 
 const app = new Hono()
 
