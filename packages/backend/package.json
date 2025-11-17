@@ -22,6 +22,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.10.7",
     "@cloudflare/workers-types": "^4.20251111.0",
     "@hono/eslint-config": "^2.0.3",
     "better-sqlite3": "^12.4.1",
@@ -31,7 +32,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.8",
+    "vitest": "~3.2.0",
     "wrangler": "^4.4.0"
   }
 }
