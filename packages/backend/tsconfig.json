@@ -10,7 +10,7 @@
       "@/*": ["src/*"]
     },
     "lib": ["ESNext"],
-    "types": ["vitest/globals", "@cloudflare/workers-types"],
+    "types": ["vitest/globals", "@cloudflare/workers-types", "@cloudflare/vitest-pool-workers"],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx"
   }

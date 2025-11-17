@@ -9,5 +9,5 @@ if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^packag
   cd "$repo_root/packages/backend"
   bun run type-check
   bun run lint
-  # bun run test:ci
+  bun run test
 fi

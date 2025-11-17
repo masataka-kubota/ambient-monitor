@@ -20,15 +20,7 @@ export default [
       'import/order': [
         'error',
         {
-          groups: ['builtin', 'external', 'internal'],
-          pathGroups: [
-            {
-              pattern: 'hono{,/**}',
-              group: 'external',
-              position: 'before',
-            },
-          ],
-          pathGroupsExcludedImportTypes: [],
+          groups: ['external', 'builtin', 'internal'],
           alphabetize: { order: 'asc', caseInsensitive: true },
           'newlines-between': 'always',
           warnOnUnassignedImports: true,
@@ -38,6 +30,6 @@ export default [
   },
 
   {
-    ignores: ['node_modules', '/.wrangler', 'eslint.config.mjs', 'vitest.config.ts'],
+    ignores: ['node_modules', '/.wrangler', 'eslint.config.mjs'],
   },
 ]
