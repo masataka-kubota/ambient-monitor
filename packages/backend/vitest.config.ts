@@ -1,19 +1,30 @@
-import { defineWorkersConfig } from '@cloudflare/vitest-pool-workers/config'
+import { defineWorkersConfig, readD1Migrations } from '@cloudflare/vitest-pool-workers/config'
 
-import { resolve } from 'path'
+import path from 'node:path'
 
-export default defineWorkersConfig({
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
-    },
-  },
-  test: {
-    globals: true,
-    poolOptions: {
-      workers: {
-        wrangler: { configPath: './wrangler.jsonc' },
+export default defineWorkersConfig(async () => {
+  const migrationsPath = path.join(__dirname, 'drizzle/migrations')
+  const migrations = await readD1Migrations(migrationsPath)
+  return {
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
       },
     },
-  },
+    test: {
+      globals: true,
+      setupFiles: ['./test/apply-migrations.ts'],
+      poolOptions: {
+        workers: {
+          wrangler: { configPath: './wrangler.jsonc' },
+          singleWorker: true,
+          isolatedStorage: false,
+          miniflare: {
+            d1Databases: ['DB'],
+            bindings: { TEST_MIGRATIONS: migrations },
+          },
+        },
+      },
+    },
+  }
 })
