@@ -1,21 +1,12 @@
 import { zValidator } from '@hono/zod-validator'
-import type { DrizzleD1Database } from 'drizzle-orm/d1'
 import { drizzle } from 'drizzle-orm/d1'
 import { Hono } from 'hono'
 
 import { measurements } from '@/db/schema'
+import type { D1Env } from '@/types'
 import { createMeasurementsSchema } from '@/validations'
 
-interface Env {
-  Bindings: {
-    DB: D1Database
-  }
-  Variables: {
-    db: DrizzleD1Database
-  }
-}
-
-const measurementsApp = new Hono<Env>()
+const measurementsApp = new Hono<D1Env>()
   .use(async (c, next) => {
     c.set('db', drizzle(c.env.DB))
     await next()
