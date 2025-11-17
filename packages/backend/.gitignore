@@ -15,6 +15,9 @@ dist/
 node_modules/
 .wrangler
 
+# vitest coverage
+coverage/
+
 # env
 .env
 .env.production
