@@ -28,10 +28,11 @@ export default defineWorkersConfig(async () => {
       coverage: {
         provider: 'istanbul' as const,
         exclude: [
-          'vitest.config.ts',
-          'drizzle.config.ts',
-          'drizzle.config.local-studio.ts',
-          'drizzle/*',
+          '**/node_modules/**',
+          '**/.wrangler/**',
+          '**/dist/**',
+          '**/*.config**.ts',
+          '**/drizzle/**',
           '**/migrations/**',
         ],
       },
