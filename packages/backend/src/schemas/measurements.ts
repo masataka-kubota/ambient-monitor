@@ -4,7 +4,6 @@ import { createInsertSchema } from 'drizzle-zod'
 import { measurements } from '@/db/schema'
 import { jwtHmacAuth } from '@/middleware'
 import {
-  NotFoundErrorSchema,
   SuccessResponseSchema,
   UnauthorizedErrorSchema,
   ValidationErrorSchema,
@@ -47,10 +46,6 @@ export const createMeasurementRoute = createRoute({
     401: {
       content: { 'application/json': { schema: UnauthorizedErrorSchema } },
       description: 'Unauthorized error',
-    },
-    404: {
-      content: { 'application/json': { schema: NotFoundErrorSchema } },
-      description: 'Device not found',
     },
     422: {
       content: { 'application/json': { schema: ValidationErrorSchema } },

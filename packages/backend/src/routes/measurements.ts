@@ -16,17 +16,17 @@ const measurementsApp = new OpenAPIHono<D1Env>({
 
   const device = await db.select().from(devices).where(eq(devices.deviceId, deviceIdStr)).get()
 
+  /* istanbul ignore next -- @preserve */
   if (!device) {
-    return c.json(
-      { success: false, error: { field: 'deviceId', message: 'Device not found' } },
-      404
-    )
+    // Unreachable code: the JWT HMAC auth middleware ensures that a valid, active device exists.
+    throw new Error('Invariant violation: device should exist')
   }
 
   await db
     .insert(measurements)
     .values({ deviceId: device.id, temperature, humidity, pressure })
     .returning()
+
   return c.json({ success: true }, 201)
 })
 
