@@ -1,21 +1,30 @@
 #include <WiFi.h>
-#include <WiFiClientSecure.h>
-#include <PubSubClient.h>
-#include <Wire.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <ArduinoJson.h>
+#include <JWTUtils.h>
 #include "secrets.h"
 
-WiFiClientSecure wifiClient;
-PubSubClient client(wifiClient);
 Adafruit_BME280 bme;
+String DEVICE_JWT;
 
-unsigned long lastPublishToHiveMQ = 0;
 const unsigned long PUBLISH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
-// unsigned long lastSendBLE = 0;
+const unsigned long JWT_EXPIRATION_SEC = 30; // 30 seconds
+unsigned long lastPublish = 0;
 
-// 📶 Wi-Fi connection
+// ---------------- NTP ----------------
+void syncTime() {
+  configTime(0, 0, "pool.ntp.org", "ntp.nict.jp"); // UTC
+  Serial.print("Syncing time");
+  while (time(nullptr) < 1700000000) {
+    Serial.print(".");
+    delay(500);
+  }
+  Serial.println("\nTime synchronized!");
+}
+
+// ---------------- Wi-Fi ----------------
 void connectToWiFi() {
   Serial.print("Connecting to WiFi: ");
   Serial.println(WIFI_SSID);
@@ -30,73 +39,77 @@ void connectToWiFi() {
   Serial.println(WiFi.localIP());
 }
 
-// 📶 MQTT connection
-void connectToMQTT() {
-  client.setServer(MQTT_SERVER, MQTT_PORT);
-  wifiClient.setCACert(ROOT_CA);
+// ---------------- JWT ----------------
+String generateJWT() {
+  time_t now = time(nullptr);
 
-  while (!client.connected()) {
-    Serial.println("Connecting to HiveMQ securely...");
-    if (client.connect("esp32-client-001", MQTT_USER, MQTT_PASS)) {
-      Serial.println("Connected to HiveMQ!");
-    } else {
-      Serial.print("Failed, rc=");
-      Serial.print(client.state());
-      delay(2000);
-    }
-  }
+  DynamicJsonDocument doc(256);
+  doc["iat"] = now;
+  doc["exp"] = now + JWT_EXPIRATION_SEC;
+  doc["iss"] = DEVICE_ID;
+
+  String payload;
+  serializeJson(doc, payload);
+
+  return JWTUtils::createJWT(payload, DEVICE_SECRET);
 }
 
-// 📡 BME280 data Transmission
+// ---------------- POST ----------------
 void publishSensorData() {
-  // get sensor data
   float temperature = bme.readTemperature();
   float humidity = bme.readHumidity();
   float pressure = bme.readPressure() / 100.0;
 
-  // Transform BME280 data to JSON
-  DynamicJsonDocument doc(128);
+  DynamicJsonDocument doc(256);
   doc["temperature"] = temperature;
   doc["humidity"] = humidity;
   doc["pressure"] = pressure;
 
-  char jsonBuffer[128];
-  serializeJson(doc, jsonBuffer);
+  String jsonStr;
+  serializeJson(doc, jsonStr);
 
-  // publish
-  client.publish("sensors/device/data", jsonBuffer);
+  // Generate JWT
+  DEVICE_JWT = generateJWT();
 
-  // debug
-  Serial.println("Published JSON:");
-  Serial.println(jsonBuffer);
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin(HONO_API_URL);
+    http.addHeader("Content-Type", "application/json");
+    http.addHeader("Authorization", String("Bearer ") + DEVICE_JWT);
+    http.addHeader("X-Device-Id", DEVICE_ID);
+
+    int status = http.POST(jsonStr);
+
+    Serial.print("Response code: ");
+    Serial.println(status);
+    Serial.println("Response body: " + http.getString());
+
+    http.end();
+  } else {
+    Serial.println("WiFi not connected!");
+  }
 }
 
+// ---------------- setup ----------------
 void setup() {
   Serial.begin(115200);
-  while (!Serial); // wait for serial port to connect
+  while (!Serial);
 
-  // initialize BME280 sensor
   if (!bme.begin(0x76)) {
-    Serial.println("BME280 not found! Check wiring or I2C address.");
+    Serial.println("BME280 not found!");
     while (1);
   }
-
   Serial.println("BME280 sensor initialized successfully!");
 
   connectToWiFi();
-  connectToMQTT();
+  syncTime();
 }
 
+// ---------------- loop ----------------
 void loop() {
   unsigned long now = millis();
-
-  if (!client.connected()) {
-    connectToMQTT(); // reconnect
-  }
-  client.loop();
-
-  if (now - lastPublishToHiveMQ >= PUBLISH_INTERVAL_MS) {
+  if (now - lastPublish >= PUBLISH_INTERVAL_MS) {
     publishSensorData();
-    lastPublishToHiveMQ = now;
+    lastPublish = now;
   }
 }
