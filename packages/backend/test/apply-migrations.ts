@@ -1,7 +1,10 @@
 import { applyD1Migrations, env } from 'cloudflare:test'
-import { TEST_DEVICE } from 'test/constants'
+import { TEST_DEVICE, TEST_ENV } from 'test/constants'
 
 await applyD1Migrations(env.DB, env.TEST_MIGRATIONS)
+
+// Set test environment
+env.EXPO_API_TOKEN = TEST_ENV.EXPO_API_TOKEN
 
 // Seed required test data
 // The tests rely on a specific device (TEST_DEVICE).
