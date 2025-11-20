@@ -2,7 +2,7 @@ import { createRoute, z } from '@hono/zod-openapi'
 import { createInsertSchema } from 'drizzle-zod'
 
 import { measurements } from '@/db/schema'
-import { jwtHmacAuth } from '@/middleware'
+import { jwtHmacAuth, withDb } from '@/middleware'
 import {
   SuccessResponseSchema,
   UnauthorizedErrorSchema,
@@ -31,7 +31,7 @@ export const HeadersSchema = z.object({
 export const createMeasurementRoute = createRoute({
   method: 'post',
   path: '/',
-  middleware: [jwtHmacAuth()],
+  middleware: [withDb, jwtHmacAuth],
   request: {
     headers: HeadersSchema,
     body: {

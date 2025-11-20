@@ -6,6 +6,7 @@ import { testClient } from 'hono/testing'
 import { TEST_DEVICE } from 'test/constants'
 import { describe, it, expect } from 'vitest'
 
+import { withDb } from '@/middleware'
 import { jwtHmacAuth } from '@/middleware/jwtHmacAuth'
 import { HeadersSchema, SuccessResponseSchema, UnauthorizedErrorSchema } from '@/schemas'
 import type { Env } from '@/types'
@@ -36,7 +37,7 @@ describe('jwtHmacAuth middleware', () => {
   const route = createRoute({
     method: 'get',
     path: '/test',
-    middleware: [jwtHmacAuth()],
+    middleware: [withDb, jwtHmacAuth],
     request: {
       headers: HeadersSchema,
     },
