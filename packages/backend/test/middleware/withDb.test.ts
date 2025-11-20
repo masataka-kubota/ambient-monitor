@@ -6,7 +6,7 @@ import { TEST_DEVICE } from 'test/constants'
 import { describe, it, expect } from 'vitest'
 
 import { devices } from '@/db/schema'
-import { withDb } from '@/middleware/withDb'
+import { withDb } from '@/middleware/'
 import { InternalServerErrorSchema, SuccessResponseSchema } from '@/schemas'
 import type { Env } from '@/types'
 
