@@ -12,4 +12,12 @@
       "migrations_dir": "./drizzle/migrations",
     },
   ],
+  "vars": {
+    // The following are defined in `.env` for development,
+    // and in Cloudflare Workers environment variables for production.
+    // "CLOUDFLARE_ACCOUNT_ID": ""
+    // "CLOUDFLARE_DATABASE_ID": ""
+    // "CLOUDFLARE_D1_TOKEN": ""
+    // "EXPO_API_TOKEN": "",
+  },
 }
