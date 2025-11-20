@@ -6,12 +6,12 @@ import { verify } from 'hono/jwt'
 
 import { devices } from '@/db/schema'
 import type { UnauthorizedErrorSchema } from '@/schemas'
-import type { D1Env } from '@/types'
+import type { Env } from '@/types'
 
 type JwtErrorResponse = z.infer<typeof UnauthorizedErrorSchema>
 
 export const jwtHmacAuth = () => {
-  return async (c: Context<D1Env>, next: Next) => {
+  return async (c: Context<Env>, next: Next) => {
     // Get token and deviceId from headers
     const token = c.req.header('Authorization')?.replace('Bearer ', '')
     const deviceId = c.req.header('X-Device-Id')

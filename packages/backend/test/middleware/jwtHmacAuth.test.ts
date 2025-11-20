@@ -8,7 +8,7 @@ import { describe, it, expect } from 'vitest'
 
 import { jwtHmacAuth } from '@/middleware/jwtHmacAuth'
 import { HeadersSchema, SuccessResponseSchema, UnauthorizedErrorSchema } from '@/schemas'
-import type { D1Env } from '@/types'
+import type { Env } from '@/types'
 
 describe('jwtHmacAuth middleware', () => {
   let nextCalled: boolean
@@ -52,7 +52,7 @@ describe('jwtHmacAuth middleware', () => {
     },
   })
 
-  const app = new OpenAPIHono<D1Env>().openapi(route, (c) => {
+  const app = new OpenAPIHono<Env>().openapi(route, (c) => {
     nextCalled = true
     return c.json({ success: true }, 200)
   })
