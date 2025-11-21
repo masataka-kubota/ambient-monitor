@@ -5,8 +5,9 @@ import { measurements } from '@/db/schema'
 import { jwtHmacAuth, verifyExpoToken, withDb } from '@/middleware'
 import {
   BearerAuthHeaderSchema,
+  NotFoundErrorSchema,
   SuccessResponseSchema,
-  SuccessWithDataSchema,
+  SuccessWithDataArraySchema,
   UnauthorizedErrorSchema,
   ValidationErrorSchema,
 } from '@/schemas/common'
@@ -22,7 +23,7 @@ const insertSchema = createInsertSchema(measurements, {
 // GET
 const selectSchema = createSelectSchema(measurements, {
   id: z.number().openapi({ example: 1 }),
-  createdAt: z.string().openapi({ example: '2025-11-19T10:00:00Z' }),
+  createdAt: z.string().openapi({ example: '2025-11-19 10:00:00' }),
 })
 
 /* --- POST /measurements --- */
@@ -63,20 +64,20 @@ export const createMeasurementRoute = createRoute({
 })
 
 /* --- GET /measurements --- */
-export const MeasurementListResponseSchema = SuccessWithDataSchema(selectSchema)
+export const MeasurementListResponseSchema = SuccessWithDataArraySchema(selectSchema)
 
 export const MeasurementListQuerySchema = z.object({
   deviceId: z.string().optional().openapi({ example: 'device-id' }),
-  startAt: z.string().optional().openapi({ example: '2025-11-19T10:00:00Z' }),
-  endAt: z.string().optional().openapi({ example: '2025-11-19T10:00:00Z' }),
-  limit: z.number().min(1).max(100).optional().openapi({ example: 10 }),
-  offset: z.number().min(0).optional().openapi({ example: 0 }),
+  startAt: z.string().optional().openapi({ example: '2025-11-19 10:00:00' }),
+  endAt: z.string().optional().openapi({ example: '2025-11-19 10:00:00' }),
+  limit: z.string().regex(/^\d+$/, 'Must be a number').optional().openapi({ example: '10' }),
+  offset: z.string().regex(/^\d+$/, 'Must be a number').optional().openapi({ example: '0' }),
 })
 
 export const listMeasurementsRoute = createRoute({
   method: 'get',
   path: '/',
-  middleware: [verifyExpoToken],
+  middleware: [withDb, verifyExpoToken],
   request: {
     headers: BearerAuthHeaderSchema,
     query: MeasurementListQuerySchema,
@@ -89,6 +90,14 @@ export const listMeasurementsRoute = createRoute({
     401: {
       content: { 'application/json': { schema: UnauthorizedErrorSchema } },
       description: 'Unauthorized',
+    },
+    404: {
+      content: { 'application/json': { schema: NotFoundErrorSchema } },
+      description: 'Not found',
+    },
+    422: {
+      content: { 'application/json': { schema: ValidationErrorSchema } },
+      description: 'Validation error',
     },
   },
 })

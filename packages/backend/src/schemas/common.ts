@@ -15,6 +15,13 @@ export const SuccessWithDataSchema = <T extends z.ZodType>(dataSchema: T) =>
     data: dataSchema,
   })
 
+// 200, 201 with data (array)
+export const SuccessWithDataArraySchema = <T extends z.ZodType>(dataSchema: T) =>
+  z.object({
+    success: SuccessFlag,
+    data: z.array(dataSchema),
+  })
+
 // 401 error
 export const UnauthorizedErrorSchema = z.object({
   success: ErrorFlag,
