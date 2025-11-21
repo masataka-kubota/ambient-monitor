@@ -8,12 +8,16 @@ import { describe, it, expect } from 'vitest'
 
 import { withDb } from '@/middleware'
 import { jwtHmacAuth } from '@/middleware/jwtHmacAuth'
-import { HeadersSchema, SuccessResponseSchema, UnauthorizedErrorSchema } from '@/schemas'
+import {
+  MeasurementCreateHeadersSchema,
+  SuccessResponseSchema,
+  UnauthorizedErrorSchema,
+} from '@/schemas'
 import type { Env } from '@/types'
 
 describe('jwtHmacAuth middleware', () => {
   let nextCalled: boolean
-  let headerData: z.infer<typeof HeadersSchema>
+  let headerData: z.infer<typeof MeasurementCreateHeadersSchema>
 
   beforeEach(async () => {
     nextCalled = false
@@ -21,7 +25,7 @@ describe('jwtHmacAuth middleware', () => {
     const timestamp = Math.floor(Date.now() / 1000)
     const token = await sign(
       {
-        iss: TEST_DEVICE.deviceId,
+        iss: TEST_DEVICE.externalId,
         iat: timestamp,
         exp: timestamp + 30,
       },
@@ -30,7 +34,7 @@ describe('jwtHmacAuth middleware', () => {
     )
     headerData = {
       Authorization: `Bearer ${token}`,
-      'X-Device-Id': TEST_DEVICE.deviceId,
+      'X-Device-Id': TEST_DEVICE.externalId,
     }
   })
 
@@ -39,7 +43,7 @@ describe('jwtHmacAuth middleware', () => {
     path: '/test',
     middleware: [withDb, jwtHmacAuth],
     request: {
-      headers: HeadersSchema,
+      headers: MeasurementCreateHeadersSchema,
     },
     responses: {
       200: {
@@ -101,8 +105,8 @@ describe('jwtHmacAuth middleware', () => {
 
   it('should return 401 if device is inactive', async () => {
     // Set the device to inactive temporarily
-    await env.DB.prepare(`UPDATE devices SET is_active = 0 WHERE device_id = ?`)
-      .bind(TEST_DEVICE.deviceId)
+    await env.DB.prepare(`UPDATE devices SET is_active = 0 WHERE external_id = ?`)
+      .bind(TEST_DEVICE.externalId)
       .run()
 
     const res = await client.test.$get({ header: headerData })
@@ -112,11 +116,6 @@ describe('jwtHmacAuth middleware', () => {
     const data = (await res.json()) as z.infer<typeof UnauthorizedErrorSchema>
     expect(data.success).toBe(false)
     expect(data.error).toEqual({ message: 'Unknown or inactive device' })
-
-    // Restore the device to active after the test
-    await env.DB.prepare(`UPDATE devices SET is_active = 1 WHERE device_id = ?`)
-      .bind(TEST_DEVICE.deviceId)
-      .run()
   })
 
   it('should return 401 if token is invalid', async () => {

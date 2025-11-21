@@ -24,7 +24,7 @@ export const jwtHmacAuth = async (c: Context<Env>, next: Next) => {
 
   // Retrieve the device record from the database using the deviceId
   const db = c.var.db
-  const device = await db.select().from(devices).where(eq(devices.deviceId, deviceId)).get()
+  const device = await db.select().from(devices).where(eq(devices.externalId, deviceId)).get()
   if (!device?.isActive) {
     const res: JwtErrorResponse = {
       success: false,

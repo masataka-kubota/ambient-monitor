@@ -15,6 +15,13 @@ export const SuccessWithDataSchema = <T extends z.ZodType>(dataSchema: T) =>
     data: dataSchema,
   })
 
+// 200, 201 with data (array)
+export const SuccessWithDataArraySchema = <T extends z.ZodType>(dataSchema: T) =>
+  z.object({
+    success: SuccessFlag,
+    data: z.array(dataSchema),
+  })
+
 // 401 error
 export const UnauthorizedErrorSchema = z.object({
   success: ErrorFlag,
@@ -57,4 +64,9 @@ export const InternalServerErrorSchema = z.object({
   error: z.object({
     message: z.string().openapi({ example: 'Internal server error' }),
   }),
+})
+
+// Bearer header
+export const BearerAuthHeaderSchema = z.object({
+  Authorization: z.string().openapi({ example: 'Bearer <token>' }),
 })

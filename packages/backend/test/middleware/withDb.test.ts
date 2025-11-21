@@ -6,7 +6,7 @@ import { TEST_DEVICE } from 'test/constants'
 import { describe, it, expect } from 'vitest'
 
 import { devices } from '@/db/schema'
-import { withDb } from '@/middleware/withDb'
+import { withDb } from '@/middleware/'
 import { InternalServerErrorSchema, SuccessResponseSchema } from '@/schemas'
 import type { Env } from '@/types'
 
@@ -65,7 +65,7 @@ describe('withDb middleware', () => {
       try {
         const { deviceId } = c.req.valid('query')
         const db = c.var.db
-        await db.select().from(devices).where(eq(devices.deviceId, deviceId)).get()
+        await db.select().from(devices).where(eq(devices.externalId, deviceId)).get()
         nextCalled = true
         return c.json({ success: true }, 200)
       } catch {
@@ -76,7 +76,7 @@ describe('withDb middleware', () => {
       try {
         const { deviceId } = c.req.valid('query')
         const db = c.var.db
-        await db.select().from(devices).where(eq(devices.deviceId, deviceId)).get()
+        await db.select().from(devices).where(eq(devices.externalId, deviceId)).get()
         nextCalled = true
         return c.json({ success: true }, 200)
       } catch {
@@ -87,13 +87,13 @@ describe('withDb middleware', () => {
   const client = testClient(app, env)
 
   it('validRoute should returns 200 when DB is set with middleware', async () => {
-    const res = await client.test.$get({ query: { deviceId: TEST_DEVICE.deviceId } })
+    const res = await client.test.$get({ query: { deviceId: TEST_DEVICE.externalId } })
     expect(res.status).toBe(200)
     expect(nextCalled).toBe(true)
   })
 
   it('invalidRoute should returns 500 when DB is not set with middleware', async () => {
-    const res = await client['invalid-test'].$get({ query: { deviceId: TEST_DEVICE.deviceId } })
+    const res = await client['invalid-test'].$get({ query: { deviceId: TEST_DEVICE.externalId } })
     expect(res.status).toBe(500)
     expect(nextCalled).toBe(false)
   })
