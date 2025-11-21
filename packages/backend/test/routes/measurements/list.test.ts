@@ -20,7 +20,7 @@ describe('GET /measurements', () => {
   it('should return 200 with array of measurements', async () => {
     const res = await client.measurements.$get({
       header: headerData,
-      query: { deviceId: TEST_DEVICE.deviceId },
+      query: { deviceId: TEST_DEVICE.externalId },
     })
     expect(res.status).toBe(200)
     const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
@@ -30,15 +30,15 @@ describe('GET /measurements', () => {
 
   it('should return 200 with empty array when no measurements exist', async () => {
     // remove all seed measurements
-    const device = await env.DB.prepare('SELECT id FROM devices WHERE device_id = ?')
-      .bind(TEST_DEVICE.deviceId)
+    const device = await env.DB.prepare('SELECT id FROM devices WHERE external_id = ?')
+      .bind(TEST_DEVICE.externalId)
       .first<{ id: number }>()
     if (!device) throw new Error('TEST_DEVICE not found, seed device first')
     await env.DB.prepare('DELETE FROM measurements WHERE device_id = ?').bind(device.id).run()
 
     const res = await client.measurements.$get({
       header: headerData,
-      query: { deviceId: TEST_DEVICE.deviceId },
+      query: { deviceId: TEST_DEVICE.externalId },
     })
     expect(res.status).toBe(200)
     const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
@@ -50,7 +50,7 @@ describe('GET /measurements', () => {
   it('should return 401 if authorization header is missing', async () => {
     const res = await client.measurements.$get({
       header: { Authorization: 'Bearer invalid-token' },
-      query: { deviceId: TEST_DEVICE.deviceId },
+      query: { deviceId: TEST_DEVICE.externalId },
     })
     expect(res.status).toBe(401)
     const data = (await res.json()) as z.infer<typeof UnauthorizedErrorSchema>
@@ -82,7 +82,7 @@ describe('GET /measurements', () => {
   it('should return 422 when limit and offset are non-numeric strings', async () => {
     const res = await client.measurements.$get({
       header: headerData,
-      query: { deviceId: TEST_DEVICE.deviceId, limit: 'invalid', offset: 'invalid' },
+      query: { deviceId: TEST_DEVICE.externalId, limit: 'invalid', offset: 'invalid' },
     })
     expect(res.status).toBe(422)
     const data = (await res.json()) as z.infer<typeof ValidationErrorSchema>
@@ -106,7 +106,7 @@ describe('GET /measurements', () => {
     const res = await client.measurements.$get({
       header: headerData,
       query: {
-        deviceId: TEST_DEVICE.deviceId,
+        deviceId: TEST_DEVICE.externalId,
         startAt: queryStartAt,
         endAt: queryEndAt,
       },
@@ -125,7 +125,7 @@ describe('GET /measurements', () => {
   it('should respect limit and offset', async () => {
     const res = await client.measurements.$get({
       header: headerData,
-      query: { deviceId: TEST_DEVICE.deviceId, limit: '2', offset: '1' },
+      query: { deviceId: TEST_DEVICE.externalId, limit: '2', offset: '1' },
     })
     expect(res.status).toBe(200)
     const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>

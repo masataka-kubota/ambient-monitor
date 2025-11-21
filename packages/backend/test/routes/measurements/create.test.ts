@@ -18,7 +18,7 @@ describe('POST /measurements', () => {
     const timestamp = Math.floor(Date.now() / 1000)
     const token = await sign(
       {
-        iss: TEST_DEVICE.deviceId,
+        iss: TEST_DEVICE.externalId,
         iat: timestamp,
         exp: timestamp + 30,
       },
@@ -27,7 +27,7 @@ describe('POST /measurements', () => {
     )
     headerData = {
       Authorization: `Bearer ${token}`,
-      'X-Device-Id': TEST_DEVICE.deviceId,
+      'X-Device-Id': TEST_DEVICE.externalId,
     }
   })
 

@@ -25,7 +25,7 @@ describe('jwtHmacAuth middleware', () => {
     const timestamp = Math.floor(Date.now() / 1000)
     const token = await sign(
       {
-        iss: TEST_DEVICE.deviceId,
+        iss: TEST_DEVICE.externalId,
         iat: timestamp,
         exp: timestamp + 30,
       },
@@ -34,7 +34,7 @@ describe('jwtHmacAuth middleware', () => {
     )
     headerData = {
       Authorization: `Bearer ${token}`,
-      'X-Device-Id': TEST_DEVICE.deviceId,
+      'X-Device-Id': TEST_DEVICE.externalId,
     }
   })
 
@@ -105,8 +105,8 @@ describe('jwtHmacAuth middleware', () => {
 
   it('should return 401 if device is inactive', async () => {
     // Set the device to inactive temporarily
-    await env.DB.prepare(`UPDATE devices SET is_active = 0 WHERE device_id = ?`)
-      .bind(TEST_DEVICE.deviceId)
+    await env.DB.prepare(`UPDATE devices SET is_active = 0 WHERE external_id = ?`)
+      .bind(TEST_DEVICE.externalId)
       .run()
 
     const res = await client.test.$get({ header: headerData })

@@ -16,7 +16,7 @@ export const measurements = sqliteTable('measurements', {
 
 export const devices = sqliteTable('devices', {
   id: int('id').primaryKey({ autoIncrement: true }),
-  deviceId: text('device_id').notNull().unique(),
+  externalId: text('external_id').notNull().unique(),
   secret: text('secret').notNull(),
   name: text('name'),
   isActive: int('is_active', { mode: 'boolean' }).notNull().default(true),

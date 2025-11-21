@@ -17,7 +17,7 @@ const measurementsApp = new OpenAPIHono<Env>({
     const { 'X-Device-Id': deviceIdStr } = c.req.valid('header')
     const { temperature, humidity, pressure } = c.req.valid('json')
 
-    const device = await db.select().from(devices).where(eq(devices.deviceId, deviceIdStr)).get()
+    const device = await db.select().from(devices).where(eq(devices.externalId, deviceIdStr)).get()
 
     // Unreachable code: the JWT HMAC auth middleware ensures that a valid, active device exists.
     /* istanbul ignore next -- @preserve */
@@ -44,7 +44,7 @@ const measurementsApp = new OpenAPIHono<Env>({
       return c.json({ success: false, error: { message: 'Missing deviceId' } }, 404)
     }
 
-    const device = await db.select().from(devices).where(eq(devices.deviceId, deviceId)).get()
+    const device = await db.select().from(devices).where(eq(devices.externalId, deviceId)).get()
     if (!device) {
       return c.json({ success: false, error: { message: 'Device not found' } }, 404)
     }

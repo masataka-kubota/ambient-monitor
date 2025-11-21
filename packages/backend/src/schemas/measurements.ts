@@ -34,7 +34,7 @@ export const MeasurementCreateRequestSchema = insertSchema.pick({
 })
 
 export const MeasurementCreateHeadersSchema = BearerAuthHeaderSchema.extend({
-  'X-Device-Id': z.string().openapi({ example: 'Device ID' }),
+  'X-Device-Id': z.string().openapi({ example: 'Device external ID' }),
 })
 
 export const createMeasurementRoute = createRoute({
