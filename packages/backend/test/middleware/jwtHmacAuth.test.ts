@@ -116,11 +116,6 @@ describe('jwtHmacAuth middleware', () => {
     const data = (await res.json()) as z.infer<typeof UnauthorizedErrorSchema>
     expect(data.success).toBe(false)
     expect(data.error).toEqual({ message: 'Unknown or inactive device' })
-
-    // Restore the device to active after the test
-    await env.DB.prepare(`UPDATE devices SET is_active = 1 WHERE device_id = ?`)
-      .bind(TEST_DEVICE.deviceId)
-      .run()
   })
 
   it('should return 401 if token is invalid', async () => {
