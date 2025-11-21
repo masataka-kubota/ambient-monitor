@@ -61,5 +61,5 @@ export const InternalServerErrorSchema = z.object({
 
 // Bearer header
 export const BearerAuthHeaderSchema = z.object({
-  Authorization: z.string().openapi({ example: 'Bearer <EXPO_API_TOKEN>' }),
+  Authorization: z.string().openapi({ example: 'Bearer <token>' }),
 })

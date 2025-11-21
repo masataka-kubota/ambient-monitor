@@ -5,13 +5,13 @@ import { testClient } from 'hono/testing'
 import { TEST_DEVICE } from 'test/constants'
 
 import app from '@/index'
-import type { HeadersSchema, ValidationErrorSchema } from '@/schemas'
+import type { MeasurementCreateHeadersSchema, ValidationErrorSchema } from '@/schemas'
 
 describe('POST /measurements', () => {
   // Create the test client from the app instance
   const client = testClient(app, env)
 
-  let headerData: z.infer<typeof HeadersSchema>
+  let headerData: z.infer<typeof MeasurementCreateHeadersSchema>
   const jsonData = { temperature: 20.55, humidity: 50.55, pressure: 1000.55 }
 
   beforeEach(async () => {

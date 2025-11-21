@@ -8,12 +8,16 @@ import { describe, it, expect } from 'vitest'
 
 import { withDb } from '@/middleware'
 import { jwtHmacAuth } from '@/middleware/jwtHmacAuth'
-import { HeadersSchema, SuccessResponseSchema, UnauthorizedErrorSchema } from '@/schemas'
+import {
+  MeasurementCreateHeadersSchema,
+  SuccessResponseSchema,
+  UnauthorizedErrorSchema,
+} from '@/schemas'
 import type { Env } from '@/types'
 
 describe('jwtHmacAuth middleware', () => {
   let nextCalled: boolean
-  let headerData: z.infer<typeof HeadersSchema>
+  let headerData: z.infer<typeof MeasurementCreateHeadersSchema>
 
   beforeEach(async () => {
     nextCalled = false
@@ -39,7 +43,7 @@ describe('jwtHmacAuth middleware', () => {
     path: '/test',
     middleware: [withDb, jwtHmacAuth],
     request: {
-      headers: HeadersSchema,
+      headers: MeasurementCreateHeadersSchema,
     },
     responses: {
       200: {
