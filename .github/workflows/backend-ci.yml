@@ -28,24 +28,3 @@ jobs:
 
       - name: Run tests
         run: bun --cwd packages/backend test
-
-      - name: Apply D1 migrations
-        run: bun --cwd packages/backend db:migration:remote
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
-          CLOUDFLARE_D1_TOKEN: ${{ secrets.CLOUDFLARE_D1_TOKEN }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-
-      - name: Deploy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: "packages/backend"
-          packageManager: bun # Required for monorepo; root bun.lock is used
-          command: deploy --minify
-          secrets: |
-            EXPO_API_TOKEN
-        env:
-          EXPO_API_TOKEN: ${{ secrets.EXPO_API_TOKEN }}
