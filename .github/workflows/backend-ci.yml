@@ -1,0 +1,30 @@
+name: Backend CI
+
+on:
+  pull_request:
+    paths:
+      - "packages/backend/**"
+      - ".github/workflows/backend-ci.yml"
+      # - "packages/shared/**"
+    branches: ["main", "develop"]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies (root/workspace)
+        run: bun install
+
+      - name: Lint
+        run: bun --cwd packages/backend lint
+
+      - name: Type-check
+        run: bun --cwd packages/backend type-check
+
+      - name: Run tests
+        run: bun --cwd packages/backend test
