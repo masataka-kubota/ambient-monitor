@@ -1,10 +1,42 @@
 // https://docs.expo.dev/guides/using-eslint/
-const { defineConfig } = require('eslint/config');
-const expoConfig = require('eslint-config-expo/flat');
+const { defineConfig, globalIgnores } = require("eslint/config");
+const expoConfig = require("eslint-config-expo/flat");
+const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
 
 module.exports = defineConfig([
+  globalIgnores([
+    "dist/*",
+    "/.expo",
+    "node_modules",
+    "expo-env.d.ts",
+    "dist/*",
+  ]),
   expoConfig,
+  eslintPluginPrettierRecommended,
   {
-    ignores: ['dist/*'],
+    ignores: ["dist/*"],
+  },
+
+  // eslint-plugin-import
+  {
+    rules: {
+      "import/order": [
+        "error",
+        {
+          groups: ["builtin", "external", "internal"],
+          pathGroups: [
+            {
+              pattern: "react",
+              group: "external",
+              position: "before",
+            },
+          ],
+          pathGroupsExcludedImportTypes: ["react"],
+          alphabetize: { order: "asc", caseInsensitive: true },
+          "newlines-between": "always",
+          warnOnUnassignedImports: true,
+        },
+      ],
+    },
   },
 ]);
