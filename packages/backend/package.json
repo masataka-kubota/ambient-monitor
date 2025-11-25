@@ -7,20 +7,34 @@
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "db:generate": "drizzle-kit generate",
+    "db:migration:local": "wrangler d1 migrations apply ambient-monitor --local",
+    "db:migration:remote": "wrangler d1 migrations apply ambient-monitor --remote",
+    "db:studio:local": "drizzle-kit studio --config drizzle.config.local-studio.ts",
+    "db:studio:remote": "drizzle-kit studio --config drizzle.config.ts"
   },
   "dependencies": {
-    "hono": "^4.10.4"
+    "@hono/zod-openapi": "^1.1.5",
+    "drizzle-orm": "^0.44.7",
+    "drizzle-zod": "^0.8.3",
+    "hono": "^4.10.6",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20251111.0",
+    "@cloudflare/vitest-pool-workers": "^0.10.10",
+    "@cloudflare/workers-types": "^4.20251121.0",
     "@hono/eslint-config": "^2.0.3",
+    "@vitest/coverage-istanbul": "3.2.4",
+    "better-sqlite3": "^12.4.5",
+    "drizzle-kit": "^0.31.7",
     "eslint": "^9.39.1",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.8",
-    "wrangler": "^4.4.0"
+    "vitest": "~3.2.4",
+    "wrangler": "^4.50.0"
   }
 }

@@ -1,7 +1,13 @@
-import { Hono } from 'hono'
+import { OpenAPIHono } from '@hono/zod-openapi'
 
-import rootApp from '@/rootApp'
+import { measurementsApp } from '@/routes'
 
-const app = new Hono().route('/', rootApp)
+const app = new OpenAPIHono()
+
+  .notFound((c) => {
+    return c.json({ success: false, message: 'Not Found' }, 404)
+  })
+
+  .route('/measurements', measurementsApp)
 
 export default app

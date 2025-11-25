@@ -3,4 +3,4 @@ source "$(dirname "$0")/common/functions.sh"
 repo_root="$(git rev-parse --show-toplevel)"
 
 # Prohibit direct commits on the 'main' or 'develop' branches
-# prohibit_protected_branch_commits
+prohibit_protected_branch_commits

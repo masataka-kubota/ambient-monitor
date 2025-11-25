@@ -1,0 +1,28 @@
+{
+  "folders": [
+    {
+      "name": "root",
+      "path": "."
+    },
+    {
+      "name": "backend",
+      "path": "./packages/backend"
+    }
+    // {
+    //   "name": "frontend-native",
+    //   "path": "./packages/frontend-native"
+    // },
+    // {
+    //   "name": "shared",
+    //   "path": "./packages/shared"
+    // },
+  ],
+  "settings": {
+    // hide packages directory in root
+    "files.exclude": {
+      "packages": true
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "liveServer.settings.multiRootWorkspaceName": "root"
+  }
+}
