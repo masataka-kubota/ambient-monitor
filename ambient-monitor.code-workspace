@@ -7,11 +7,11 @@
     {
       "name": "backend",
       "path": "./packages/backend"
+    },
+    {
+      "name": "mobile",
+      "path": "./packages/mobile"
     }
-    // {
-    //   "name": "frontend-native",
-    //   "path": "./packages/frontend-native"
-    // },
     // {
     //   "name": "shared",
     //   "path": "./packages/shared"
