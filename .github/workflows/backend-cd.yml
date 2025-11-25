@@ -6,17 +6,11 @@ on:
       - "packages/backend/**"
       - ".github/workflows/backend-cd.yml"
       # - "packages/shared/**"
-    branches:
-      - main
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
-      CLOUDFLARE_D1_TOKEN: ${{ secrets.CLOUDFLARE_D1_TOKEN }}
-      EXPO_API_TOKEN: ${{ secrets.EXPO_API_TOKEN }}
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
@@ -26,8 +20,13 @@ jobs:
       - name: Install dependencies (root/workspace)
         run: bun install
 
-      - name: Apply remote (production) migrations
+      - name: Apply D1 migrations
         run: bun --cwd packages/backend db:migration:remote
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
+          CLOUDFLARE_D1_TOKEN: ${{ secrets.CLOUDFLARE_D1_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
@@ -39,3 +38,5 @@ jobs:
           command: deploy --minify
           secrets: |
             EXPO_API_TOKEN
+        env:
+          EXPO_API_TOKEN: ${{ secrets.EXPO_API_TOKEN }}
