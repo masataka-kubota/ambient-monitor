@@ -1,4 +1,4 @@
-import { Text, TextProps } from "react-native";
+import { StyleSheet, Text, TextProps } from "react-native";
 
 import { useResolvedTheme } from "@/hooks/common";
 
@@ -10,10 +10,20 @@ const ThemeText = ({ children, style, ...props }: ThemeTextProps) => {
   const { currentThemeColors } = useResolvedTheme();
 
   return (
-    <Text style={[{ color: currentThemeColors.mainColor }, style]} {...props}>
+    <Text
+      style={[styles.text, { color: currentThemeColors.mainColor }, style]}
+      {...props}
+    >
       {children}
     </Text>
   );
 };
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 14,
+    lineHeight: 21,
+  },
+});
 
 export default ThemeText;
