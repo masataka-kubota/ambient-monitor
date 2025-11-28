@@ -2,7 +2,7 @@ import { ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-import { AtomProviders } from "@/components/providers";
+import { Providers } from "@/components/layouts";
 import { APP_THEME_SCHEME } from "@/constants";
 import { useResolvedTheme } from "@/hooks/common";
 
@@ -10,7 +10,7 @@ const RootLayout = () => {
   const { isDarkMode } = useResolvedTheme();
 
   return (
-    <AtomProviders>
+    <Providers>
       <ThemeProvider
         value={
           isDarkMode
@@ -23,7 +23,7 @@ const RootLayout = () => {
         </Stack>
         <StatusBar style={isDarkMode ? "light" : "dark"} />
       </ThemeProvider>
-    </AtomProviders>
+    </Providers>
   );
 };
 
