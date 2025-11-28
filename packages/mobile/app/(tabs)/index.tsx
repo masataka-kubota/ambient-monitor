@@ -1,8 +1,5 @@
-import {
-  Heading,
-  KeyboardAvoidingScrollableView,
-  ThemeText,
-} from "@/components/ui";
+import { KeyboardAvoidingScrollableView } from "@/components/layouts";
+import { Heading, ThemeText } from "@/components/ui";
 
 const Index = () => {
   return (
