@@ -7,11 +7,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
  * - Keep RootLayout clean by centralizing all providers in this component.
  *
  * Jotai:
- * - We intentionally do NOT wrap <Provider> from Jotai
+ * - We intentionally do NOT wrap <AppProviders> from Jotai
  *   because we want all atoms to share the global store.
  */
-const Providers = ({ children }: { children: React.ReactNode }) => {
+const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return <SafeAreaProvider>{children}</SafeAreaProvider>;
 };
 
-export default Providers;
+export default AppProviders;
