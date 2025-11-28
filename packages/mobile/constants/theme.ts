@@ -1,6 +1,6 @@
 import { DarkTheme, DefaultTheme, Theme } from "@react-navigation/native";
 
-import { AppThemeColors } from "@/types";
+import { AppThemeColors, ThemeOption } from "@/types";
 
 // common
 const black = "rgba(62, 62, 62, 1)"; // #3e3e3e)
@@ -69,3 +69,9 @@ export const APP_THEME_COLORS: AppThemeColors = {
     tint: tint,
   },
 };
+
+export const THEME_OPTIONS: ThemeOption[] = [
+  { id: 0, name: "Default (System)", value: "system" },
+  { id: 1, name: "Light", value: "light" },
+  { id: 2, name: "Dark", value: "dark" },
+] as const;
