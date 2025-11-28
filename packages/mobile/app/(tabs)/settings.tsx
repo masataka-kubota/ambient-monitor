@@ -2,7 +2,7 @@ import { KeyboardAvoidingScrollableView } from "@/components/layouts";
 import { ThemeSetting } from "@/components/settings";
 import { Heading } from "@/components/ui";
 
-const Setting = () => {
+const Settings = () => {
   return (
     <KeyboardAvoidingScrollableView>
       <Heading mt={20}>Theme Setting</Heading>
@@ -11,4 +11,4 @@ const Setting = () => {
   );
 };
 
-export default Setting;
+export default Settings;

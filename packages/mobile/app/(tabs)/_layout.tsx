@@ -19,9 +19,9 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="setting"
+        name="settings"
         options={{
-          tabBarLabel: "Setting",
+          tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (
             <Entypo size={28} name="cog" color={color} />
           ),
