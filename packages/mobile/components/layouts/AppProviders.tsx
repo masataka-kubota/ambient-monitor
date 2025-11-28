@@ -1,5 +1,5 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
 /**
  * Global providers wrapper.
  *
@@ -10,8 +10,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
  * - We intentionally do NOT wrap <AppProviders> from Jotai
  *   because we want all atoms to share the global store.
  */
+
+const queryClient = new QueryClient();
+
 const AppProviders = ({ children }: { children: React.ReactNode }) => {
-  return <SafeAreaProvider>{children}</SafeAreaProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider>{children}</SafeAreaProvider>
+    </QueryClientProvider>
+  );
 };
 
 export default AppProviders;
