@@ -4,6 +4,7 @@
   "types": "./dist/src/index.d.ts",
   "scripts": {
     "dev": "wrangler dev",
+    "dev:ip": "wrangler dev --ip 0.0.0.0",
     "build:types": "rm -rf dist && tsc -p tsconfig.build.json",
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
