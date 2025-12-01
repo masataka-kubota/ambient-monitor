@@ -42,7 +42,6 @@ export const ForbiddenErrorSchema = z.object({
 export const NotFoundErrorSchema = z.object({
   success: ErrorFlag,
   error: z.object({
-    resource: z.string().optional().openapi({ example: 'resource' }),
     message: z.string().openapi({ example: 'Not found error' }),
   }),
 })
