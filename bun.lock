@@ -43,6 +43,7 @@
         "@react-navigation/elements": "^2.6.3",
         "@react-navigation/native": "^7.1.8",
         "@tanstack/react-query": "^5.90.11",
+        "backend": "workspace:*",
         "expo": "~54.0.25",
         "expo-constants": "~18.0.10",
         "expo-dev-client": "~6.0.18",
