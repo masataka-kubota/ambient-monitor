@@ -1,3 +1,4 @@
+import { memo } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -98,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default KeyboardAvoidingScrollableView;
+export default memo(KeyboardAvoidingScrollableView);

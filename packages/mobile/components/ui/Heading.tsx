@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { StyleSheet, TextProps, TextStyle } from "react-native";
 
 import ThemeText from "@/components/ui/ThemeText";
@@ -25,4 +26,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Heading;
+export default memo(Heading);

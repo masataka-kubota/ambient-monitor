@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { StyleSheet, Text, TextProps } from "react-native";
 
 import { useResolvedTheme } from "@/hooks/common";
@@ -26,4 +27,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ThemeText;
+export default memo(ThemeText);

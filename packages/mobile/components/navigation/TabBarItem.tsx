@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import Animated, {
   interpolate,
@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TabBarItem;
+export default memo(TabBarItem);

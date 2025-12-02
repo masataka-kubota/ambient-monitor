@@ -1,5 +1,5 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { LayoutChangeEvent, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TabBar;
+export default memo(TabBar);
