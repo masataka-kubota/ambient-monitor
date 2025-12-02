@@ -28,6 +28,23 @@ describe('GET /measurements', () => {
     expect(data.data).toBeInstanceOf(Array)
   })
 
+  it('should return measurements in descending order by createdAt', async () => {
+    const res = await client.measurements.$get({
+      header: headerData,
+      query: { deviceId: TEST_DEVICE.externalId },
+    })
+    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
+    expect(data.success).toBe(true)
+    expect(data.data).toBeInstanceOf(Array)
+
+    // Verify that the measurements are in descending order by createdAt
+    for (let i = 1; i < data.data.length; i++) {
+      const prev = new Date(data.data[i - 1].createdAt).getTime()
+      const curr = new Date(data.data[i].createdAt).getTime()
+      expect(prev).toBeGreaterThanOrEqual(curr)
+    }
+  })
+
   it('should return 200 with empty array when no measurements exist', async () => {
     // remove all seed measurements
     const device = await env.DB.prepare('SELECT id FROM devices WHERE external_id = ?')
