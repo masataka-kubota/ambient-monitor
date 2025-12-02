@@ -1,26 +1,106 @@
 import { memo } from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 
-import { ThemeText } from "@/components/ui";
+import { CShapeGauge, ThemeText } from "@/components/ui";
+import {
+  HUMIDITY_GRADIENTS,
+  HUMIDITY_THRESHOLDS,
+  PRESSURE_GRADIENTS,
+  PRESSURE_THRESHOLDS,
+  TEMPERATURE_GRADIENTS,
+  TEMPERATURE_THRESHOLDS,
+} from "@/constants";
+import { useResolvedTheme } from "@/hooks/common";
 import { useLiveMeasurement } from "@/hooks/measurements";
 
+const { width } = Dimensions.get("window");
+const bigRadius = width * 0.27;
+const smallRadius = width * 0.17;
+
 const LiveMeasurementView = () => {
-  const { data: measurement, isLoading } = useLiveMeasurement();
+  const { currentThemeColors } = useResolvedTheme();
+  const { data: m, isLoading } = useLiveMeasurement();
 
   if (isLoading) return <ThemeText>Loading...</ThemeText>;
-
-  if (!measurement) return <ThemeText>No measurement</ThemeText>;
+  if (!m) return <ThemeText>No measurement</ThemeText>;
 
   return (
-    <View>
-      <ThemeText>time: {measurement.createdAt}</ThemeText>
-      <ThemeText>temperature: {measurement.temperature}</ThemeText>
-      <ThemeText>humidity: {measurement.humidity}</ThemeText>
-      <ThemeText>pressure: {measurement.pressure}</ThemeText>
+    <View style={styles.wrapper}>
+      {/* temperature */}
+      <View style={styles.chartContainer}>
+        <CShapeGauge
+          value={m.temperature}
+          unit="°C"
+          decimalPlaces={1}
+          label="Temperature"
+          radius={bigRadius}
+          strokeWidth={bigRadius * 0.2}
+          gradientColors={TEMPERATURE_GRADIENTS}
+          thresholds={TEMPERATURE_THRESHOLDS}
+        />
+      </View>
+
+      {/* humidity and pressure */}
+      <View style={[styles.chartContainer, styles.row]}>
+        {/* humidity */}
+        <View style={styles.chartContainer}>
+          <CShapeGauge
+            value={m.humidity}
+            unit="%"
+            label="Humidity"
+            radius={smallRadius}
+            strokeWidth={smallRadius * 0.2}
+            gradientColors={HUMIDITY_GRADIENTS}
+            thresholds={HUMIDITY_THRESHOLDS}
+          />
+        </View>
+        {/* pressure */}
+        <View style={styles.chartContainer}>
+          <CShapeGauge
+            value={m.pressure}
+            unit="hPa"
+            label="Pressure"
+            radius={smallRadius}
+            strokeWidth={smallRadius * 0.2}
+            gradientColors={PRESSURE_GRADIENTS}
+            thresholds={PRESSURE_THRESHOLDS}
+          />
+        </View>
+      </View>
+
+      {/* time */}
+      <View style={styles.timeWrapper}>
+        <ThemeText
+          style={[styles.time, { color: currentThemeColors.mediumColor }]}
+        >
+          {m.createdAt}
+        </ThemeText>
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  chartContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  timeWrapper: {
+    marginVertical: 20,
+  },
+  time: {
+    fontSize: 16,
+  },
+});
 
 export default memo(LiveMeasurementView);
