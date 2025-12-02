@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemeText } from "@/components/ui";
 import { useMeasurements } from "@/hooks/measurements";
@@ -17,17 +17,28 @@ const MeasurementView = () => {
 
   return (
     <View>
-      <ThemeText>
-        {measurements.map((m) => (
-          <View key={m.id}>
-            <ThemeText>temperature: {m.temperature}</ThemeText>
+      {measurements.map((m) => (
+        <View key={m.id} style={styles.listContainer}>
+          <ThemeText>dateTime: {m.createdAt}</ThemeText>
+          <View style={styles.measurementContainer}>
+            <ThemeText>temp: {m.temperature}</ThemeText>
             <ThemeText>humidity: {m.humidity}</ThemeText>
             <ThemeText>pressure: {m.pressure}</ThemeText>
           </View>
-        ))}
-      </ThemeText>
+        </View>
+      ))}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  listContainer: {
+    marginBottom: 10,
+  },
+  measurementContainer: {
+    flexDirection: "row",
+    gap: 10,
+  },
+});
 
 export default memo(MeasurementView);
