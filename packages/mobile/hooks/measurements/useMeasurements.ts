@@ -20,16 +20,17 @@ const useMeasurements = () => {
     if (!data.success) {
       throw new Error("Failed to fetch measurements");
     }
+
     return data.data;
   };
 
-  const { data: measurements, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["measurements", selectedDeviceId],
     queryFn: onFetchMeasurements,
     refetchInterval: 5 * 60 * 1000,
   });
 
-  return { measurements, isLoading };
+  return { data, isLoading };
 };
 
 export default useMeasurements;

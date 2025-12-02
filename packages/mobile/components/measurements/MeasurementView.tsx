@@ -5,7 +5,7 @@ import { Heading, ThemeText } from "@/components/ui";
 import { useMeasurements } from "@/hooks/measurements";
 
 const MeasurementView = () => {
-  const { measurements, isLoading } = useMeasurements();
+  const { data: measurements, isLoading } = useMeasurements();
 
   if (isLoading) {
     return <ThemeText>Loading...</ThemeText>;
