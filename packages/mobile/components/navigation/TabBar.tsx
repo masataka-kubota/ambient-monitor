@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "center",
-    width: "50%",
+    width: "60%",
     maxWidth: 400,
     marginHorizontal: "auto",
     paddingVertical: 10,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   indicator: {
     position: "absolute",
     borderRadius: 30,
-    marginHorizontal: 9,
+    marginHorizontal: 10,
   },
 });
 

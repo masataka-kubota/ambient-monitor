@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { View } from "react-native";
 
-import { Heading, ThemeText } from "@/components/ui";
+import { ThemeText } from "@/components/ui";
 import { useMeasurements } from "@/hooks/measurements";
 
 const MeasurementView = () => {
@@ -17,7 +17,6 @@ const MeasurementView = () => {
 
   return (
     <View>
-      <Heading>Index screen.</Heading>
       <ThemeText>
         {measurements.map((m) => (
           <View key={m.id}>

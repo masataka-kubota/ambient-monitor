@@ -12,9 +12,18 @@ const TabLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: "Live",
           tabBarIcon: ({ color }) => (
             <Entypo size={28} name="thermometer" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{
+          tabBarLabel: "History",
+          tabBarIcon: ({ color }) => (
+            <Entypo size={28} name="line-graph" color={color} />
           ),
         }}
       />
