@@ -1,8 +1,18 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
+import Animated, {
+  useAnimatedProps,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
 
 import ThemeText from "@/components/ui/ThemeText";
+
+const AnimatedPath = Animated.createAnimatedComponent(Path);
+
+const startAngle = -135;
+const endAngle = 135;
 
 interface Gradient {
   start: string;
@@ -26,11 +36,12 @@ const getGradientForValue = (
   return gradients[gradients.length - 1];
 };
 
-//  Returns the SVG path for the arc
-const describeArc = (r: number, center: number) => {
-  const startAngle = -135;
-  const endAngle = 135;
-
+const describeArc = (
+  r: number,
+  center: number,
+  startAngle: number,
+  endAngle: number,
+) => {
   const polarToCartesian = (angleDeg: number) => {
     const angleRad = ((angleDeg - 90) * Math.PI) / 180.0;
     return {
@@ -39,9 +50,9 @@ const describeArc = (r: number, center: number) => {
     };
   };
 
-  const start = polarToCartesian(endAngle);
-  const end = polarToCartesian(startAngle);
-  return `M ${start.x} ${start.y} A ${r} ${r} 0 1 0 ${end.x} ${end.y}`;
+  const start = polarToCartesian(startAngle);
+  const end = polarToCartesian(endAngle);
+  return `M ${start.x} ${start.y} A ${r} ${r} 0 1 1 ${end.x} ${end.y}`;
 };
 
 interface CShapeGaugeProps {
@@ -65,14 +76,25 @@ const CShapeGauge = ({
   gradientColors,
   thresholds,
 }: CShapeGaugeProps) => {
+  const progress = useSharedValue(0);
+
+  const sweepAngle = endAngle - startAngle;
+  const totalLength = 2 * Math.PI * radius * (sweepAngle / 360);
   const center = radius + strokeWidth;
-
-  const path = describeArc(radius, center);
+  const path = describeArc(radius, center, startAngle, endAngle);
   const gradient = getGradientForValue(value, gradientColors, thresholds);
-
   const valueFontSize = radius * 0.4;
   const unitFontSize = radius * 0.2;
   const labelFontSize = radius * 0.25;
+
+  useEffect(() => {
+    progress.value = 0;
+    progress.value = withTiming(1, { duration: 800 });
+  }, [progress]);
+
+  const animatedProps = useAnimatedProps(() => ({
+    strokeDashoffset: totalLength * (1 - progress.value),
+  }));
 
   return (
     <View style={styles.wrapper}>
@@ -83,12 +105,14 @@ const CShapeGauge = ({
             <Stop offset="100%" stopColor={gradient.end} />
           </LinearGradient>
         </Defs>
-        <Path
+        <AnimatedPath
           d={path}
           stroke="url(#grad)"
           strokeWidth={strokeWidth}
           fill="none"
           strokeLinecap="round"
+          strokeDasharray={totalLength}
+          animatedProps={animatedProps}
         />
       </Svg>
 
