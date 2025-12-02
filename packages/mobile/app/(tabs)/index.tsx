@@ -1,10 +1,12 @@
 import { KeyboardAvoidingScrollableView } from "@/components/layouts";
-import { MeasurementView } from "@/components/measurements";
+import { LiveMeasurementView } from "@/components/measurements";
+import { Heading } from "@/components/ui";
 
 const Index = () => {
   return (
     <KeyboardAvoidingScrollableView>
-      <MeasurementView />
+      <Heading mt={20}>Latest Measurement</Heading>
+      <LiveMeasurementView />
     </KeyboardAvoidingScrollableView>
   );
 };
