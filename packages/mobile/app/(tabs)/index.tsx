@@ -1,11 +1,10 @@
 import { KeyboardAvoidingScrollableView } from "@/components/layouts";
-import { Heading, ThemeText } from "@/components/ui";
+import { MeasurementView } from "@/components/measurements";
 
 const Index = () => {
   return (
     <KeyboardAvoidingScrollableView>
-      <Heading>Index screen.</Heading>
-      <ThemeText>Index screen.</ThemeText>
+      <MeasurementView />
     </KeyboardAvoidingScrollableView>
   );
 };
