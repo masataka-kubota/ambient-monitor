@@ -10,8 +10,6 @@ const useMeasurements = () => {
   const selectedDeviceId = useAtomValue(selectedDeviceIdAtom);
 
   const onFetchMeasurements = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     const res = await apiClient.measurements.$get({
       header: { Authorization: `Bearer ${API_TOKEN}` },
       query: { deviceId: selectedDeviceId },
