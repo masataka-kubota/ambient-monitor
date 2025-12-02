@@ -21,14 +21,6 @@ module.exports = defineConfig([
         "error",
         {
           groups: ["builtin", "external", "internal"],
-          pathGroups: [
-            {
-              pattern: "react",
-              group: "external",
-              position: "before",
-            },
-          ],
-          pathGroupsExcludedImportTypes: ["react"],
           alphabetize: { order: "asc", caseInsensitive: true },
           "newlines-between": "always",
           warnOnUnassignedImports: true,

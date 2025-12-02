@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-
 import { Pressable, StyleSheet } from "react-native";
 import Animated, {
   interpolate,

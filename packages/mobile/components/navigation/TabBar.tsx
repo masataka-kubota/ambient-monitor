@@ -1,6 +1,5 @@
-import { useState } from "react";
-
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { useState } from "react";
 import { LayoutChangeEvent, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedStyle,

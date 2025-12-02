@@ -1,6 +1,5 @@
-import { memo } from "react";
-
 import { Ionicons } from "@expo/vector-icons";
+import { memo } from "react";
 import {
   Pressable,
   StyleProp,
