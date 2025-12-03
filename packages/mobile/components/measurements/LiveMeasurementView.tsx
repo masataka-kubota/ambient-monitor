@@ -1,3 +1,4 @@
+import { Entypo } from "@expo/vector-icons";
 import { memo } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
@@ -13,6 +14,7 @@ import {
 } from "@/constants";
 import { useResolvedTheme } from "@/hooks/common";
 import { useLiveMeasurement } from "@/hooks/measurements";
+import { formatToLocalTime } from "@/utils";
 
 const { width } = Dimensions.get("window");
 const bigRadius = width * 0.27;
@@ -80,10 +82,16 @@ const LiveMeasurementView = () => {
 
       {/* time */}
       <View style={styles.timeWrapper}>
+        <Entypo
+          name="clock"
+          size={20}
+          color={currentThemeColors.mediumColor}
+          style={styles.timeIcon}
+        />
         <ThemeText
           style={[styles.time, { color: currentThemeColors.mediumColor }]}
         >
-          {m.createdAt}
+          Last update: {formatToLocalTime(m.createdAt, "MM-dd HH:mm:ss")}
         </ThemeText>
       </View>
     </View>
@@ -107,6 +115,11 @@ const styles = StyleSheet.create({
   },
   timeWrapper: {
     marginVertical: 20,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  timeIcon: {
+    marginRight: 5,
   },
   time: {
     fontSize: 16,
