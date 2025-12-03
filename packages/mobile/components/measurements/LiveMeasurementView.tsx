@@ -40,6 +40,7 @@ const LiveMeasurementView = () => {
           unit="°C"
           decimalPlaces={1}
           label="Temperature"
+          iconName="thermometer"
           radius={bigRadius}
           strokeWidth={bigRadius * 0.2}
           gradientColors={TEMPERATURE_GRADIENTS}
@@ -55,6 +56,7 @@ const LiveMeasurementView = () => {
             value={m.humidity}
             unit="%"
             label="Humidity"
+            iconName="drop"
             radius={smallRadius}
             strokeWidth={smallRadius * 0.2}
             gradientColors={HUMIDITY_GRADIENTS}
@@ -67,6 +69,7 @@ const LiveMeasurementView = () => {
             value={m.pressure}
             unit="hPa"
             label="Pressure"
+            iconName="gauge"
             radius={smallRadius}
             strokeWidth={smallRadius * 0.2}
             gradientColors={PRESSURE_GRADIENTS}

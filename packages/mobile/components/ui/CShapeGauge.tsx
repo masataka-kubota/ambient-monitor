@@ -1,3 +1,4 @@
+import { Entypo } from "@expo/vector-icons";
 import { memo, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
@@ -9,6 +10,7 @@ import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
 
 import ThemeText from "@/components/ui/ThemeText";
 import { END_ANGLE, START_ANGLE } from "@/constants";
+import { useResolvedTheme } from "@/hooks/common";
 import { describeArc } from "@/utils";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -40,6 +42,7 @@ interface CShapeGaugeProps {
   unit?: string;
   decimalPlaces?: number;
   label: string;
+  iconName: keyof typeof Entypo.glyphMap;
   radius?: number;
   strokeWidth?: number;
   gradientColors: Gradient[];
@@ -51,11 +54,14 @@ const CShapeGauge = ({
   unit = "",
   decimalPlaces = 0,
   label,
+  iconName,
   radius = 50,
   strokeWidth = 10,
   gradientColors,
   thresholds,
 }: CShapeGaugeProps) => {
+  const { currentThemeColors } = useResolvedTheme();
+
   const progress = useSharedValue(0);
 
   const sweepAngle = END_ANGLE - START_ANGLE;
@@ -98,7 +104,7 @@ const CShapeGauge = ({
       </Svg>
 
       {/* Value */}
-      <View style={[styles.centered, { top: center - 15 }]}>
+      <View style={[styles.centered, { top: center - valueFontSize / 2 }]}>
         <ThemeText
           style={[
             styles.value,
@@ -121,10 +127,16 @@ const CShapeGauge = ({
 
       {/* Label */}
       <View style={[styles.centered, styles.labelContainer]}>
+        <Entypo
+          name={iconName}
+          size={labelFontSize * 1.3}
+          color={currentThemeColors.mainColor}
+          style={styles.labelIcon}
+        />
         <ThemeText
           style={[
             styles.label,
-            { fontSize: labelFontSize, lineHeight: labelFontSize },
+            { fontSize: labelFontSize, lineHeight: labelFontSize * 1.3 },
           ]}
         >
           {label}
@@ -153,6 +165,10 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     bottom: 0,
+    flexDirection: "row",
+  },
+  labelIcon: {
+    marginRight: 3,
   },
   label: {
     fontWeight: "bold",
