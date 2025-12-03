@@ -8,11 +8,10 @@ import Animated, {
 import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
 
 import ThemeText from "@/components/ui/ThemeText";
+import { END_ANGLE, START_ANGLE } from "@/constants";
+import { describeArc } from "@/utils";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-
-const startAngle = -135;
-const endAngle = 135;
 
 interface Gradient {
   start: string;
@@ -34,25 +33,6 @@ const getGradientForValue = (
   }
 
   return gradients[gradients.length - 1];
-};
-
-const describeArc = (
-  r: number,
-  center: number,
-  startAngle: number,
-  endAngle: number,
-) => {
-  const polarToCartesian = (angleDeg: number) => {
-    const angleRad = ((angleDeg - 90) * Math.PI) / 180.0;
-    return {
-      x: center + r * Math.cos(angleRad),
-      y: center + r * Math.sin(angleRad),
-    };
-  };
-
-  const start = polarToCartesian(startAngle);
-  const end = polarToCartesian(endAngle);
-  return `M ${start.x} ${start.y} A ${r} ${r} 0 1 1 ${end.x} ${end.y}`;
 };
 
 interface CShapeGaugeProps {
@@ -78,10 +58,10 @@ const CShapeGauge = ({
 }: CShapeGaugeProps) => {
   const progress = useSharedValue(0);
 
-  const sweepAngle = endAngle - startAngle;
+  const sweepAngle = END_ANGLE - START_ANGLE;
   const totalLength = 2 * Math.PI * radius * (sweepAngle / 360);
   const center = radius + strokeWidth;
-  const path = describeArc(radius, center, startAngle, endAngle);
+  const path = describeArc(radius, center);
   const gradient = getGradientForValue(value, gradientColors, thresholds);
   const valueFontSize = radius * 0.4;
   const unitFontSize = radius * 0.2;
@@ -98,6 +78,7 @@ const CShapeGauge = ({
 
   return (
     <View style={styles.wrapper}>
+      {/* Arc */}
       <Svg width={center * 2} height={center * 2}>
         <Defs>
           <LinearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -116,7 +97,7 @@ const CShapeGauge = ({
         />
       </Svg>
 
-      {/* value */}
+      {/* Value */}
       <View style={[styles.centered, { top: center - 15 }]}>
         <ThemeText
           style={[
@@ -138,7 +119,7 @@ const CShapeGauge = ({
         ) : null}
       </View>
 
-      {/* label */}
+      {/* Label */}
       <View style={[styles.centered, styles.labelContainer]}>
         <ThemeText
           style={[
