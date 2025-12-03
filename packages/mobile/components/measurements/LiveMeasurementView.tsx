@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 
+import { LiveMeasurementSkeleton } from "@/components/skelton";
 import { CShapeGauge, ThemeText } from "@/components/ui";
 import {
   HUMIDITY_GRADIENTS,
@@ -21,7 +22,13 @@ const LiveMeasurementView = () => {
   const { currentThemeColors } = useResolvedTheme();
   const { data: m, isLoading } = useLiveMeasurement();
 
-  if (isLoading) return <ThemeText>Loading...</ThemeText>;
+  if (isLoading)
+    return (
+      <LiveMeasurementSkeleton
+        bigRadius={bigRadius}
+        smallRadius={smallRadius}
+      />
+    );
   if (!m) return <ThemeText>No measurement</ThemeText>;
 
   return (
