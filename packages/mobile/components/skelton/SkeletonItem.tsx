@@ -1,13 +1,9 @@
-import { memo, useEffect } from "react";
+import { memo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
 import { useResolvedTheme } from "@/hooks/common";
+import { useSkeletonAnimation } from "@/hooks/ui";
 
 interface SkeletonItemProps {
   width?: ViewStyle["width"];
@@ -25,23 +21,10 @@ const SkeletonItem = ({
   style,
 }: SkeletonItemProps) => {
   const { currentThemeColors } = useResolvedTheme();
-
-  const opacity = useSharedValue(1);
+  const { skeltonAnimatedStyle } = useSkeletonAnimation();
 
   const defaultBackgroundColor =
     backgroundColor ?? currentThemeColors.secondaryBackground;
-
-  useEffect(() => {
-    opacity.value = withRepeat(
-      withTiming(0.5, { duration: 700 }),
-      Infinity,
-      true,
-    );
-  }, [opacity]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
 
   return (
     <Animated.View
@@ -52,7 +35,7 @@ const SkeletonItem = ({
           borderRadius,
           backgroundColor: defaultBackgroundColor,
         },
-        animatedStyle,
+        skeltonAnimatedStyle,
         style,
       ]}
     />
