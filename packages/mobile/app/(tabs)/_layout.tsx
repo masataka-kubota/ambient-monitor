@@ -1,9 +1,11 @@
 import { Entypo } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 import { TabBar } from "@/components/navigation";
 
 const TabLayout = () => {
+  const { t } = useTranslation();
   return (
     <Tabs
       screenOptions={{ headerShown: false }}
@@ -12,7 +14,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarLabel: "Live",
+          tabBarLabel: t("navigation.tabBarLabel.live"),
           tabBarIcon: ({ color }) => (
             <Entypo size={28} name="thermometer" color={color} />
           ),
@@ -21,7 +23,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="history"
         options={{
-          tabBarLabel: "History",
+          tabBarLabel: t("navigation.tabBarLabel.history"),
           tabBarIcon: ({ color }) => (
             <Entypo size={28} name="line-graph" color={color} />
           ),
@@ -30,7 +32,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="settings"
         options={{
-          tabBarLabel: "Settings",
+          tabBarLabel: t("navigation.tabBarLabel.settings"),
           tabBarIcon: ({ color }) => (
             <Entypo size={28} name="cog" color={color} />
           ),

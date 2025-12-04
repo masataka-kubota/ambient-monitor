@@ -1,5 +1,6 @@
 import { Entypo } from "@expo/vector-icons";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 import { Dimensions, StyleSheet, View } from "react-native";
 
 import { LiveMeasurementSkeleton } from "@/components/skelton";
@@ -20,9 +21,10 @@ const { width } = Dimensions.get("window");
 const bigRadius = width * 0.27;
 const smallRadius = width * 0.17;
 
-const LiveMeasurementView = () => {
+const HistoryMeasurementView = () => {
   const { currentThemeColors } = useResolvedTheme();
   const { data: m, isLoading } = useLiveMeasurement();
+  const { t } = useTranslation();
 
   if (isLoading)
     return (
@@ -33,6 +35,10 @@ const LiveMeasurementView = () => {
     );
   if (!m) return <ThemeText>No measurement</ThemeText>;
 
+  // format date
+  const locatedDate = new Date(formatToLocalTime(m.createdAt));
+  const formattedDate = t("common.date.format.mdehm", { date: locatedDate });
+
   return (
     <View style={styles.wrapper}>
       {/* temperature */}
@@ -41,7 +47,7 @@ const LiveMeasurementView = () => {
           value={m.temperature}
           unit="°C"
           decimalPlaces={1}
-          label="Temperature"
+          label={t("common.measurement.temperature")}
           iconName="thermometer"
           radius={bigRadius}
           strokeWidth={bigRadius * 0.2}
@@ -57,7 +63,7 @@ const LiveMeasurementView = () => {
           <CShapeGauge
             value={m.humidity}
             unit="%"
-            label="Humidity"
+            label={t("common.measurement.humidity")}
             iconName="drop"
             radius={smallRadius}
             strokeWidth={smallRadius * 0.2}
@@ -70,7 +76,7 @@ const LiveMeasurementView = () => {
           <CShapeGauge
             value={m.pressure}
             unit="hPa"
-            label="Pressure"
+            label={t("common.measurement.pressure")}
             iconName="gauge"
             radius={smallRadius}
             strokeWidth={smallRadius * 0.2}
@@ -91,7 +97,7 @@ const LiveMeasurementView = () => {
         <ThemeText
           style={[styles.time, { color: currentThemeColors.mediumColor }]}
         >
-          Last update: {formatToLocalTime(m.createdAt, "MM-dd HH:mm:ss")}
+          {t("live.lastUpdate", { date: formattedDate })}
         </ThemeText>
       </View>
     </View>
@@ -126,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(LiveMeasurementView);
+export default memo(HistoryMeasurementView);

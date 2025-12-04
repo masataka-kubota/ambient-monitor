@@ -1,0 +1,10 @@
+{
+  "title": {
+    "theme": "Theme Settings"
+  },
+  "theme": {
+    "system": "Follow system",
+    "light": "Light",
+    "dark": "Dark"
+  }
+}

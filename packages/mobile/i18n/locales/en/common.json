@@ -1,0 +1,16 @@
+{
+  "date": {
+    "format": {
+      "ymdehm": "{{date, MMM d (EEE), yyyy HH:mm}}",
+      "mdehm": "{{date, MMM d (EEE) HH:mm}}",
+      "mde": "{{date, MMM d (EEE)}}",
+      "md": "{{date, MMM d}}",
+      "ym": "{{date, MMM yyyy}}"
+    }
+  },
+  "measurement": {
+    "temperature": "Temperature",
+    "humidity": "Humidity",
+    "pressure": "Pressure"
+  }
+}

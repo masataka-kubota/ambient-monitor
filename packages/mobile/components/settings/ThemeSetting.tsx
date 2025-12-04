@@ -3,25 +3,26 @@ import { memo, useCallback } from "react";
 
 import { themeModeAtom } from "@/atoms";
 import { RadioGroup } from "@/components/ui";
-import { THEME_OPTIONS } from "@/constants";
+import { useThemeOptions } from "@/hooks/settings";
 
 const ThemeSetting = () => {
   const [themeMode, setThemeMode] = useAtom(themeModeAtom);
+  const themeOptions = useThemeOptions();
 
   const selectedId =
-    THEME_OPTIONS.find((opt) => opt.value === themeMode)?.id ?? 1;
+    themeOptions.find((opt) => opt.value === themeMode)?.id ?? 1;
 
   const handlePress = useCallback(
     (id: number) => {
-      const selected = THEME_OPTIONS.find((opt) => opt.id === id);
+      const selected = themeOptions.find((opt) => opt.id === id);
       if (selected) setThemeMode(selected.value);
     },
-    [setThemeMode],
+    [setThemeMode, themeOptions],
   );
 
   return (
     <RadioGroup
-      data={THEME_OPTIONS}
+      data={themeOptions}
       selectedId={selectedId}
       onPress={handlePress}
     />
