@@ -1,7 +1,7 @@
 {
   "tabBarLabel": {
-    "live": "リアルタイム",
-    "history": "履歴",
+    "live": "Live",
+    "history": "データ",
     "settings": "設定"
   }
 }
