@@ -9,7 +9,9 @@ const Index = () => {
 
   return (
     <KeyboardAvoidingScrollableView>
-      <Heading mt={20}>{t("live.title")}</Heading>
+      <Heading iconName="flash" align="center">
+        {t("live.title")}
+      </Heading>
       <LiveMeasurementView />
     </KeyboardAvoidingScrollableView>
   );

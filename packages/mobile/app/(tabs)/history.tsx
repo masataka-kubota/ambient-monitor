@@ -5,7 +5,9 @@ import { Heading } from "@/components/ui";
 const History = () => {
   return (
     <KeyboardAvoidingScrollableView>
-      <Heading mt={20}>History</Heading>
+      <Heading iconName="line-graph" align="center">
+        History
+      </Heading>
       <HistoryMeasurementView />
     </KeyboardAvoidingScrollableView>
   );
