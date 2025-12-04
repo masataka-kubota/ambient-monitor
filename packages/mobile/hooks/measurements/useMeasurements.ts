@@ -2,9 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 
 import { selectedDeviceIdAtom } from "@/atoms";
+import { API_TOKEN } from "@/constants";
 import { apiClient } from "@/lib";
-
-const API_TOKEN = process.env.EXPO_PUBLIC_EXPO_API_TOKEN || "";
 
 const useMeasurements = () => {
   const selectedDeviceId = useAtomValue(selectedDeviceIdAtom);
