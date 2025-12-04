@@ -1,5 +1,5 @@
 import { getLocales } from "expo-localization";
-import { useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 
 import { languageAtom } from "@/atoms";
@@ -8,7 +8,7 @@ import { initI18n } from "@/i18n";
 import { isSupportedLanguageCode } from "@/utils";
 
 const useI18nInitializer = () => {
-  const storedLanguage = useAtomValue(languageAtom);
+  const [storedLanguage, setStoredLanguage] = useAtom(languageAtom);
   const [isI18nReady, setIsI18nReady] = useState(false);
 
   useEffect(() => {
@@ -24,11 +24,12 @@ const useI18nInitializer = () => {
 
       // 3. Initialize
       await initI18n(lng);
+      await setStoredLanguage(lng);
       setIsI18nReady(true);
     };
 
     run();
-  }, [storedLanguage]);
+  }, [setStoredLanguage, storedLanguage]);
 
   return { isI18nReady };
 };
