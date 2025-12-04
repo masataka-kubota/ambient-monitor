@@ -6,19 +6,26 @@ import { useEffect } from "react";
 
 import { AppProviders } from "@/components/layouts";
 import { APP_THEME_SCHEME } from "@/constants";
-import { useResolvedTheme } from "@/hooks/common";
+import { useI18nInitializer, useResolvedTheme } from "@/hooks/common";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
   const { isDarkMode } = useResolvedTheme();
+  const { isI18nReady } = useI18nInitializer();
 
   // Prevent initial theme flicker
   // by keeping the splash screen visible until the first render completes.
   useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
+    if (isI18nReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [isI18nReady]);
+
+  if (!isI18nReady) {
+    return null;
+  }
 
   return (
     <AppProviders>
