@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { ThemeText } from "@/components/ui";
 import { useMeasurements } from "@/hooks/measurements";
 
-const MeasurementView = () => {
+const MeasurementsView = () => {
   const { data: measurements, isLoading } = useMeasurements();
 
   if (isLoading) {
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(MeasurementView);
+export default memo(MeasurementsView);
