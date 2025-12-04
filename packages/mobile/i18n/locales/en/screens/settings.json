@@ -1,6 +1,7 @@
 {
   "title": {
-    "theme": "Theme Settings"
+    "theme": "Theme Settings",
+    "lang": "Language Settings"
   },
   "theme": {
     "system": "Follow system",
