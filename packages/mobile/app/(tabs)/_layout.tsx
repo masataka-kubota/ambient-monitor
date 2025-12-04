@@ -15,8 +15,12 @@ const TabLayout = () => {
         name="index"
         options={{
           tabBarLabel: t("navigation.tabBarLabel.live"),
-          tabBarIcon: ({ color }) => (
-            <Entypo size={28} name="thermometer" color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Entypo
+              size={size * 1.2}
+              name={focused ? "thermometer" : "flash"}
+              color={color}
+            />
           ),
         }}
       />
@@ -24,8 +28,12 @@ const TabLayout = () => {
         name="history"
         options={{
           tabBarLabel: t("navigation.tabBarLabel.history"),
-          tabBarIcon: ({ color }) => (
-            <Entypo size={28} name="line-graph" color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Entypo
+              size={size * 1.2}
+              name={focused ? "database" : "line-graph"}
+              color={color}
+            />
           ),
         }}
       />
@@ -33,8 +41,12 @@ const TabLayout = () => {
         name="settings"
         options={{
           tabBarLabel: t("navigation.tabBarLabel.settings"),
-          tabBarIcon: ({ color }) => (
-            <Entypo size={28} name="cog" color={color} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <Entypo
+              size={size * 1.2}
+              name={focused ? "tools" : "cog"}
+              color={color}
+            />
           ),
         }}
       />
