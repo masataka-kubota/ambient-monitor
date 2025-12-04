@@ -11,3 +11,11 @@ if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^packag
   bun run lint
   bun run test
 fi
+
+# Only run on mobile directory.
+if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^packages/mobile/')" ]; then
+  cd "$repo_root/packages/mobile"
+  bun run type-check
+  bun run lint
+  # bun run test
+fi

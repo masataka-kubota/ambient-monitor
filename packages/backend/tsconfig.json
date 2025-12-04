@@ -5,9 +5,9 @@
     "moduleResolution": "Bundler",
     "strict": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
     "lib": ["ESNext"],
     "types": ["vitest/globals", "@cloudflare/workers-types", "@cloudflare/vitest-pool-workers"],

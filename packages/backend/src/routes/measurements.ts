@@ -1,6 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import type { SQLWrapper } from 'drizzle-orm'
-import { and, eq, gte, lte } from 'drizzle-orm'
+import { and, desc, eq, gte, lte } from 'drizzle-orm'
 
 import { devices, measurements } from '@/db/schema'
 import { createValidationHook } from '@/hooks'
@@ -63,6 +63,7 @@ const measurementsApp = new OpenAPIHono<Env>({
       .select()
       .from(measurements)
       .where(and(...conditions))
+      .orderBy(desc(measurements.createdAt))
       .limit(limit)
       .offset(offset)
       .all()
