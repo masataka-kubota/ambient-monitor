@@ -72,6 +72,7 @@ export const MeasurementListQuerySchema = z.object({
   endAt: z.string().optional().openapi({ example: '2025-11-19 10:00:00' }),
   limit: z.string().regex(/^\d+$/, 'Must be a number').optional().openapi({ example: '10' }),
   offset: z.string().regex(/^\d+$/, 'Must be a number').optional().openapi({ example: '0' }),
+  sort: z.enum(['asc', 'desc']).optional().default('desc'),
 })
 
 export const listMeasurementsRoute = createRoute({

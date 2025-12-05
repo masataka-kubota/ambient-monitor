@@ -1,6 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import type { SQLWrapper } from 'drizzle-orm'
-import { and, desc, eq, gte, lte } from 'drizzle-orm'
+import type { SQL, SQLWrapper } from 'drizzle-orm'
+import { and, asc, desc, eq, gte, lte } from 'drizzle-orm'
 
 import { devices, measurements } from '@/db/schema'
 import { createValidationHook } from '@/hooks'
@@ -36,7 +36,14 @@ const measurementsApp = new OpenAPIHono<Env>({
   // GET /measurements
   .openapi(listMeasurementsRoute, async (c) => {
     const db = c.var.db
-    const { deviceId, startAt, endAt, limit: limitStr, offset: offsetStr } = c.req.valid('query')
+    const {
+      deviceId,
+      startAt,
+      endAt,
+      limit: limitStr,
+      offset: offsetStr,
+      sort,
+    } = c.req.valid('query')
     const limit = Number(limitStr) || 288 // 288 = 1 day (24h / 5min)
     const offset = Number(offsetStr) || 0
 
@@ -59,11 +66,13 @@ const measurementsApp = new OpenAPIHono<Env>({
       conditions.push(lte(measurements.createdAt, endAt))
     }
 
+    const order: SQL = sort === 'asc' ? asc(measurements.createdAt) : desc(measurements.createdAt)
+
     const data = await db
       .select()
       .from(measurements)
       .where(and(...conditions))
-      .orderBy(desc(measurements.createdAt))
+      .orderBy(order)
       .limit(limit)
       .offset(offset)
       .all()

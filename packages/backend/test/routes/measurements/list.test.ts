@@ -28,23 +28,6 @@ describe('GET /measurements', () => {
     expect(data.data).toBeInstanceOf(Array)
   })
 
-  it('should return measurements in descending order by createdAt', async () => {
-    const res = await client.measurements.$get({
-      header: headerData,
-      query: { deviceId: TEST_DEVICE.externalId },
-    })
-    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
-    expect(data.success).toBe(true)
-    expect(data.data).toBeInstanceOf(Array)
-
-    // Verify that the measurements are in descending order by createdAt
-    for (let i = 1; i < data.data.length; i++) {
-      const prev = new Date(data.data[i - 1].createdAt).getTime()
-      const curr = new Date(data.data[i].createdAt).getTime()
-      expect(prev).toBeGreaterThanOrEqual(curr)
-    }
-  })
-
   it('should return 200 with empty array when no measurements exist', async () => {
     // remove all seed measurements
     const device = await env.DB.prepare('SELECT id FROM devices WHERE external_id = ?')
@@ -150,5 +133,57 @@ describe('GET /measurements', () => {
     expect(data.data.length).toBeLessThanOrEqual(2)
     const expectedSecondMeasurement = SEED_MEASUREMENTS[1]
     expect(data.data[0].createdAt).toBe(expectedSecondMeasurement.createdAt)
+  })
+
+  it('should return measurements in default descending order when sort is not specified', async () => {
+    const res = await client.measurements.$get({
+      header: headerData,
+      query: { deviceId: TEST_DEVICE.externalId },
+    })
+    expect(res.status).toBe(200)
+
+    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
+    expect(data.success).toBe(true)
+
+    // Check descending order
+    for (let i = 1; i < data.data.length; i++) {
+      const prev = new Date(data.data[i - 1].createdAt).getTime()
+      const curr = new Date(data.data[i].createdAt).getTime()
+      expect(prev).toBeGreaterThanOrEqual(curr)
+    }
+  })
+
+  it('should return measurements in descending order when sort=desc is specified', async () => {
+    const res = await client.measurements.$get({
+      header: headerData,
+      query: { deviceId: TEST_DEVICE.externalId, sort: 'desc' },
+    })
+    expect(res.status).toBe(200)
+
+    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
+    expect(data.success).toBe(true)
+
+    for (let i = 1; i < data.data.length; i++) {
+      const prev = new Date(data.data[i - 1].createdAt).getTime()
+      const curr = new Date(data.data[i].createdAt).getTime()
+      expect(prev).toBeGreaterThanOrEqual(curr)
+    }
+  })
+
+  it('should return measurements in ascending order when sort=asc is specified', async () => {
+    const res = await client.measurements.$get({
+      header: headerData,
+      query: { deviceId: TEST_DEVICE.externalId, sort: 'asc' },
+    })
+    expect(res.status).toBe(200)
+
+    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
+    expect(data.success).toBe(true)
+
+    for (let i = 1; i < data.data.length; i++) {
+      const prev = new Date(data.data[i - 1].createdAt).getTime()
+      const curr = new Date(data.data[i].createdAt).getTime()
+      expect(prev).toBeLessThanOrEqual(curr)
+    }
   })
 })
