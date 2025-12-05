@@ -52,11 +52,11 @@ const measurementsApp = new OpenAPIHono<Env>({
     const conditions: SQLWrapper[] = [eq(measurements.deviceId, device.id)]
 
     if (startAt) {
-      conditions.push(gte(measurements.createdAt, new Date(startAt).toISOString()))
+      conditions.push(gte(measurements.createdAt, startAt))
     }
 
     if (endAt) {
-      conditions.push(lte(measurements.createdAt, new Date(endAt).toISOString()))
+      conditions.push(lte(measurements.createdAt, endAt))
     }
 
     const data = await db
