@@ -1,3 +1,18 @@
+import { MeasurementKey, MeasurementSettings } from "@/types";
+
+// Measurement settings
+export const MEASUREMENT_SETTINGS: MeasurementSettings = {
+  temperature: { min: -5, max: 40, unit: "°C", decimals: 1 },
+  humidity: { min: 0, max: 100, unit: "%", decimals: 0 },
+  pressure: { min: 850, max: 1100, unit: "hPa", decimals: 0 },
+} as const;
+
+// Measurement keys
+export const MEASUREMENT_KEYS = Object.keys(
+  MEASUREMENT_SETTINGS,
+) as MeasurementKey[];
+
+// Gradients and thresholds
 export const TEMPERATURE_GRADIENTS = [
   { start: "#0000FF", end: "#00BFFF" },
   { start: "#00BFFF", end: "#4ad0ba" },
