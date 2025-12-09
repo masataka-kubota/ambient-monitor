@@ -9,9 +9,9 @@ const useLiveMeasurement = () => {
   const selectedDeviceId = useAtomValue(selectedDeviceIdAtom);
 
   const onFetchMeasurements = async () => {
-    const res = await apiClient.measurements.$get({
+    const res = await apiClient.measurements.latest.$get({
       header: { Authorization: `Bearer ${API_TOKEN}` },
-      query: { deviceId: selectedDeviceId, limit: "1", offset: "0" }, // Get the latest measurement
+      query: { deviceId: selectedDeviceId },
     });
 
     const data = await res.json();
@@ -20,7 +20,7 @@ const useLiveMeasurement = () => {
       throw new Error("Failed to fetch measurements");
     }
 
-    return data.data[0]; // Return the latest measurement
+    return data.data; // Return the latest measurement
   };
 
   const { data, isLoading } = useQuery({

@@ -6,8 +6,8 @@ import MeasurementLineChart from "@/components/measurements/MeasurementLineChart
 import { IconTabs, ThemeText } from "@/components/ui";
 import { MEASUREMENT_SETTINGS } from "@/constants";
 import { useResolvedTheme } from "@/hooks/common";
-import { useMeasurements24h } from "@/hooks/measurements/useMeasurements24h";
-import { MeasurementKey, MeasurementTabItem } from "@/types";
+import { useMeasurements } from "@/hooks/measurements";
+import { MeasurementKey, MeasurementRange, MeasurementTabItem } from "@/types";
 import { getChartData } from "@/utils/measurements";
 
 const { width, height } = Dimensions.get("window");
@@ -15,10 +15,23 @@ const { width, height } = Dimensions.get("window");
 const WIDTH = width - 100;
 const HEIGHT = height * 0.4;
 
-const Data24hGraph = () => {
+export const PERIOD_MINUTES_MAP: Record<MeasurementRange, number> = {
+  "1d": 30, // 30 minutes
+  "7d": 240, // 4 hour
+  "30d": 720, // 12 hour
+};
+
+interface DataGraphProps {
+  period: MeasurementRange;
+}
+
+const DataGraph = ({ period }: DataGraphProps) => {
   const { t } = useTranslation();
   const { currentThemeColors } = useResolvedTheme();
-  const { data, isLoading } = useMeasurements24h();
+
+  const [selectedKey, setSelectedKey] = useState<MeasurementKey>("temperature");
+
+  const { data, isLoading } = useMeasurements(period);
 
   const tabs: MeasurementTabItem[] = [
     {
@@ -38,8 +51,6 @@ const Data24hGraph = () => {
     },
   ];
 
-  const [selectedKey, setSelectedKey] = useState<MeasurementKey>(tabs[0].key);
-
   const setting = MEASUREMENT_SETTINGS[selectedKey];
 
   if (isLoading) return <ThemeText>Loading...</ThemeText>;
@@ -48,7 +59,6 @@ const Data24hGraph = () => {
   const chartData = getChartData({
     data,
     key: selectedKey,
-    minutes: 30,
     textColor: currentThemeColors.lightColor,
   });
 
@@ -62,6 +72,7 @@ const Data24hGraph = () => {
       />
       {/* Chart */}
       <MeasurementLineChart
+        key={`${selectedKey}-${period}`}
         data={chartData}
         setting={setting}
         width={WIDTH}
@@ -77,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(Data24hGraph);
+export default memo(DataGraph);

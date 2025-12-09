@@ -1,3 +1,8 @@
 {
-  "title": "Data"
+  "title": "Data",
+  "period": {
+    "1d": "24 hours",
+    "7d": "7 days",
+    "30d": "30 days"
+  }
 }

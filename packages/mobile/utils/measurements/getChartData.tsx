@@ -1,49 +1,41 @@
 import { MeasurementListResponse } from "backend";
+import { View } from "react-native";
 
 import { ThemeText } from "@/components/ui";
 import { MeasurementKey } from "@/types";
 import { formatToLocalTime } from "@/utils/date";
 
-const INTERVAL = 5; // 5 minutes
-
 interface getChartDataProps {
   data: MeasurementListResponse["data"] | undefined;
   key: MeasurementKey;
-  minutes: number;
   textColor: string;
 }
 
-export const getChartData = ({
-  data,
-  key,
-  minutes = 30,
-  textColor,
-}: getChartDataProps) => {
+export const getChartData = ({ data, key, textColor }: getChartDataProps) => {
   if (!data) return [];
 
-  const step = Math.floor(minutes / INTERVAL);
+  const toLabel = (date: string) => {
+    const formatted = formatToLocalTime(date, "MM/dd HH:mm");
+    const [day, time] = formatted.split(" ");
+    return (
+      <View style={{ alignItems: "center" }}>
+        <ThemeText style={{ color: textColor }}>{day}</ThemeText>
+        <ThemeText style={{ color: textColor }}>{time}</ThemeText>
+      </View>
+    );
+  };
 
-  const toLabel = (date: string) => (
-    <ThemeText style={{ color: textColor }}>
-      {formatToLocalTime(date, "HH:mm")}
-    </ThemeText>
-  );
+  const filtered = data.map((d) => {
+    const value = d[key];
+    const isNull = value == null;
 
-  const filtered = data
-    .filter((_, i) => i % step === 0)
-    .map((d) => ({
-      value: d[key],
-      labelComponent: () => toLabel(d.createdAt),
-    }));
-
-  // If the latest data is not included in the filtered data, add it.
-  const latest = data[data.length - 1];
-  if (!filtered.length || filtered[filtered.length - 1].value !== latest[key]) {
-    filtered.push({
-      value: latest[key],
-      labelComponent: () => toLabel(latest.createdAt),
-    });
-  }
+    return {
+      value,
+      labelComponent: () => toLabel(d.bucketStart),
+      hideDataPoint: isNull,
+      hidePointer: isNull,
+    };
+  });
 
   return filtered;
 };
