@@ -28,6 +28,13 @@ export const insertSeedDevice = async () => {
   }
 }
 
+// Generate timestamp "YYYY-MM-DD HH:mm:ss"
+const toSqlDateTime = (date: Date) => {
+  return date
+    .toISOString()
+    .replace('T', ' ')
+    .replace(/\.\d+Z$/, '')
+}
 /**
  * Insert seed measurements for the test device.
  */
@@ -40,22 +47,24 @@ export const insertSeedMeasurements = async () => {
 
   if (!device) throw new Error('TEST_DEVICE not found — call insertSeedDevice first')
 
+  const now = new Date()
   for (const m of SEED_MEASUREMENTS) {
-    const exists = await db
-      .prepare('SELECT 1 FROM measurements WHERE device_id = ? AND created_at = ?')
-      .bind(device.id, m.createdAt)
-      .first()
+    const createdAtDate = new Date(now.getTime() - m.minutesAgo * 60 * 1000)
 
-    if (!exists) {
-      await db
-        .prepare(
-          `INSERT INTO measurements 
-            (device_id, temperature, humidity, pressure, created_at)
-           VALUES (?, ?, ?, ?, ?)`
-        )
-        .bind(device.id, m.temperature, m.humidity, m.pressure, m.createdAt)
-        .run()
-    }
+    // Round off seconds, to make stable tests
+    createdAtDate.setSeconds(0)
+    createdAtDate.setMilliseconds(0)
+
+    const createdAt = toSqlDateTime(createdAtDate)
+
+    await db
+      .prepare(
+        `INSERT INTO measurements 
+          (device_id, temperature, humidity, pressure, created_at)
+         VALUES (?, ?, ?, ?, ?)`
+      )
+      .bind(device.id, m.temperature, m.humidity, m.pressure, createdAt)
+      .run()
   }
 }
 
