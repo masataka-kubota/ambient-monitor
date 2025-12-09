@@ -1,16 +1,20 @@
+import { useTranslation } from "react-i18next";
+
 import { KeyboardAvoidingScrollableView } from "@/components/layouts";
-import { HistoryMeasurementView } from "@/components/measurements";
+import { DataMeasurementsView } from "@/components/measurements";
 import { Heading } from "@/components/ui";
 
-const History = () => {
+const Data = () => {
+  const { t } = useTranslation();
+
   return (
     <KeyboardAvoidingScrollableView>
       <Heading iconName="line-graph" align="center">
-        History
+        {t("data.title")}
       </Heading>
-      <HistoryMeasurementView />
+      <DataMeasurementsView />
     </KeyboardAvoidingScrollableView>
   );
 };
 
-export default History;
+export default Data;

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { StyleSheet, View } from "react-native";
 
 import CShapeGaugeSkeleton from "@/components/skelton/CShapeGaugeSkeleton";
@@ -59,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LiveMeasurementSkeleton;
+export default memo(LiveMeasurementSkeleton);

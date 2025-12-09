@@ -1,8 +1,9 @@
 import type { z } from '@hono/zod-openapi'
 import { env } from 'cloudflare:test'
 import { testClient } from 'hono/testing'
-import { SEED_MEASUREMENTS, TEST_DEVICE, TEST_ENV } from 'test/constants'
+import { TEST_DEVICE, TEST_ENV } from 'test/constants'
 
+import { PERIOD_INTERVAL_MINUTES } from '@/constants'
 import app from '@/index'
 import type {
   MeasurementListResponseSchema,
@@ -12,143 +13,129 @@ import type {
 } from '@/schemas'
 
 describe('GET /measurements', () => {
-  // Create the test client from the app instance
   const client = testClient(app, env)
-
   const headerData = { Authorization: `Bearer ${TEST_ENV.EXPO_API_TOKEN}` }
 
-  it('should return 200 with array of measurements', async () => {
+  // -------------------------
+  // 1day test
+  // -------------------------
+  it('1d: should return correct aggregated measurements', async () => {
     const res = await client.measurements.$get({
       header: headerData,
-      query: { deviceId: TEST_DEVICE.externalId },
+      query: { deviceId: TEST_DEVICE.externalId, period: '1d' },
     })
+
     expect(res.status).toBe(200)
-    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
-    expect(data.success).toEqual(true)
-    expect(data.data).toBeInstanceOf(Array)
+    const json = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
+
+    expect(json.success).toBe(true)
+    expect(Array.isArray(json.data)).toBe(true)
+
+    const intervalMin = PERIOD_INTERVAL_MINUTES['1d']
+    const expectedBuckets = Math.floor((1 * 24 * 60) / intervalMin) + 1
+    expect(json.data.length).toBe(expectedBuckets)
+
+    const nonNullCount = json.data.filter((r) => r.temperature !== null).length
+    expect(nonNullCount).toBeGreaterThan(0)
   })
 
-  it('should return measurements in descending order by createdAt', async () => {
+  // -------------------------
+  // 7day test
+  // -------------------------
+  it('7d: should return correct aggregated measurements', async () => {
     const res = await client.measurements.$get({
       header: headerData,
-      query: { deviceId: TEST_DEVICE.externalId },
+      query: { deviceId: TEST_DEVICE.externalId, period: '7d' },
     })
-    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
-    expect(data.success).toBe(true)
-    expect(data.data).toBeInstanceOf(Array)
 
-    // Verify that the measurements are in descending order by createdAt
-    for (let i = 1; i < data.data.length; i++) {
-      const prev = new Date(data.data[i - 1].createdAt).getTime()
-      const curr = new Date(data.data[i].createdAt).getTime()
-      expect(prev).toBeGreaterThanOrEqual(curr)
-    }
-  })
-
-  it('should return 200 with empty array when no measurements exist', async () => {
-    // remove all seed measurements
-    const device = await env.DB.prepare('SELECT id FROM devices WHERE external_id = ?')
-      .bind(TEST_DEVICE.externalId)
-      .first<{ id: number }>()
-    if (!device) throw new Error('TEST_DEVICE not found, seed device first')
-    await env.DB.prepare('DELETE FROM measurements WHERE device_id = ?').bind(device.id).run()
-
-    const res = await client.measurements.$get({
-      header: headerData,
-      query: { deviceId: TEST_DEVICE.externalId },
-    })
     expect(res.status).toBe(200)
-    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
-    expect(data.success).toBe(true)
-    expect(Array.isArray(data.data)).toBe(true)
-    expect(data.data.length).toBe(0)
+    const json = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
+
+    expect(json.success).toBe(true)
+    expect(Array.isArray(json.data)).toBe(true)
+
+    const intervalMin = PERIOD_INTERVAL_MINUTES['7d']
+    const expectedBuckets = Math.floor((7 * 24 * 60) / intervalMin) + 1
+    expect(json.data.length).toBe(expectedBuckets)
+
+    const nonNullCount = json.data.filter((r) => r.temperature !== null).length
+    expect(nonNullCount).toBeGreaterThan(0)
   })
 
+  // -------------------------
+  // 30day test
+  // -------------------------
+  it('30d: should return correct aggregated measurements', async () => {
+    const res = await client.measurements.$get({
+      header: headerData,
+      query: { deviceId: TEST_DEVICE.externalId, period: '30d' },
+    })
+
+    expect(res.status).toBe(200)
+    const json = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
+
+    expect(json.success).toBe(true)
+    expect(Array.isArray(json.data)).toBe(true)
+
+    const intervalMin = PERIOD_INTERVAL_MINUTES['30d']
+    const expectedBuckets = Math.floor((30 * 24 * 60) / intervalMin) + 1
+    expect(json.data.length).toBe(expectedBuckets)
+
+    const nonNullCount = json.data.filter((r) => r.temperature !== null).length
+    expect(nonNullCount).toBeGreaterThan(0)
+  })
+
+  // -------------------------
+  // 401 tests
+  // -------------------------
   it('should return 401 if authorization header is missing', async () => {
     const res = await client.measurements.$get({
       header: { Authorization: 'Bearer invalid-token' },
-      query: { deviceId: TEST_DEVICE.externalId },
+      query: { deviceId: TEST_DEVICE.externalId, period: '1d' },
     })
     expect(res.status).toBe(401)
-    const data = (await res.json()) as z.infer<typeof UnauthorizedErrorSchema>
-    expect(data.success).toBe(false)
+    const json = (await res.json()) as z.infer<typeof UnauthorizedErrorSchema>
+    expect(json.success).toBe(false)
+    expect(json.error.message).toMatch(/Unauthorized error/i)
   })
 
+  // -------------------------
+  // 404 tests
+  // -------------------------
   it('should return 404 if deviceId is missing', async () => {
     const res = await client.measurements.$get({
       header: headerData,
-      query: {},
+      query: { period: '1d' },
     })
     expect(res.status).toBe(404)
-    const data = (await res.json()) as z.infer<typeof NotFoundErrorSchema>
-    expect(data.success).toBe(false)
-    expect(data.error.message).toMatch(/Missing deviceId/i)
+    const json = (await res.json()) as z.infer<typeof NotFoundErrorSchema>
+    expect(json.success).toBe(false)
+    expect(json.error.message).toMatch(/Missing deviceId/i)
   })
 
   it('should return 404 if device does not exist', async () => {
     const res = await client.measurements.$get({
       header: headerData,
-      query: { deviceId: 'non-existent-device' },
+      query: { deviceId: 'unknown', period: '1d' },
     })
     expect(res.status).toBe(404)
-    const data = (await res.json()) as z.infer<typeof NotFoundErrorSchema>
-    expect(data.success).toBe(false)
-    expect(data.error.message).toMatch(/Device not found/i)
+    const json = (await res.json()) as z.infer<typeof NotFoundErrorSchema>
+    expect(json.success).toBe(false)
+    expect(json.error.message).toMatch(/Device not found/i)
   })
 
-  it('should return 422 when limit and offset are non-numeric strings', async () => {
+  // -------------------------
+  // 422 tests
+  // -------------------------
+  it('should return 422 if period is invalid', async () => {
+    const query: unknown = { deviceId: TEST_DEVICE.externalId, period: 'invalid' }
+
     const res = await client.measurements.$get({
       header: headerData,
-      query: { deviceId: TEST_DEVICE.externalId, limit: 'invalid', offset: 'invalid' },
+      query: query as Record<string, unknown>,
     })
     expect(res.status).toBe(422)
-    const data = (await res.json()) as z.infer<typeof ValidationErrorSchema>
-    expect(data.success).toBe(false)
-    expect(data.errors).toBeInstanceOf(Array)
-    expect(data.errors.length).toBeGreaterThanOrEqual(2)
-    const limitError = data.errors.find((e) => e.field === 'limit')
-    const offsetError = data.errors.find((e) => e.field === 'offset')
-    expect(limitError).toBeDefined()
-    expect(limitError?.message).toBe('Must be a number')
-    expect(offsetError).toBeDefined()
-    expect(offsetError?.message).toBe('Must be a number')
-  })
-
-  it('should respect startAt and endAt filters', async () => {
-    const seedStart = new Date(SEED_MEASUREMENTS[0].createdAt).getTime()
-    const seedEnd = new Date(SEED_MEASUREMENTS[SEED_MEASUREMENTS.length - 1].createdAt).getTime()
-    const queryStartAt = new Date(seedStart + 1 * 60 * 1000).toISOString() // 1 minute later
-    const queryEndAt = new Date(seedEnd - 1 * 60 * 1000).toISOString() // 1 minute earlier
-
-    const res = await client.measurements.$get({
-      header: headerData,
-      query: {
-        deviceId: TEST_DEVICE.externalId,
-        startAt: queryStartAt,
-        endAt: queryEndAt,
-      },
-    })
-    expect(res.status).toBe(200)
-    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
-    expect(data.success).toBe(true)
-    // Verify that the returned data is within the range `startAt <= createdAt <= endAt`
-    for (const m of data.data) {
-      const created = new Date(m.createdAt)
-      expect(created.getTime()).toBeGreaterThanOrEqual(seedStart)
-      expect(created.getTime()).toBeLessThanOrEqual(seedEnd)
-    }
-  })
-
-  it('should respect limit and offset', async () => {
-    const res = await client.measurements.$get({
-      header: headerData,
-      query: { deviceId: TEST_DEVICE.externalId, limit: '2', offset: '1' },
-    })
-    expect(res.status).toBe(200)
-    const data = (await res.json()) as z.infer<typeof MeasurementListResponseSchema>
-    expect(data.success).toBe(true)
-    expect(data.data.length).toBeLessThanOrEqual(2)
-    const expectedSecondMeasurement = SEED_MEASUREMENTS[1]
-    expect(data.data[0].createdAt).toBe(expectedSecondMeasurement.createdAt)
+    const json = (await res.json()) as z.infer<typeof ValidationErrorSchema>
+    expect(json.success).toBe(false)
   })
 })

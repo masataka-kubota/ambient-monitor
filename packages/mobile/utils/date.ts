@@ -3,9 +3,7 @@ import { format, toZonedTime } from "date-fns-tz";
 
 /**
  * Converts a UTC datetime string to the local timezone and formats it.
- * @param utcString A UTC datetime string, e.g., "2025-12-03 04:54:08"
- * @param dateFormat The output format (date-fns format string, default is "yyyy-MM-dd HH:mm:ss")
- * @returns A string representing the datetime in the local timezone
+ * e.g., "2025-12-04 04:27:32" → "2025-12-04 13:27:32" (JST)
  */
 export const formatToLocalTime = (
   utcString: string,

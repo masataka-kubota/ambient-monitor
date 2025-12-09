@@ -53,7 +53,6 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           styles.indicator,
           animatedStyle,
           {
-            // backgroundColor: currentThemeColors.mainBackground,
             backgroundColor: currentThemeColors.tint,
             height: dimension.height - 15,
             width: buttonWidth - 20,
@@ -69,7 +68,9 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 
         const isFocused = state.index === index;
 
-        const baseColor = isFocused ? "#fff" : currentThemeColors.mediumColor;
+        const baseColor = isFocused
+          ? currentThemeColors.onTint
+          : currentThemeColors.mediumColor;
 
         const onPress = () => {
           tabPositionX.value = withSpring(index * buttonWidth, {

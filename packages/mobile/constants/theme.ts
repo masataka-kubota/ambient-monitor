@@ -8,7 +8,8 @@ const white = "rgba(245, 245, 245, 1)"; // #f5f5f5
 const gray = "rgba(154, 154, 154, 1)"; // #9a9a9a
 const blue = "rgba(0, 113, 227, 1)"; // #0071e3
 const red = "rgba(255, 59, 48, 1)"; // #e03440
-const tint = "rgba(30, 198, 136, 1)"; // #1ec688ff
+const tint = "rgba(74, 208, 186, 1)"; // #4ad0ba
+const onTint = "rgba(255, 255, 255, 1)"; // #ffffff
 
 // default (light)
 const inputBackgroundLight = "rgba(232, 232, 232, 1)"; // #e8e8e8
@@ -57,6 +58,7 @@ export const APP_THEME_COLORS: AppThemeColors = {
     navBackground: navBackgroundLight,
     shadow: shadowLight,
     tint: tint,
+    onTint: onTint,
   },
   dark: {
     mainColor: white,
@@ -67,5 +69,6 @@ export const APP_THEME_COLORS: AppThemeColors = {
     navBackground: navBackgroundDark,
     shadow: shadowDark,
     tint: tint,
+    onTint: onTint,
   },
 };

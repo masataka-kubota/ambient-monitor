@@ -2,35 +2,33 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 
 import { selectedDeviceIdAtom } from "@/atoms";
+import { API_TOKEN } from "@/constants";
 import { apiClient } from "@/lib";
+import { MeasurementRange } from "@/types";
 
-const API_TOKEN = process.env.EXPO_PUBLIC_EXPO_API_TOKEN || "";
-
-const useMeasurements = () => {
+const useMeasurements = (range: MeasurementRange) => {
   const selectedDeviceId = useAtomValue(selectedDeviceIdAtom);
 
-  const onFetchMeasurements = async () => {
+  const fetchMeasurements = async () => {
     const res = await apiClient.measurements.$get({
       header: { Authorization: `Bearer ${API_TOKEN}` },
-      query: { deviceId: selectedDeviceId },
+      query: { deviceId: selectedDeviceId, period: range },
     });
 
     const data = await res.json();
 
     if (!data.success) {
-      throw new Error("Failed to fetch measurements");
+      throw new Error("Failed to fetch last 24h measurements");
     }
 
     return data.data;
   };
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["measurements", selectedDeviceId],
-    queryFn: onFetchMeasurements,
+  return useQuery({
+    queryKey: ["measurements24h", selectedDeviceId, range],
+    queryFn: fetchMeasurements,
     refetchInterval: 5 * 60 * 1000,
   });
-
-  return { data, isLoading };
 };
 
 export default useMeasurements;

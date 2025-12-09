@@ -11,6 +11,7 @@ export interface ThemeColors {
   navBackground: string;
   shadow: string;
   tint: string;
+  onTint: string;
 }
 
 export interface AppThemeColors {

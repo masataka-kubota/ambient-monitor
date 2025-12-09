@@ -25,7 +25,7 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="history"
+        name="data"
         options={{
           tabBarLabel: t("navigation.tabBarLabel.history"),
           tabBarIcon: ({ color, size, focused }) => (
