@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Dimensions, StyleSheet, View } from "react-native";
 
 import MeasurementLineChart from "@/components/measurements/MeasurementLineChart";
+import { DataGraphSkeleton } from "@/components/skelton";
 import { IconTabs, ThemeText } from "@/components/ui";
 import { MEASUREMENT_SETTINGS } from "@/constants";
 import { useResolvedTheme } from "@/hooks/common";
@@ -53,7 +54,15 @@ const DataGraph = ({ period }: DataGraphProps) => {
 
   const setting = MEASUREMENT_SETTINGS[selectedKey];
 
-  if (isLoading) return <ThemeText>Loading...</ThemeText>;
+  if (isLoading)
+    return (
+      <DataGraphSkeleton
+        width={WIDTH}
+        height={HEIGHT}
+        tabWidth={width}
+        tabLength={tabs.length}
+      />
+    );
   if (!data) return <ThemeText>No data</ThemeText>;
 
   const chartData = getChartData({
