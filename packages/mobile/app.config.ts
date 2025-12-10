@@ -64,6 +64,14 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
         },
       },
     ],
+    [
+      "react-native-ble-plx",
+      {
+        modes: ["central"],
+        bluetoothAlwaysPermission:
+          "Allow $(getAppName()) to connect to bluetooth devices",
+      },
+    ],
   ],
 
   experiments: {
