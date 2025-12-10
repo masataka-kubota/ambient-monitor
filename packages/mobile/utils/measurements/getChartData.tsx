@@ -26,14 +26,14 @@ export const getChartData = ({ data, key, textColor }: getChartDataProps) => {
   };
 
   const filtered = data.map((d) => {
-    const value = d[key];
-    const isNull = value == null;
+    const value = d[key] ?? undefined;
+    const isUndefined = value === undefined;
 
     return {
       value,
       labelComponent: () => toLabel(d.bucketStart),
-      hideDataPoint: isNull,
-      hidePointer: isNull,
+      hideDataPoint: isUndefined,
+      hidePointer: isUndefined,
     };
   });
 

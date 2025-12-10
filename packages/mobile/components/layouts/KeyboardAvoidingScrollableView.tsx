@@ -24,7 +24,7 @@ const KeyboardAvoidingScrollableView = ({
   const insets = useSafeAreaInsets();
 
   const paddingTop = insets.top + 20;
-  const paddingBottom = insets.bottom + 100; // 100 is the height of the TabBar
+  const paddingBottom = insets.bottom + 120; // 100 is the height of the TabBar
 
   const animatedStyle = useAnimatedStyle(() => {
     const isKeyboardOpen = keyboard.state.value === KeyboardState.OPEN;
