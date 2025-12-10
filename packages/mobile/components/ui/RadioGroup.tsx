@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import {
   Pressable,
   StyleProp,
@@ -10,6 +10,7 @@ import {
 
 import ThemeText from "@/components/ui/ThemeText";
 import { useResolvedTheme } from "@/hooks/common";
+import { triggerLightHaptics } from "@/utils";
 
 interface RadioGroupProps<T extends { id: number; name: string }> {
   data: T[];
@@ -29,6 +30,14 @@ const RadioGroup = <T extends { id: number; name: string }>({
 }: RadioGroupProps<T>) => {
   const { currentThemeColors } = useResolvedTheme();
 
+  const handlePress = useCallback(
+    (id: number) => {
+      triggerLightHaptics();
+      onPress(id);
+    },
+    [onPress],
+  );
+
   return (
     <>
       {data.map((item) => (
@@ -39,7 +48,7 @@ const RadioGroup = <T extends { id: number; name: string }>({
             { borderBottomColor: currentThemeColors.lightColor },
             buttonStyle,
           ]}
-          onPress={() => onPress(item.id)}
+          onPress={() => handlePress(item.id)}
           disabled={item.id === selectedId}
         >
           <ThemeText style={textStyle} testID={`radio-group-option-${item.id}`}>

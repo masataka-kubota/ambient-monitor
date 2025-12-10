@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, View } from "react-native";
 
@@ -6,6 +6,7 @@ import { ThemeText } from "@/components/ui";
 import { MEASUREMENT_RANGES } from "@/constants";
 import { useResolvedTheme } from "@/hooks/common";
 import { MeasurementRange } from "@/types";
+import { triggerLightHaptics } from "@/utils";
 
 interface PeriodTabsProps {
   selectedPeriod: MeasurementRange;
@@ -16,6 +17,14 @@ const PeriodTabs = ({ selectedPeriod, onSelectPeriod }: PeriodTabsProps) => {
   const { t } = useTranslation();
   const { currentThemeColors } = useResolvedTheme();
 
+  const handlePress = useCallback(
+    (p: MeasurementRange) => {
+      triggerLightHaptics();
+      onSelectPeriod(p);
+    },
+    [onSelectPeriod],
+  );
+
   return (
     <View style={style.container}>
       {MEASUREMENT_RANGES.map((p) => {
@@ -23,7 +32,7 @@ const PeriodTabs = ({ selectedPeriod, onSelectPeriod }: PeriodTabsProps) => {
         return (
           <Pressable
             key={p}
-            onPress={() => onSelectPeriod(p)}
+            onPress={() => handlePress(p)}
             style={[
               style.tabButton,
               focused && {
