@@ -5,12 +5,17 @@
     "moduleResolution": "Bundler",
     "strict": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
     "lib": ["ESNext"],
-    "types": ["vitest/globals", "@cloudflare/workers-types", "@cloudflare/vitest-pool-workers"],
+    "types": [
+      "vitest/globals",
+      "@cloudflare/vitest-pool-workers",
+      "./worker-configuration.d.ts",
+      "node"
+    ],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx"
   }

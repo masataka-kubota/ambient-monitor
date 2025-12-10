@@ -1,0 +1,11 @@
+{
+  "title": {
+    "theme": "Theme Settings",
+    "lang": "Language Settings"
+  },
+  "theme": {
+    "system": "Follow system",
+    "light": "Light",
+    "dark": "Dark"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "date": {
+    "format": {
+      "ymdehm": "{{date, yyyy年M月d日(EEE) HH:mm}}",
+      "mdehm": "{{date, M月d日(EEE) HH:mm}}",
+      "mde": "{{date, M月d日(EEE)}}",
+      "md": "{{date, M月d日}}",
+      "ym": "{{date, yyyy年M月}}"
+    }
+  },
+  "measurement": {
+    "temperature": "温度",
+    "humidity": "湿度",
+    "pressure": "気圧"
+  }
+}

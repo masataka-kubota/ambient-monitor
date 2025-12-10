@@ -8,6 +8,7 @@ import {
   NotFoundErrorSchema,
   SuccessResponseSchema,
   SuccessWithDataArraySchema,
+  SuccessWithDataSchema,
   UnauthorizedErrorSchema,
   ValidationErrorSchema,
 } from '@/schemas/common'
@@ -20,10 +21,17 @@ const insertSchema = createInsertSchema(measurements, {
   humidity: z.number().min(0).max(100).openapi({ example: 50 }),
   pressure: z.number().min(0).openapi({ example: 1000 }),
 })
-// GET
-const selectSchema = createSelectSchema(measurements, {
+// GET (for live)
+const selectLatestSchema = createSelectSchema(measurements, {
   id: z.number().openapi({ example: 1 }),
   createdAt: z.string().openapi({ example: '2025-11-19 10:00:00' }),
+})
+// GET (for Aggregate)
+const selectListSchema = z.object({
+  bucketStart: z.string().openapi({ example: '2025-12-08 22:00:00' }),
+  temperature: z.number().nullable().openapi({ example: 25 }),
+  humidity: z.number().nullable().openapi({ example: 50 }),
+  pressure: z.number().nullable().openapi({ example: 1000 }),
 })
 
 /* --- POST /measurements --- */
@@ -64,14 +72,11 @@ export const createMeasurementRoute = createRoute({
 })
 
 /* --- GET /measurements --- */
-export const MeasurementListResponseSchema = SuccessWithDataArraySchema(selectSchema)
+export const MeasurementListResponseSchema = SuccessWithDataArraySchema(selectListSchema)
 
 export const MeasurementListQuerySchema = z.object({
   deviceId: z.string().optional().openapi({ example: 'device-id' }),
-  startAt: z.string().optional().openapi({ example: '2025-11-19 10:00:00' }),
-  endAt: z.string().optional().openapi({ example: '2025-11-19 10:00:00' }),
-  limit: z.string().regex(/^\d+$/, 'Must be a number').optional().openapi({ example: '10' }),
-  offset: z.string().regex(/^\d+$/, 'Must be a number').optional().openapi({ example: '0' }),
+  period: z.enum(['1d', '7d', '30d']).default('1d'),
 })
 
 export const listMeasurementsRoute = createRoute({
@@ -98,6 +103,37 @@ export const listMeasurementsRoute = createRoute({
     422: {
       content: { 'application/json': { schema: ValidationErrorSchema } },
       description: 'Validation error',
+    },
+  },
+})
+
+/* --- GET /measurements/latest --- */
+export const MeasurementLatestResponseSchema = SuccessWithDataSchema(selectLatestSchema)
+
+export const MeasurementLatestQuerySchema = z.object({
+  deviceId: z.string().optional().openapi({ example: 'device-id' }),
+})
+
+export const latestMeasurementRoute = createRoute({
+  method: 'get',
+  path: '/latest',
+  middleware: [withDb, verifyExpoToken],
+  request: {
+    headers: BearerAuthHeaderSchema,
+    query: MeasurementLatestQuerySchema,
+  },
+  responses: {
+    200: {
+      content: { 'application/json': { schema: MeasurementLatestResponseSchema } },
+      description: 'List of measurements',
+    },
+    401: {
+      content: { 'application/json': { schema: UnauthorizedErrorSchema } },
+      description: 'Unauthorized',
+    },
+    404: {
+      content: { 'application/json': { schema: NotFoundErrorSchema } },
+      description: 'Not found',
     },
   },
 })

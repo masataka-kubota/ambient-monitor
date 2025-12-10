@@ -7,7 +7,17 @@ repo_root="$(git rev-parse --show-toplevel)"
 # Only run on backend directory.
 if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^packages/backend/')" ]; then
   cd "$repo_root/packages/backend"
+  bun run cf-typegen
+  bun run build:types
   bun run type-check
   bun run lint
   bun run test
+fi
+
+# Only run on mobile directory.
+if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^packages/mobile/')" ]; then
+  cd "$repo_root/packages/mobile"
+  bun run type-check
+  bun run lint
+  # bun run test
 fi
