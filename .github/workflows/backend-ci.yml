@@ -20,11 +20,14 @@ jobs:
       - name: Install dependencies (root/workspace)
         run: bun install
 
-      - name: Lint
-        run: bun --cwd packages/backend lint
+      - name: Generate Cloudflare types
+        run: bun --cwd packages/backend cf-typegen
 
       - name: Type-check
         run: bun --cwd packages/backend type-check
+
+      - name: Lint
+        run: bun --cwd packages/backend lint
 
       - name: Run tests
         run: bun --cwd packages/backend test
