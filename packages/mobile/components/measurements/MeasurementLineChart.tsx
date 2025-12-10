@@ -8,7 +8,7 @@ import { MeasurementSetting } from "@/types";
 
 interface LineChartDataPoint {
   labelComponent?: React.ReactNode;
-  value: number;
+  value?: number;
 }
 
 interface MeasurementLineChartProps {
@@ -64,11 +64,11 @@ const MeasurementLineChart = ({
           autoAdjustPointerLabelPosition: true,
           activatePointersOnLongPress: true,
           activatePointersInstantlyOnTouch: false,
-          // activatePointersDelay: 500,
           pointerLabelComponent: (
             dataPoints: LineChartDataPoint[] | undefined,
           ) => {
             if (!dataPoints) return null;
+            if (!dataPoints[0].value) return null;
             const value = dataPoints[0].value.toFixed(setting.decimals);
             return (
               <View
