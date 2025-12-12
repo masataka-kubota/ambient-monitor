@@ -4,13 +4,14 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #include <JWTUtils.h>
+#include "ble_manager.h"
 #include "secrets.h"
 
 Adafruit_BME280 bme;
 String DEVICE_JWT;
 
 const unsigned long PUBLISH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
-const unsigned long JWT_EXPIRATION_SEC = 30; // 30 seconds
+const unsigned long JWT_EXPIRATION_SEC = 60; // 60 seconds
 unsigned long lastPublish = 0;
 
 // ---------------- Pressure Filter State ----------------
@@ -239,6 +240,7 @@ void setup() {
 
   connectToWiFi();
   syncTime();
+  initBLE();
 }
 
 // ---------------- loop ----------------

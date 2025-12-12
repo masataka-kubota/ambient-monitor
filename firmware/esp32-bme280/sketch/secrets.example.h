@@ -13,3 +13,6 @@
 
 // jwt secret (devices.secret)
 #define DEVICE_SECRET   "super-secret-value"
+
+// BLE
+#define BLE_SERVICE_UUID "f0e0cafe-1234-5678-9abc-def012345678"
