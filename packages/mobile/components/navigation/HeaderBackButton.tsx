@@ -1,4 +1,4 @@
-import { Entypo } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { router, useRouter } from "expo-router";
 import React, { memo, useCallback } from "react";
 import { Pressable, StyleSheet } from "react-native";
@@ -30,8 +30,8 @@ const HeaderBackButton = () => {
         },
       ]}
     >
-      <Entypo
-        name={hasHistory ? "arrow-left" : "cross"}
+      <Ionicons
+        name={hasHistory ? "arrow-back" : "close-outline"}
         size={24}
         color={currentThemeColors.mainBackground}
       />
