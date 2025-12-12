@@ -1,5 +1,11 @@
 import { memo, useCallback } from "react";
-import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  ViewStyle,
+} from "react-native";
 
 import { useResolvedTheme } from "@/hooks/common";
 import { triggerLightHaptics } from "@/utils";
@@ -10,6 +16,7 @@ interface PrimaryButtonProps {
   disabled?: boolean;
   isPending?: boolean;
   backgroundColor?: ViewStyle["backgroundColor"];
+  style?: StyleProp<ViewStyle>;
 }
 
 const PrimaryButton = ({
@@ -18,6 +25,7 @@ const PrimaryButton = ({
   disabled,
   isPending,
   backgroundColor,
+  style,
 }: PrimaryButtonProps) => {
   const { currentThemeColors } = useResolvedTheme();
 
@@ -40,6 +48,7 @@ const PrimaryButton = ({
           backgroundColor: buttonColor,
           shadowColor: currentThemeColors.shadow,
         },
+        style,
       ]}
       disabled={disabled || isPending}
     >
