@@ -1,49 +1,59 @@
 import { useSetAtom } from "jotai";
 import { useCallback } from "react";
-import { Device } from "react-native-ble-plx";
 
-import { connectedDeviceAtom, scannedDevicesAtom } from "@/atoms";
+import {
+  connectedDeviceAtom,
+  connectedDeviceIdAtom,
+  scannedDevicesAtom,
+} from "@/atoms";
 import { bleManager } from "@/lib";
 
 const useBleConnect = () => {
+  const setConnectedIdDevice = useSetAtom(connectedDeviceIdAtom);
   const setConnectedDevice = useSetAtom(connectedDeviceAtom);
   const setScannedDevices = useSetAtom(scannedDevicesAtom);
 
   const connectToDevice = useCallback(
-    async (device: Device) => {
+    async (deviceId: string) => {
       try {
-        const connectedDevice = await bleManager.connectToDevice(device.id);
+        const connectedDevice = await bleManager.connectToDevice(deviceId);
         await connectedDevice.discoverAllServicesAndCharacteristics();
+        setConnectedIdDevice(connectedDevice.id);
         setConnectedDevice(connectedDevice);
-        setScannedDevices((prev) => prev.filter((d) => d.id !== device.id));
+        setScannedDevices((prev) => prev.filter((d) => d.id !== deviceId));
       } catch (error) {
         console.error("Connection failed:", error);
       }
     },
-    [setConnectedDevice, setScannedDevices],
+    [setConnectedDevice, setConnectedIdDevice, setScannedDevices],
   );
 
-  const autoConnectToDevice = useCallback(async (device: Device) => {
-    try {
-      const connectedDevice = await bleManager.connectToDevice(device.id);
-      await connectedDevice.discoverAllServicesAndCharacteristics();
-      return true;
-    } catch (error) {
-      console.error("Auto connection failed:", error);
-      return false;
-    }
-  }, []);
-
-  const disconnectDevice = useCallback(
-    async (device: Device) => {
+  const autoConnectToDevice = useCallback(
+    async (deviceId: string) => {
       try {
-        await bleManager.cancelDeviceConnection(device.id);
-        setConnectedDevice(null);
+        const connectedDevice = await bleManager.connectToDevice(deviceId);
+        await connectedDevice.discoverAllServicesAndCharacteristics();
+        setConnectedDevice(connectedDevice);
+        return true;
       } catch (error) {
-        console.error(`Failed to disconnect: ${device.id}`, error);
+        console.error("Auto connection failed:", error);
+        return false;
       }
     },
     [setConnectedDevice],
+  );
+
+  const disconnectDevice = useCallback(
+    async (deviceId: string) => {
+      try {
+        await bleManager.cancelDeviceConnection(deviceId);
+        setConnectedIdDevice(null);
+        setConnectedDevice(null);
+      } catch (error) {
+        console.error(`Failed to disconnect: ${deviceId}`, error);
+      }
+    },
+    [setConnectedDevice, setConnectedIdDevice],
   );
 
   return { connectToDevice, autoConnectToDevice, disconnectDevice };

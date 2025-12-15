@@ -9,7 +9,7 @@ import { useResolvedTheme } from "@/hooks/common";
 
 interface BleConnectedUIProps {
   connectedDevice: Device;
-  onDisconnect: (device: Device) => Promise<void>;
+  onDisconnect: (deviceId: string) => Promise<void>;
 }
 
 const BleConnectedUI = ({
@@ -18,8 +18,6 @@ const BleConnectedUI = ({
 }: BleConnectedUIProps) => {
   const { currentThemeColors } = useResolvedTheme();
   const { t } = useTranslation();
-
-  if (!connectedDevice) return null;
 
   return (
     <View style={styles.container}>
@@ -41,7 +39,7 @@ const BleConnectedUI = ({
       {/* Disconnect button */}
       <PrimaryButton
         title={t("ble.connected.disconnectButton")}
-        onPress={() => onDisconnect(connectedDevice)}
+        onPress={() => onDisconnect(connectedDevice.id)}
         backgroundColor={currentThemeColors.error}
       />
     </View>

@@ -10,7 +10,7 @@ import { useResolvedTheme } from "@/hooks/common";
 interface BleNotConnectedUIProps {
   scannedDevices: Device[];
   onScan: () => void;
-  onConnect: (device: Device) => void;
+  onConnect: (deviceId: string) => void;
 }
 
 const BleNotConnectedUI = ({
@@ -65,7 +65,7 @@ const BleNotConnectedUI = ({
         }
         renderItem={({ item }) => (
           <Pressable
-            onPress={() => onConnect(item)}
+            onPress={() => onConnect(item.id)}
             style={[
               styles.itemContainer,
               {

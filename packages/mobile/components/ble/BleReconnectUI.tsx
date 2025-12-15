@@ -9,8 +9,8 @@ import { useResolvedTheme } from "@/hooks/common";
 
 interface BleReconnectUIProps {
   connectedDevice: Device;
-  onReconnect: (device: Device) => Promise<void>;
-  onDisconnect: (device: Device) => Promise<void>;
+  onReconnect: (deviceId: string) => Promise<void>;
+  onDisconnect: (deviceId: string) => Promise<void>;
 }
 
 const BleReconnectUI = ({
@@ -43,13 +43,13 @@ const BleReconnectUI = ({
       {/* Reconnect button */}
       <PrimaryButton
         title={t("ble.reconnect.reconnectButton")}
-        onPress={() => onReconnect(connectedDevice)}
+        onPress={() => onReconnect(connectedDevice.id)}
       />
 
       {/* Disconnect button */}
       <PrimaryButton
         title={t("ble.reconnect.disconnectButton")}
-        onPress={() => onDisconnect(connectedDevice)}
+        onPress={() => onDisconnect(connectedDevice.id)}
         backgroundColor={currentThemeColors.error}
         style={styles.disconnectButton}
       />

@@ -3,14 +3,16 @@ import { atom } from "jotai";
 import { atomWithStorage, createJSONStorage } from "jotai/utils";
 import { Device } from "react-native-ble-plx";
 
-const connectedDevice = createJSONStorage<Device | null>(() => AsyncStorage);
+const connectedDeviceId = createJSONStorage<string | null>(() => AsyncStorage);
 
-export const connectedDeviceAtom = atomWithStorage<Device | null>(
-  "connectedDevice",
+export const connectedDeviceIdAtom = atomWithStorage<string | null>(
+  "connectedDeviceId",
   null,
-  connectedDevice,
+  connectedDeviceId,
   { getOnInit: true },
 );
+
+export const connectedDeviceAtom = atom<Device | null>(null);
 
 export const scannedDevicesAtom = atom<Device[]>([]);
 

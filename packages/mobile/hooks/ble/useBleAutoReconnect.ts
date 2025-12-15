@@ -1,19 +1,18 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
-import { Device } from "react-native-ble-plx";
 
-import { connectedDeviceAtom, isBleConnectedAtom } from "@/atoms";
+import { connectedDeviceIdAtom, isBleConnectedAtom } from "@/atoms";
 import { bleManager } from "@/lib";
 
 const useBleAutoReconnect = (
-  autoConnectToDevice: (device: Device) => Promise<boolean>,
+  autoConnectToDevice: (deviceId: string) => Promise<boolean>,
 ) => {
-  const connectedDevice = useAtomValue(connectedDeviceAtom);
+  const connectedDeviceId = useAtomValue(connectedDeviceIdAtom);
 
   const setIsBleConnected = useSetAtom(isBleConnectedAtom);
 
   useEffect(() => {
-    if (!connectedDevice) {
+    if (!connectedDeviceId) {
       setIsBleConnected(false);
       return;
     }
@@ -22,7 +21,7 @@ const useBleAutoReconnect = (
       if (state === "PoweredOn") {
         (async () => {
           try {
-            const success = await autoConnectToDevice(connectedDevice);
+            const success = await autoConnectToDevice(connectedDeviceId);
             setIsBleConnected(success);
           } catch (error) {
             console.error("connection check error", error);
@@ -35,7 +34,7 @@ const useBleAutoReconnect = (
     }, true);
 
     return () => subscription.remove();
-  }, [autoConnectToDevice, connectedDevice, setIsBleConnected]);
+  }, [autoConnectToDevice, connectedDeviceId, setIsBleConnected]);
 };
 
 export default useBleAutoReconnect;
