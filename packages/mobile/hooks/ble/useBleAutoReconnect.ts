@@ -2,7 +2,7 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { Device } from "react-native-ble-plx";
 
-import { connectedDeviceAtom, isBleConnectedAtom } from "@/atoms/bleAtom";
+import { connectedDeviceAtom, isBleConnectedAtom } from "@/atoms";
 import { bleManager } from "@/lib";
 
 const useBleAutoReconnect = (

@@ -2,7 +2,7 @@ import { useSetAtom } from "jotai";
 import { useCallback } from "react";
 import { Device } from "react-native-ble-plx";
 
-import { connectedDeviceAtom, scannedDevicesAtom } from "@/atoms/bleAtom";
+import { connectedDeviceAtom, scannedDevicesAtom } from "@/atoms";
 import { bleManager } from "@/lib";
 
 const useBleConnect = () => {

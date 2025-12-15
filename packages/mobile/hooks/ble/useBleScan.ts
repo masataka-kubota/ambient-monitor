@@ -1,6 +1,6 @@
 import { useSetAtom } from "jotai";
 
-import { scannedDevicesAtom } from "@/atoms/bleAtom";
+import { scannedDevicesAtom } from "@/atoms";
 import { BLE_DEVICE_NAME, BLE_SERVICE_UUID } from "@/constants/ble";
 import { bleManager } from "@/lib";
 

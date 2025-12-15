@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
 
-import { isBleConnectedAtom } from "@/atoms/bleAtom";
+import { isBleConnectedAtom } from "@/atoms";
 import { KeyboardAvoidingScrollableView } from "@/components/layouts";
 import { MenuLinkGroup, MenuLinkItem } from "@/components/navigation";
 import { LangSetting, ThemeSetting } from "@/components/settings";

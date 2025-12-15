@@ -5,7 +5,7 @@ import {
   connectedDeviceAtom,
   isBleConnectedAtom,
   scannedDevicesAtom,
-} from "@/atoms/bleAtom";
+} from "@/atoms";
 import {
   BleConnectedUI,
   BleNotConnectedUI,
