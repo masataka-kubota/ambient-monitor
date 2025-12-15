@@ -6,7 +6,7 @@ import { connectedDeviceAtom, isBleConnectedAtom } from "@/atoms/bleAtom";
 import { bleManager } from "@/lib";
 
 const useBleAutoReconnect = (
-  autoConnectToDevice: (device: Device) => Promise<void>,
+  autoConnectToDevice: (device: Device) => Promise<boolean>,
 ) => {
   const connectedDevice = useAtomValue(connectedDeviceAtom);
 
@@ -22,11 +22,8 @@ const useBleAutoReconnect = (
       if (state === "PoweredOn") {
         (async () => {
           try {
-            await autoConnectToDevice(connectedDevice);
-            const connected = await bleManager.isDeviceConnected(
-              connectedDevice.id,
-            );
-            setIsBleConnected(connected);
+            const success = await autoConnectToDevice(connectedDevice);
+            setIsBleConnected(success);
           } catch (error) {
             console.error("connection check error", error);
             setIsBleConnected(false);

@@ -16,7 +16,6 @@ const useBleConnect = () => {
         await connectedDevice.discoverAllServicesAndCharacteristics();
         setConnectedDevice(connectedDevice);
         setScannedDevices((prev) => prev.filter((d) => d.id !== device.id));
-        return connectedDevice;
       } catch (error) {
         console.error("Connection failed:", error);
       }
@@ -28,8 +27,10 @@ const useBleConnect = () => {
     try {
       const connectedDevice = await bleManager.connectToDevice(device.id);
       await connectedDevice.discoverAllServicesAndCharacteristics();
+      return true;
     } catch (error) {
       console.error("Auto connection failed:", error);
+      return false;
     }
   }, []);
 

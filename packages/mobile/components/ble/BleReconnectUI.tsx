@@ -9,7 +9,7 @@ import { useResolvedTheme } from "@/hooks/common";
 
 interface BleReconnectUIProps {
   connectedDevice: Device;
-  onReconnect: (device: Device) => Promise<Device | undefined>;
+  onReconnect: (device: Device) => Promise<void>;
   onDisconnect: (device: Device) => Promise<void>;
 }
 
