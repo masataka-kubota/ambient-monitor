@@ -32,45 +32,28 @@ const BleSettings = () => {
 
   if (isBleConnected === null) return <ThemeText>Loading...</ThemeText>;
 
-  const content = () => {
-    // Not connected
-    if (!connectedDevice) {
-      return (
-        <BleNotConnectedUI
-          scannedDevices={scannedDevices}
-          onScan={handleScan}
-          onConnect={connectToDevice}
-        />
-      );
-    }
-
-    // Previously connected but not connected now
-    if (connectedDevice && !isBleConnected) {
-      return (
-        <BleReconnectUI
-          connectedDevice={connectedDevice}
-          onReconnect={connectToDevice}
-          onDisconnect={disconnectDevice}
-        />
-      );
-    }
-
-    // Connected
-    if (connectedDevice && isBleConnected) {
-      return (
-        <BleConnectedUI
-          connectedDevice={connectedDevice}
-          onDisconnect={disconnectDevice}
-        />
-      );
-    }
-  };
-
   return (
     <>
       <HeaderNavigation title={t("ble.title")} />
       <KeyboardAvoidingScrollableView hasHeader={true}>
-        {content()}
+        {!connectedDevice ? (
+          <BleNotConnectedUI
+            scannedDevices={scannedDevices}
+            onScan={handleScan}
+            onConnect={connectToDevice}
+          />
+        ) : isBleConnected ? (
+          <BleConnectedUI
+            connectedDevice={connectedDevice}
+            onDisconnect={disconnectDevice}
+          />
+        ) : (
+          <BleReconnectUI
+            connectedDevice={connectedDevice}
+            onReconnect={connectToDevice}
+            onDisconnect={disconnectDevice}
+          />
+        )}
       </KeyboardAvoidingScrollableView>
     </>
   );
