@@ -70,15 +70,16 @@ const BleNotConnectedUI = ({
               styles.itemContainer,
               {
                 backgroundColor: currentThemeColors.secondaryBackground,
-                shadowColor: currentThemeColors.shadow,
               },
             ]}
           >
-            <View>
+            <View style={styles.itemLeftContainer}>
               <ThemeText style={styles.itemName}>
                 {item.name || t("ble.notConnected.unknownDevice")}
               </ThemeText>
-              <ThemeText style={styles.itemId}>{item.id}</ThemeText>
+              <ThemeText style={styles.itemId} truncate>
+                {item.id}
+              </ThemeText>
             </View>
 
             <MaterialIcons
@@ -120,8 +121,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+  },
+  itemLeftContainer: {
+    width: "90%",
   },
   itemName: {
     fontWeight: "bold",
