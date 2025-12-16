@@ -70,7 +70,7 @@ const BleWifiSettings = () => {
 
   const form = useForm({
     defaultValues: {
-      ssid: "",
+      ssid: wifiStatus?.ssid || "",
       password: "",
     },
     onSubmit: async ({ value }) => {
