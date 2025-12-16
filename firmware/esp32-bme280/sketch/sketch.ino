@@ -4,7 +4,9 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #include <JWTUtils.h>
+
 #include "ble_manager.h"
+#include "wifi_manager.h"
 #include "secrets.h"
 
 Adafruit_BME280 bme;
@@ -160,22 +162,6 @@ void syncTime() {
   Serial.println("\nTime synchronized!");
 }
 
-// ---------------- Wi-Fi ----------------
-void connectToWiFi() {
-  Serial.print("Connecting to WiFi: ");
-  Serial.println(WIFI_SSID);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.print(".");
-  }
-
-  Serial.println("\nWiFi connected!");
-  Serial.print("IP: ");
-  Serial.println(WiFi.localIP());
-}
-
 // ---------------- JWT ----------------
 String generateJWT() {
   time_t now = time(nullptr);
@@ -238,8 +224,13 @@ void setup() {
     Serial.println("FATAL: BME280 could not be initialized!");
   }
 
-  connectToWiFi();
-  syncTime();
+  bool wifiConnected = connectToWiFi();
+  if (wifiConnected) {
+    syncTime();
+  } else {
+    Serial.println("WiFi not connected, skip time sync");
+  }
+  
   initBLE();
 }
 
