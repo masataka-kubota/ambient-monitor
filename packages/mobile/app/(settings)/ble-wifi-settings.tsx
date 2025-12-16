@@ -1,11 +1,12 @@
+import { useForm } from "@tanstack/react-form";
 import { useAtomValue } from "jotai";
 import { memo, useCallback, useEffect, useState } from "react";
-import { Alert, StyleSheet, TextInput, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 import { connectedDeviceAtom } from "@/atoms";
 import { KeyboardAvoidingScrollableView } from "@/components/layouts";
 import { HeaderNavigation } from "@/components/navigation";
-import { PrimaryButton, ThemeText } from "@/components/ui";
+import { PrimaryButton, PrimaryTextInput, ThemeText } from "@/components/ui";
 import {
   BLE_SERVICE_UUID,
   WIFI_CONFIG_CHAR_UUID,
@@ -19,8 +20,6 @@ const BleWifiSettings = () => {
 
   const [wifiStatus, setWifiStatus] = useState<WifiStatus | null>(null);
   const [loading, setLoading] = useState(true);
-  const [ssid, setSsid] = useState("");
-  const [password, setPassword] = useState("");
 
   const fetchWifiStatus = useCallback(async () => {
     if (!connectedDevice) return;
@@ -49,35 +48,63 @@ const BleWifiSettings = () => {
     fetchWifiStatus();
   }, [fetchWifiStatus]);
 
-  const handleSave = async () => {
-    if (!connectedDevice) return;
+  // const handleSave = async () => {
+  //   if (!connectedDevice) return;
 
-    if (!ssid) {
-      Alert.alert("SSID cannot be empty");
-      return;
-    }
+  //   if (!ssid) {
+  //     Alert.alert("SSID cannot be empty");
+  //     return;
+  //   }
 
-    const payload = { ssid, password };
-    const json = JSON.stringify(payload);
-    const base64Payload = base64.encode(json);
+  //   const payload = { ssid, password };
+  //   const json = JSON.stringify(payload);
+  //   const base64Payload = base64.encode(json);
 
-    try {
-      await connectedDevice.writeCharacteristicWithResponseForService(
-        BLE_SERVICE_UUID,
-        WIFI_CONFIG_CHAR_UUID,
-        base64Payload,
-      );
-      console.log("WiFi config written:", payload);
+  //   try {
+  //     await connectedDevice.writeCharacteristicWithResponseForService(
+  //       BLE_SERVICE_UUID,
+  //       WIFI_CONFIG_CHAR_UUID,
+  //       base64Payload,
+  //     );
+  //     console.log("WiFi config written:", payload);
 
-      setSsid("");
-      setPassword("");
+  //     setSsid("");
+  //     setPassword("");
 
-      await fetchWifiStatus();
-    } catch (e) {
-      console.error("Failed to write WiFi config", e);
-      Alert.alert("Failed to write WiFi config");
-    }
-  };
+  //     await fetchWifiStatus();
+  //   } catch (e) {
+  //     console.error("Failed to write WiFi config", e);
+  //     Alert.alert("Failed to write WiFi config");
+  //   }
+  // };
+
+  const form = useForm({
+    defaultValues: {
+      ssid: "",
+      password: "",
+    },
+    onSubmit: async ({ value }) => {
+      if (!connectedDevice) return;
+
+      const json = JSON.stringify(value);
+      const base64Payload = base64.encode(json);
+
+      try {
+        await connectedDevice.writeCharacteristicWithResponseForService(
+          BLE_SERVICE_UUID,
+          WIFI_CONFIG_CHAR_UUID,
+          base64Payload,
+        );
+
+        form.reset();
+
+        await fetchWifiStatus();
+      } catch (e) {
+        console.error("Failed to write WiFi config", e);
+        Alert.alert("Failed to write WiFi config");
+      }
+    },
+  });
 
   const renderStatus = () => {
     if (loading) {
@@ -125,20 +152,61 @@ const BleWifiSettings = () => {
 
         {/* Form */}
         <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="SSID"
-            value={ssid}
-            onChangeText={setSsid}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <PrimaryButton title="Save Wi-Fi Settings" onPress={handleSave} />
+          {/* SSID */}
+          <form.Field
+            name="ssid"
+            validators={{
+              onChange: ({ value }) =>
+                value.trim().length === 0 ? "SSID is required" : undefined,
+            }}
+          >
+            {(field) => (
+              <PrimaryTextInput
+                isRequired
+                label="SSID"
+                placeholder="SSID"
+                value={field.state.value}
+                onChangeText={field.handleChange}
+                errorMessage={field.state.meta.errors[0]}
+              />
+            )}
+          </form.Field>
+
+          {/* Password */}
+          <form.Field
+            name="password"
+            validators={{
+              onChange: ({ value }) =>
+                value.trim().length === 0 ? "Password is required" : undefined,
+            }}
+          >
+            {(field) => (
+              <PrimaryTextInput
+                isRequired
+                label="Password"
+                placeholder="Password"
+                value={field.state.value}
+                secureTextEntry
+                onChangeText={field.handleChange}
+                errorMessage={field.state.meta.errors[0]}
+              />
+            )}
+          </form.Field>
+
+          {/* Save Button */}
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+          >
+            {([canSubmit, isSubmitting]) => (
+              <PrimaryButton
+                title={isSubmitting ? "Saving..." : "Save Wi-Fi Settings"}
+                onPress={form.handleSubmit}
+                disabled={
+                  loading || wifiStatus?.status === "connecting" || !canSubmit
+                }
+              />
+            )}
+          </form.Subscribe>
         </View>
       </KeyboardAvoidingScrollableView>
     </>
