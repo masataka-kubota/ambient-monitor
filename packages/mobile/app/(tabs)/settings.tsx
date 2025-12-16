@@ -39,6 +39,9 @@ const Settings = () => {
               : t("settings.ble.status.disconnected")
           }
         />
+        {isBleConnected && (
+          <MenuLinkItem title="Wifi Settings" href="/ble-wifi-settings" />
+        )}
       </MenuLinkGroup>
     </KeyboardAvoidingScrollableView>
   );
