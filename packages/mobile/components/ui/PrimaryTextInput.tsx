@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 
-import { ThemedText } from "@/app-example/components/themed-text";
+import ThemeText from "@/components/ui/ThemeText";
 import { useResolvedTheme } from "@/hooks/common";
 
 interface PrimaryTextInputProps extends TextInputProps {
@@ -66,15 +66,15 @@ const PrimaryTextInput = ({
       {/* label */}
       <View style={styles.labelWrapper}>
         <View style={styles.labelContainer}>
-          {label && <ThemedText style={styles.label}>{label}</ThemedText>}
+          {label && <ThemeText style={styles.label}>{label}</ThemeText>}
 
           {isRequired && (
-            <ThemedText style={[styles.required]}>※ Require</ThemedText>
+            <ThemeText style={styles.required}>※ Require</ThemeText>
           )}
         </View>
 
         {labelDescription && (
-          <ThemedText style={styles.description}>{labelDescription}</ThemedText>
+          <ThemeText style={styles.description}>{labelDescription}</ThemeText>
         )}
       </View>
 
@@ -103,11 +103,11 @@ const PrimaryTextInput = ({
         {SecureTextEntryToggle}
       </View>
       {hasError && (
-        <ThemedText
+        <ThemeText
           style={[styles.errorMessage, { color: currentThemeColors.error }]}
         >
           {errorMessage}
-        </ThemedText>
+        </ThemeText>
       )}
     </View>
   );
