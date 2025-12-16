@@ -102,6 +102,31 @@ const BleWifiSettings = () => {
     },
   });
 
+  const handleInitialize = async () => {
+    if (!connectedDevice) return;
+
+    try {
+      const json = JSON.stringify({ ssid: "", password: "" });
+      const base64Payload = base64.encode(json);
+
+      await connectedDevice.writeCharacteristicWithResponseForService(
+        BLE_SERVICE_UUID,
+        WIFI_CONFIG_CHAR_UUID,
+        base64Payload,
+      );
+
+      const status = await updateWifiStatus();
+
+      if (status && status.status === "not_configured") {
+        form.reset();
+        Alert.alert("Wi-Fi has been initialized");
+      }
+    } catch (e) {
+      console.error("Failed to initialize Wi-Fi", e);
+      Alert.alert("Failed to initialize Wi-Fi");
+    }
+  };
+
   const renderStatus = () => {
     if (loading) {
       return <ThemeText>Loading...</ThemeText>;
@@ -180,7 +205,11 @@ const BleWifiSettings = () => {
               <PrimaryTextInput
                 isRequired
                 label="Password"
-                placeholder="Password"
+                placeholder={
+                  wifiStatus?.status === "connected"
+                    ? "Already set"
+                    : "Password"
+                }
                 value={field.state.value}
                 secureTextEntry
                 onChangeText={field.handleChange}
@@ -203,6 +232,15 @@ const BleWifiSettings = () => {
               />
             )}
           </form.Subscribe>
+
+          {/* Initialize Button */}
+          {wifiStatus?.status === "connected" && (
+            <PrimaryButton
+              title="Initialize Wi-Fi"
+              onPress={handleInitialize}
+              disabled={loading}
+            />
+          )}
         </View>
       </KeyboardAvoidingScrollableView>
     </>
@@ -210,16 +248,12 @@ const BleWifiSettings = () => {
 };
 
 const styles = StyleSheet.create({
-  form: {
-    marginTop: 20,
-    paddingHorizontal: 16,
+  container: {
+    flex: 1,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    padding: 10,
-    marginBottom: 12,
+  form: {
+    marginTop: 30,
+    paddingHorizontal: 16,
   },
 });
 
