@@ -48,35 +48,25 @@ const BleWifiSettings = () => {
     fetchWifiStatus();
   }, [fetchWifiStatus]);
 
-  // const handleSave = async () => {
-  //   if (!connectedDevice) return;
+  const updateWifiStatus = useCallback(async () => {
+    if (!connectedDevice) return null;
 
-  //   if (!ssid) {
-  //     Alert.alert("SSID cannot be empty");
-  //     return;
-  //   }
+    try {
+      const char = await connectedDevice.readCharacteristicForService(
+        BLE_SERVICE_UUID,
+        WIFI_STATUS_CHAR_UUID,
+      );
+      const decoded = char.value ? base64.decode(char.value) : "{}";
+      const status: WifiStatus = JSON.parse(decoded);
 
-  //   const payload = { ssid, password };
-  //   const json = JSON.stringify(payload);
-  //   const base64Payload = base64.encode(json);
+      setWifiStatus(status);
 
-  //   try {
-  //     await connectedDevice.writeCharacteristicWithResponseForService(
-  //       BLE_SERVICE_UUID,
-  //       WIFI_CONFIG_CHAR_UUID,
-  //       base64Payload,
-  //     );
-  //     console.log("WiFi config written:", payload);
-
-  //     setSsid("");
-  //     setPassword("");
-
-  //     await fetchWifiStatus();
-  //   } catch (e) {
-  //     console.error("Failed to write WiFi config", e);
-  //     Alert.alert("Failed to write WiFi config");
-  //   }
-  // };
+      return status;
+    } catch (e) {
+      console.error("Failed to fetch Wi-Fi status", e);
+      return null;
+    }
+  }, [connectedDevice]);
 
   const form = useForm({
     defaultValues: {
@@ -96,9 +86,15 @@ const BleWifiSettings = () => {
           base64Payload,
         );
 
-        form.reset();
+        const status = await updateWifiStatus();
 
-        await fetchWifiStatus();
+        if (status && status.status === "connected") {
+          form.reset();
+        }
+
+        if (status?.status === "failed") {
+          Alert.alert("Failed to connect to Wi-Fi");
+        }
       } catch (e) {
         console.error("Failed to write WiFi config", e);
         Alert.alert("Failed to write WiFi config");
