@@ -18,5 +18,6 @@ void clearWiFiConfig();
 
 // WiFi Operation
 bool connectToWiFi();
+bool temporaryConnectToWiFi(const String& ssid, const String& password);
 bool isWiFiConfigured();
 bool reconnectWiFi();

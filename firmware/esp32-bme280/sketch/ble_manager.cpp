@@ -63,13 +63,16 @@ class WiFiConfigCallbacks : public BLECharacteristicCallbacks {
     String password = doc["password"] | "";
     if (ssid.isEmpty()) return;
 
-    saveWiFiConfig(ssid, password);
-
-    setWiFiStatus("configured", ssid.c_str(), true);
     setWiFiStatus("connecting", ssid.c_str(), true);
 
-    bool ok = reconnectWiFi();
-    setWiFiStatus(ok ? "connected" : "failed", ok ? ssid.c_str() : nullptr, true);
+    bool ok = temporaryConnectToWiFi(ssid, password);
+
+    if (ok) {
+        saveWiFiConfig(ssid, password);
+        setWiFiStatus("connected", ssid.c_str(), true);
+    } else {
+        setWiFiStatus("failed", nullptr, true);
+    }
   }
 };
 
