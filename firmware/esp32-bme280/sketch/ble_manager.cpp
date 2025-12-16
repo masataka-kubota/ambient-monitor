@@ -61,7 +61,14 @@ class WiFiConfigCallbacks : public BLECharacteristicCallbacks {
 
     String ssid = doc["ssid"] | "";
     String password = doc["password"] | "";
-    if (ssid.isEmpty()) return;
+
+    if (ssid.isEmpty()) {
+      // Initialize to factory settings
+      clearWiFiConfig();
+      setWiFiStatus("not_configured", nullptr, true);
+      Serial.println("📡 Wi-Fi initialized to factory settings");
+      return;
+    }
 
     setWiFiStatus("connecting", ssid.c_str(), true);
 
