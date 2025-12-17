@@ -9,3 +9,8 @@ export interface WifiStatus {
   status: WifiStatusCode;
   ssid?: string;
 }
+
+export interface WifiFormValues {
+  ssid: string;
+  password: string;
+}

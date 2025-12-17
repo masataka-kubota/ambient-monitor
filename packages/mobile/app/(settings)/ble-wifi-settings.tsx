@@ -1,175 +1,58 @@
 import { useForm } from "@tanstack/react-form";
 import { useAtomValue } from "jotai";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 
-import { connectedDeviceAtom } from "@/atoms";
+import { wifiStatusAtom } from "@/atoms";
+import { BleWifiStatus } from "@/components/ble";
 import { KeyboardAvoidingScrollableView } from "@/components/layouts";
 import { HeaderNavigation } from "@/components/navigation";
-import { PrimaryButton, PrimaryTextInput, ThemeText } from "@/components/ui";
-import {
-  BLE_SERVICE_UUID,
-  WIFI_CONFIG_CHAR_UUID,
-  WIFI_STATUS_CHAR_UUID,
-} from "@/constants/ble";
-import { WifiStatus } from "@/types";
-import { base64 } from "@/utils";
+import { PrimaryButton, PrimaryTextInput } from "@/components/ui";
+import { useBleWifiActions, useBleWifiStatus } from "@/hooks/ble";
+import { WifiFormValues } from "@/types";
 
 const BleWifiSettings = () => {
-  const connectedDevice = useAtomValue(connectedDeviceAtom);
+  const wifiStatus = useAtomValue(wifiStatusAtom);
 
-  const [wifiStatus, setWifiStatus] = useState<WifiStatus | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { loading } = useBleWifiStatus();
+  const { initializeWifiConfig, updateWifiConfig } = useBleWifiActions();
 
-  const fetchWifiStatus = useCallback(async () => {
-    if (!connectedDevice) return;
-    setLoading(true);
-    try {
-      const char = await connectedDevice.readCharacteristicForService(
-        BLE_SERVICE_UUID,
-        WIFI_STATUS_CHAR_UUID,
-      );
-      if (!char.value) {
-        setWifiStatus(null);
-        return;
-      }
-      const decoded = base64.decode(char.value);
-      const parsed: WifiStatus = JSON.parse(decoded);
-      setWifiStatus(parsed);
-    } catch (e) {
-      console.error("Failed to read WiFi status", e);
-      setWifiStatus(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [connectedDevice]);
-
-  useEffect(() => {
-    fetchWifiStatus();
-  }, [fetchWifiStatus]);
-
-  const updateWifiStatus = useCallback(async () => {
-    if (!connectedDevice) return null;
-
-    try {
-      const char = await connectedDevice.readCharacteristicForService(
-        BLE_SERVICE_UUID,
-        WIFI_STATUS_CHAR_UUID,
-      );
-      const decoded = char.value ? base64.decode(char.value) : "{}";
-      const status: WifiStatus = JSON.parse(decoded);
-
-      setWifiStatus(status);
-
-      return status;
-    } catch (e) {
-      console.error("Failed to fetch Wi-Fi status", e);
-      return null;
-    }
-  }, [connectedDevice]);
+  const defaultWifiFormValues: WifiFormValues = {
+    ssid: wifiStatus?.ssid || "",
+    password: "",
+  };
 
   const form = useForm({
-    defaultValues: {
-      ssid: wifiStatus?.ssid || "",
-      password: "",
-    },
+    defaultValues: defaultWifiFormValues,
     onSubmit: async ({ value }) => {
-      if (!connectedDevice) return;
+      const status = await updateWifiConfig(value);
 
-      const json = JSON.stringify(value);
-      const base64Payload = base64.encode(json);
-
-      try {
-        await connectedDevice.writeCharacteristicWithResponseForService(
-          BLE_SERVICE_UUID,
-          WIFI_CONFIG_CHAR_UUID,
-          base64Payload,
-        );
-
-        const status = await updateWifiStatus();
-
-        if (status && status.status === "connected") {
-          form.reset();
-        }
-
-        if (status?.status === "failed") {
-          Alert.alert("Failed to connect to Wi-Fi");
-        }
-      } catch (e) {
-        console.error("Failed to write WiFi config", e);
-        Alert.alert("Failed to write WiFi config");
+      if (!status || status.status !== "connected") {
+        Alert.alert("Failed to connect to Wi-Fi");
+        return;
       }
+
+      form.reset();
     },
   });
 
-  const handleInitialize = async () => {
-    if (!connectedDevice) return;
+  const handleInitialize = useCallback(async () => {
+    const status = await initializeWifiConfig();
 
-    try {
-      const json = JSON.stringify({ ssid: "", password: "" });
-      const base64Payload = base64.encode(json);
-
-      await connectedDevice.writeCharacteristicWithResponseForService(
-        BLE_SERVICE_UUID,
-        WIFI_CONFIG_CHAR_UUID,
-        base64Payload,
-      );
-
-      const status = await updateWifiStatus();
-
-      if (status && status.status === "not_configured") {
-        form.reset();
-        Alert.alert("Wi-Fi has been initialized");
-      }
-    } catch (e) {
-      console.error("Failed to initialize Wi-Fi", e);
+    if (!status || status.status !== "not_configured") {
       Alert.alert("Failed to initialize Wi-Fi");
-    }
-  };
-
-  const renderStatus = () => {
-    if (loading) {
-      return <ThemeText>Loading...</ThemeText>;
+      return;
     }
 
-    if (!wifiStatus) {
-      return <ThemeText>No WiFi status available</ThemeText>;
-    }
-
-    switch (wifiStatus.status) {
-      case "not_configured":
-        return <ThemeText>Wi-Fi is not configured</ThemeText>;
-
-      case "configured":
-        return (
-          <ThemeText>
-            Configured{wifiStatus.ssid ? ` (${wifiStatus.ssid})` : ""}
-          </ThemeText>
-        );
-
-      case "connecting":
-        return <ThemeText>Connecting to Wi-Fi…</ThemeText>;
-
-      case "connected":
-        return (
-          <ThemeText>
-            Connected{wifiStatus.ssid ? ` to ${wifiStatus.ssid}` : ""}
-          </ThemeText>
-        );
-
-      case "failed":
-        return <ThemeText>Failed to connect to Wi-Fi</ThemeText>;
-
-      default:
-        return <ThemeText>Unknown status</ThemeText>;
-    }
-  };
+    form.reset();
+  }, [initializeWifiConfig, form]);
 
   return (
     <>
       <HeaderNavigation title="Wifi Settings" />
       <KeyboardAvoidingScrollableView hasHeader={true}>
-        {renderStatus()}
+        {/* Status */}
+        <BleWifiStatus loading={loading} />
 
         {/* Form */}
         <View style={styles.form}>
@@ -220,14 +103,21 @@ const BleWifiSettings = () => {
 
           {/* Save Button */}
           <form.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting]}
+            selector={(state) => [
+              state.canSubmit,
+              state.isSubmitting,
+              state.isDirty,
+            ]}
           >
-            {([canSubmit, isSubmitting]) => (
+            {([canSubmit, isSubmitting, isDirty]) => (
               <PrimaryButton
                 title={isSubmitting ? "Saving..." : "Save Wi-Fi Settings"}
                 onPress={form.handleSubmit}
                 disabled={
-                  loading || wifiStatus?.status === "connecting" || !canSubmit
+                  loading ||
+                  wifiStatus?.status === "connecting" ||
+                  !canSubmit ||
+                  !isDirty
                 }
               />
             )}

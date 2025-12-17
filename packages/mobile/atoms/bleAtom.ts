@@ -3,6 +3,8 @@ import { atom } from "jotai";
 import { atomWithStorage, createJSONStorage } from "jotai/utils";
 import { Device } from "react-native-ble-plx";
 
+import { WifiStatus } from "@/types";
+
 const connectedDeviceId = createJSONStorage<string | null>(() => AsyncStorage);
 
 export const connectedDeviceIdAtom = atomWithStorage<string | null>(
@@ -17,3 +19,5 @@ export const connectedDeviceAtom = atom<Device | null>(null);
 export const scannedDevicesAtom = atom<Device[]>([]);
 
 export const isBleConnectedAtom = atom<boolean | null>(null);
+
+export const wifiStatusAtom = atom<WifiStatus | null>(null);
