@@ -1,0 +1,24 @@
+{
+  "title": "Wi-Fi 設定",
+  "status": {
+    "loading": "読み込み中…",
+    "none": "Wi-Fi の状態を取得できません",
+    "not_configured": "Wi-Fi は未設定です",
+    "configured": "Wi-Fi は設定されています",
+    "connecting": "Wi-Fi に接続中…",
+    "connected": "接続済み",
+    "failed": "Wi-Fi 接続に失敗しました"
+  },
+  "form": {
+    "ssid": "SSID",
+    "password": "Password",
+    "password_placeholder_connected": "設定済み",
+    "save": "Wi-Fi 設定を保存",
+    "saving": "保存中...",
+    "initialize": "Wi-Fi を初期化"
+  },
+  "alert": {
+    "connect_failed": "Wi-Fi に接続できませんでした",
+    "initialize_failed": "Wi-Fi の初期化に失敗しました"
+  }
+}

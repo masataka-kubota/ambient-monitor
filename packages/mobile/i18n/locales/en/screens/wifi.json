@@ -1,0 +1,24 @@
+{
+  "title": "WiFi Settings",
+  "status": {
+    "loading": "Loading…",
+    "none": "No WiFi status available",
+    "not_configured": "Wi-Fi is not configured",
+    "configured": "Wi-Fi is configured",
+    "connecting": "Connecting to Wi-Fi…",
+    "connected": "Connected",
+    "failed": "Failed to connect to Wi-Fi"
+  },
+  "form": {
+    "ssid": "SSID",
+    "password": "Password",
+    "password_placeholder_connected": "Already set",
+    "save": "Save Wi-Fi Settings",
+    "saving": "Saving...",
+    "initialize": "Initialize Wi-Fi"
+  },
+  "alert": {
+    "connect_failed": "Failed to connect to Wi-Fi",
+    "initialize_failed": "Failed to initialize Wi-Fi"
+  }
+}

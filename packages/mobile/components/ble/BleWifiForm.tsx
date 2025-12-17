@@ -1,11 +1,13 @@
 import { useForm } from "@tanstack/react-form";
 import { useAtomValue } from "jotai";
 import { memo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet, View } from "react-native";
 
 import { wifiStatusAtom } from "@/atoms";
 import { PrimaryButton, PrimaryTextInput } from "@/components/ui";
 import { useBleWifiActions } from "@/hooks/ble";
+import { useResolvedTheme } from "@/hooks/common";
 import { WifiFormValues } from "@/types";
 
 interface BleWifiFormProps {
@@ -15,6 +17,8 @@ interface BleWifiFormProps {
 const BleWifiForm = ({ loading }: BleWifiFormProps) => {
   const wifiStatus = useAtomValue(wifiStatusAtom);
   const { initializeWifiConfig, updateWifiConfig } = useBleWifiActions();
+  const { currentThemeColors } = useResolvedTheme();
+  const { t } = useTranslation();
 
   const defaultWifiFormValues: WifiFormValues = {
     ssid: wifiStatus?.ssid || "",
@@ -27,7 +31,7 @@ const BleWifiForm = ({ loading }: BleWifiFormProps) => {
       const status = await updateWifiConfig(value);
 
       if (!status || status.status !== "connected") {
-        Alert.alert("Failed to connect to Wi-Fi");
+        Alert.alert(t("wifi.alert.connect_failed"));
         return;
       }
 
@@ -39,12 +43,12 @@ const BleWifiForm = ({ loading }: BleWifiFormProps) => {
     const status = await initializeWifiConfig();
 
     if (!status || status.status !== "not_configured") {
-      Alert.alert("Failed to initialize Wi-Fi");
+      Alert.alert(t("wifi.alert.initialize_failed"));
       return;
     }
 
     form.reset();
-  }, [initializeWifiConfig, form]);
+  }, [initializeWifiConfig, form, t]);
 
   return (
     <View style={styles.form}>
@@ -59,8 +63,8 @@ const BleWifiForm = ({ loading }: BleWifiFormProps) => {
         {(field) => (
           <PrimaryTextInput
             isRequired
-            label="SSID"
-            placeholder="SSID"
+            label={t("wifi.form.ssid")}
+            placeholder={t("wifi.form.ssid")}
             value={field.state.value}
             onChangeText={field.handleChange}
             errorMessage={field.state.meta.errors[0]}
@@ -79,9 +83,11 @@ const BleWifiForm = ({ loading }: BleWifiFormProps) => {
         {(field) => (
           <PrimaryTextInput
             isRequired
-            label="Password"
+            label={t("wifi.form.password")}
             placeholder={
-              wifiStatus?.status === "connected" ? "Already set" : "Password"
+              wifiStatus?.status === "connected"
+                ? t("wifi.form.password_placeholder_connected")
+                : t("wifi.form.password")
             }
             value={field.state.value}
             secureTextEntry
@@ -101,7 +107,7 @@ const BleWifiForm = ({ loading }: BleWifiFormProps) => {
       >
         {([canSubmit, isSubmitting, isDirty]) => (
           <PrimaryButton
-            title={isSubmitting ? "Saving..." : "Save Wi-Fi Settings"}
+            title={isSubmitting ? t("wifi.form.saving") : t("wifi.form.save")}
             onPress={form.handleSubmit}
             disabled={
               loading ||
@@ -116,9 +122,10 @@ const BleWifiForm = ({ loading }: BleWifiFormProps) => {
       {/* Initialize Button */}
       {wifiStatus?.status === "connected" && (
         <PrimaryButton
-          title="Initialize Wi-Fi"
+          title={t("wifi.form.initialize")}
           onPress={handleInitialize}
           disabled={loading}
+          backgroundColor={currentThemeColors.error}
         />
       )}
     </View>

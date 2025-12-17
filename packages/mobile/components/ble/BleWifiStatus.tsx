@@ -1,34 +1,24 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { useAtomValue } from "jotai";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
 import { wifiStatusAtom } from "@/atoms";
 import { ThemeText } from "@/components/ui";
 import { useResolvedTheme } from "@/hooks/common";
+import { WifiStatusCode } from "@/types";
 
-const WIFI_STATUS_UI = {
-  not_configured: {
-    icon: "wifi-off",
-    text: "Wi-Fi is not configured",
-  },
-  configured: {
-    icon: "settings",
-    text: "Wi-Fi is configured",
-  },
-  connecting: {
-    icon: "autorenew",
-    text: "Connecting to Wi-Fi…",
-  },
-  connected: {
-    icon: "wifi",
-    text: "Connected",
-  },
-  failed: {
-    icon: "error-outline",
-    text: "Failed to connect to Wi-Fi",
-  },
-} as const;
+const WIFI_STATUS_UI: Record<
+  WifiStatusCode,
+  { icon: keyof typeof MaterialIcons.glyphMap }
+> = {
+  not_configured: { icon: "wifi-off" },
+  configured: { icon: "settings" },
+  connecting: { icon: "autorenew" },
+  connected: { icon: "wifi" },
+  failed: { icon: "error-outline" },
+};
 
 interface BleWifiStatusProps {
   loading: boolean;
@@ -37,6 +27,7 @@ interface BleWifiStatusProps {
 const BleWifiStatus = ({ loading }: BleWifiStatusProps) => {
   const wifiStatus = useAtomValue(wifiStatusAtom);
   const { currentThemeColors } = useResolvedTheme();
+  const { t } = useTranslation();
 
   if (loading) {
     return (
@@ -46,7 +37,7 @@ const BleWifiStatus = ({ loading }: BleWifiStatusProps) => {
           size={48}
           color={currentThemeColors.mainColor}
         />
-        <ThemeText>Loading…</ThemeText>
+        <ThemeText>{t("wifi.status.loading")}</ThemeText>
       </View>
     );
   }
@@ -59,22 +50,23 @@ const BleWifiStatus = ({ loading }: BleWifiStatusProps) => {
           size={48}
           color={currentThemeColors.mainColor}
         />
-        <ThemeText>No WiFi status available</ThemeText>
+        <ThemeText>{t("wifi.status.none")}</ThemeText>
       </View>
     );
   }
 
-  const ui = WIFI_STATUS_UI[wifiStatus.status];
+  const iconName = WIFI_STATUS_UI[wifiStatus.status].icon;
+  const statusKey = `wifi.status.${wifiStatus?.status}` as const;
 
   return (
     <View style={styles.statusContainer}>
       <MaterialIcons
-        name={ui.icon}
+        name={iconName}
         size={48}
         color={currentThemeColors.mainColor}
       />
       <ThemeText>
-        {ui.text}
+        {t(statusKey)}
         {wifiStatus.ssid ? ` (${wifiStatus.ssid})` : ""}
       </ThemeText>
     </View>

@@ -4,6 +4,7 @@ import ble from "./screens/ble.json";
 import data from "./screens/data.json";
 import live from "./screens/live.json";
 import settings from "./screens/settings.json";
+import wifi from "./screens/wifi.json";
 
 const ja = {
   translation: {
@@ -15,6 +16,7 @@ const ja = {
     settings,
     // screens
     ble,
+    wifi,
   },
 };
 
