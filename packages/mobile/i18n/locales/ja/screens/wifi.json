@@ -1,7 +1,6 @@
 {
   "title": "Wi-Fi 設定",
   "status": {
-    "loading": "読み込み中…",
     "none": "Wi-Fi の状態を取得できません",
     "not_configured": "Wi-Fi は未設定です",
     "configured": "Wi-Fi は設定されています",

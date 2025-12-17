@@ -10,11 +10,7 @@ import { useBleWifiActions } from "@/hooks/ble";
 import { useResolvedTheme } from "@/hooks/common";
 import { WifiFormValues } from "@/types";
 
-interface BleWifiFormProps {
-  loading: boolean;
-}
-
-const BleWifiForm = ({ loading }: BleWifiFormProps) => {
+const BleWifiForm = () => {
   const wifiStatus = useAtomValue(wifiStatusAtom);
   const { initializeWifiConfig, updateWifiConfig } = useBleWifiActions();
   const { currentThemeColors } = useResolvedTheme();
@@ -110,10 +106,7 @@ const BleWifiForm = ({ loading }: BleWifiFormProps) => {
             title={isSubmitting ? t("wifi.form.saving") : t("wifi.form.save")}
             onPress={form.handleSubmit}
             disabled={
-              loading ||
-              wifiStatus?.status === "connecting" ||
-              !canSubmit ||
-              !isDirty
+              wifiStatus?.status === "connecting" || !canSubmit || !isDirty
             }
           />
         )}
@@ -124,7 +117,6 @@ const BleWifiForm = ({ loading }: BleWifiFormProps) => {
         <PrimaryButton
           title={t("wifi.form.initialize")}
           onPress={handleInitialize}
-          disabled={loading}
           backgroundColor={currentThemeColors.error}
         />
       )}

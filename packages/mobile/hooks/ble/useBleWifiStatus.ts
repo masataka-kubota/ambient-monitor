@@ -1,5 +1,5 @@
 import { useAtomValue, useSetAtom } from "jotai";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import { connectedDeviceAtom, wifiStatusAtom } from "@/atoms";
 import { BLE_SERVICE_UUID, WIFI_STATUS_CHAR_UUID } from "@/constants/ble";
@@ -10,11 +10,9 @@ const useBleWifiStatus = () => {
   const connectedDevice = useAtomValue(connectedDeviceAtom);
   const setWifiStatus = useSetAtom(wifiStatusAtom);
 
-  const [loading, setLoading] = useState(true);
-
   const fetchWifiStatus = useCallback(async () => {
     if (!connectedDevice) return;
-    setLoading(true);
+
     try {
       const char = await connectedDevice.readCharacteristicForService(
         BLE_SERVICE_UUID,
@@ -30,8 +28,6 @@ const useBleWifiStatus = () => {
     } catch (e) {
       console.error("Failed to read WiFi status", e);
       setWifiStatus(null);
-    } finally {
-      setLoading(false);
     }
   }, [connectedDevice, setWifiStatus]);
 
@@ -55,14 +51,7 @@ const useBleWifiStatus = () => {
     }
   }, [connectedDevice, setWifiStatus]);
 
-  useEffect(() => {
-    fetchWifiStatus();
-  }, [fetchWifiStatus]);
-
-  return {
-    loading,
-    updateWifiStatus,
-  };
+  return { fetchWifiStatus, updateWifiStatus };
 };
 
 export default useBleWifiStatus;

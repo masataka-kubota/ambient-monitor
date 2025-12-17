@@ -20,27 +20,10 @@ const WIFI_STATUS_UI: Record<
   failed: { icon: "error-outline" },
 };
 
-interface BleWifiStatusProps {
-  loading: boolean;
-}
-
-const BleWifiStatus = ({ loading }: BleWifiStatusProps) => {
+const BleWifiStatus = () => {
   const wifiStatus = useAtomValue(wifiStatusAtom);
   const { currentThemeColors } = useResolvedTheme();
   const { t } = useTranslation();
-
-  if (loading) {
-    return (
-      <View style={styles.statusContainer}>
-        <MaterialIcons
-          name="hourglass-empty"
-          size={48}
-          color={currentThemeColors.mainColor}
-        />
-        <ThemeText>{t("wifi.status.loading")}</ThemeText>
-      </View>
-    );
-  }
 
   if (!wifiStatus) {
     return (

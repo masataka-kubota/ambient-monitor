@@ -3,10 +3,8 @@ import { useTranslation } from "react-i18next";
 import { BleWifiForm, BleWifiStatus } from "@/components/ble";
 import { KeyboardAvoidingScrollableView } from "@/components/layouts";
 import { HeaderNavigation } from "@/components/navigation";
-import { useBleWifiStatus } from "@/hooks/ble";
 
 const BleWifiSettings = () => {
-  const { loading } = useBleWifiStatus();
   const { t } = useTranslation();
 
   return (
@@ -14,10 +12,10 @@ const BleWifiSettings = () => {
       <HeaderNavigation title={t("wifi.title")} />
       <KeyboardAvoidingScrollableView hasHeader={true}>
         {/* Status */}
-        <BleWifiStatus loading={loading} />
+        <BleWifiStatus />
 
         {/* Form */}
-        <BleWifiForm loading={loading} />
+        <BleWifiForm />
       </KeyboardAvoidingScrollableView>
     </>
   );

@@ -1,7 +1,6 @@
 {
   "title": "WiFi Settings",
   "status": {
-    "loading": "Loading…",
     "none": "No WiFi status available",
     "not_configured": "Wi-Fi is not configured",
     "configured": "Wi-Fi is configured",

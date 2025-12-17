@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 
 import { BleAutoReconnectInitializer } from "@/components/ble";
+import WifiWifiStatusSync from "@/components/ble/WifiWifiStatusSync";
 import { AppProviders } from "@/components/layouts";
 import { APP_THEME_SCHEME } from "@/constants";
 import { useI18nInitializer, useResolvedTheme } from "@/hooks/common";
@@ -31,6 +32,7 @@ const RootLayout = () => {
   return (
     <AppProviders>
       <BleAutoReconnectInitializer />
+      <WifiWifiStatusSync />
       <ThemeProvider
         value={
           isDarkMode
