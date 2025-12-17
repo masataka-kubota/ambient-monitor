@@ -1,7 +1,8 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { Link, LinkProps } from "expo-router";
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import {
+  GestureResponderEvent,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -12,6 +13,7 @@ import {
 
 import ThemeText from "@/components/ui/ThemeText";
 import { useResolvedTheme } from "@/hooks/common";
+import { triggerLightHaptics } from "@/utils";
 
 interface MenuLinkProps {
   title: string;
@@ -52,6 +54,14 @@ const MenuLinkItem = ({
 }: CombinedMenuLinkItemProps) => {
   const { currentThemeColors } = useResolvedTheme();
 
+  const handlePress = useCallback(
+    (event: GestureResponderEvent | React.MouseEvent<HTMLAnchorElement>) => {
+      triggerLightHaptics();
+      onPress?.(event);
+    },
+    [onPress],
+  );
+
   const content = (
     <>
       <ThemeText
@@ -82,10 +92,10 @@ const MenuLinkItem = ({
 
   return href ? (
     <Link href={href} asChild style={[styles.button, linkStyle]}>
-      <Pressable>{content}</Pressable>
+      <Pressable onPress={handlePress}>{content}</Pressable>
     </Link>
   ) : (
-    <Pressable style={[styles.button, buttonStyle]} onPress={onPress}>
+    <Pressable style={[styles.button, buttonStyle]} onPress={handlePress}>
       {content}
     </Pressable>
   );
