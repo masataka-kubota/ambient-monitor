@@ -15,5 +15,12 @@
       "connected": "Connected",
       "disconnected": "Not connected"
     }
+  },
+  "wifi": {
+    "link": "Wi-Fi Settings",
+    "status": {
+      "connected": "Connected",
+      "disconnected": "Not connected"
+    }
   }
 }

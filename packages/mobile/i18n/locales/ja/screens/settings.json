@@ -15,5 +15,12 @@
       "connected": "接続済み",
       "disconnected": "未接続"
     }
+  },
+  "wifi": {
+    "link": "Wi-Fi設定",
+    "status": {
+      "connected": "接続済み",
+      "disconnected": "未接続"
+    }
   }
 }

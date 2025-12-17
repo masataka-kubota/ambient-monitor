@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
 
-import { isBleConnectedAtom } from "@/atoms";
+import { isBleConnectedAtom, wifiStatusAtom } from "@/atoms";
 import { KeyboardAvoidingScrollableView } from "@/components/layouts";
 import { MenuLinkGroup, MenuLinkItem } from "@/components/navigation";
 import { LangSetting, ThemeSetting } from "@/components/settings";
@@ -10,6 +10,7 @@ import { Heading } from "@/components/ui";
 const Settings = () => {
   const { t } = useTranslation();
   const isBleConnected = useAtomValue(isBleConnectedAtom);
+  const wifiStatus = useAtomValue(wifiStatusAtom);
 
   return (
     <KeyboardAvoidingScrollableView>
@@ -40,7 +41,15 @@ const Settings = () => {
           }
         />
         {isBleConnected && (
-          <MenuLinkItem title="Wifi Settings" href="/ble-wifi-settings" />
+          <MenuLinkItem
+            title={t("settings.wifi.link")}
+            href="/ble-wifi-settings"
+            infoText={
+              wifiStatus?.status === "connected"
+                ? t("settings.wifi.status.connected")
+                : t("settings.wifi.status.disconnected")
+            }
+          />
         )}
       </MenuLinkGroup>
     </KeyboardAvoidingScrollableView>
