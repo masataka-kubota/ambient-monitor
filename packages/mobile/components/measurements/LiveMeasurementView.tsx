@@ -1,8 +1,9 @@
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Dimensions, StyleSheet, View } from "react-native";
 
+import IconLabel from "@/components/measurements/IconLabel";
 import { LiveMeasurementSkeleton } from "@/components/skelton";
 import { CShapeGauge, ThemeText } from "@/components/ui";
 import {
@@ -23,7 +24,7 @@ const smallRadius = width * 0.17;
 
 const HistoryMeasurementView = () => {
   const { currentThemeColors } = useResolvedTheme();
-  const { data: m, isLoading } = useLiveMeasurement();
+  const { data: m, isLoading, source } = useLiveMeasurement();
   const { t } = useTranslation();
 
   if (isLoading)
@@ -86,19 +87,41 @@ const HistoryMeasurementView = () => {
         </View>
       </View>
 
-      {/* time */}
-      <View style={styles.timeWrapper}>
-        <Entypo
-          name="clock"
-          size={20}
+      {/* Note */}
+      <View style={styles.noteContainer}>
+        {/* time */}
+        <IconLabel
+          icon={
+            <Entypo
+              name="clock"
+              size={20}
+              color={currentThemeColors.mediumColor}
+            />
+          }
+          text={t("live.lastUpdate", { date: formattedDate })}
           color={currentThemeColors.mediumColor}
-          style={styles.timeIcon}
         />
-        <ThemeText
-          style={[styles.time, { color: currentThemeColors.mediumColor }]}
-        >
-          {t("live.lastUpdate", { date: formattedDate })}
-        </ThemeText>
+
+        {/* source */}
+        <IconLabel
+          icon={
+            source === "ble" ? (
+              <MaterialCommunityIcons
+                name="bluetooth"
+                size={18}
+                color={currentThemeColors.mediumColor}
+              />
+            ) : (
+              <Entypo
+                name="cloud"
+                size={18}
+                color={currentThemeColors.mediumColor}
+              />
+            )
+          }
+          text={source === "ble" ? "Bluetooth (Live Data)" : "Cloud Data"}
+          color={currentThemeColors.mediumColor}
+        />
       </View>
     </View>
   );
@@ -119,16 +142,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
-  timeWrapper: {
+  noteContainer: {
     marginVertical: 20,
-    flexDirection: "row",
+    gap: 10,
     alignItems: "center",
-  },
-  timeIcon: {
-    marginRight: 5,
-  },
-  time: {
-    fontSize: 16,
   },
 });
 
