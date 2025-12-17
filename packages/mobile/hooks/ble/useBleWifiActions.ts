@@ -1,6 +1,5 @@
 import { useAtomValue } from "jotai";
 import { useCallback } from "react";
-import { Alert } from "react-native";
 
 import { connectedDeviceAtom } from "@/atoms";
 import { BLE_SERVICE_UUID, WIFI_CONFIG_CHAR_UUID } from "@/constants/ble";
@@ -29,7 +28,6 @@ const useBleWifiActions = () => {
       return status;
     } catch (e) {
       console.error("Failed to initialize Wi-Fi", e);
-      Alert.alert("Failed to initialize Wi-Fi");
       return null;
     }
   }, [connectedDevice, updateWifiStatus]);
@@ -52,7 +50,6 @@ const useBleWifiActions = () => {
         return status;
       } catch (e) {
         console.error("Failed to write WiFi config", e);
-        Alert.alert("Failed to write WiFi config");
         return null;
       }
     },
