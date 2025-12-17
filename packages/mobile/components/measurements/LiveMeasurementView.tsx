@@ -95,7 +95,9 @@ const HistoryMeasurementView = () => {
         {/* source */}
         <IconLabel
           iconName={source === "ble" ? "bluetooth" : "cloud"}
-          text={source === "ble" ? "Bluetooth (Live Data)" : "Cloud Data"}
+          text={
+            source === "ble" ? t("live.source.ble") : t("live.source.cloud")
+          }
         />
       </View>
     </View>
