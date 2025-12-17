@@ -8,9 +8,12 @@
 #include <ArduinoJson.h>
 #include "secrets.h"
 
+extern volatile bool bleClientConnected;
+
 void initBLE();
 
 // Unified WiFi status setter
-// notify = true  -> send NOTIFY
-// notify = false -> just set READ value
 void setWiFiStatus(const char* status, const char* ssid = nullptr, bool notify = false);
+
+// Unified measurement notifier
+void notifyMeasurement(float t, float h, float p);

@@ -1,10 +1,6 @@
 // Copy the following to create `secrets.h` file.
 // `secrets.h` contains sensitive information and should be excluded from Git.
 
-// Wi-Fi
-#define WIFI_SSID       "your_wifi_ssid"
-#define WIFI_PASSWORD   "your_wifi_password"
-
 // Hono API endpoint
 #define HONO_API_URL    "http://192.168.1.1:8787/measurements"
 
@@ -13,6 +9,3 @@
 
 // jwt secret (devices.secret)
 #define DEVICE_SECRET   "super-secret-value"
-
-// BLE
-#define BLE_SERVICE_UUID "f0e0cafe-1234-5678-9abc-def012345678"

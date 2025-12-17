@@ -12,9 +12,13 @@
 Adafruit_BME280 bme;
 String DEVICE_JWT;
 
-const unsigned long PUBLISH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 const unsigned long JWT_EXPIRATION_SEC = 60; // 60 seconds
-unsigned long lastPublish = 0;
+
+const unsigned long BLE_INTERVAL_MS  = 1 * 60 * 1000; // 1 minute
+const unsigned long CLOUD_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+
+unsigned long lastBleNotify  = 0;
+unsigned long lastCloudPublish = 0;
 
 // ---------------- Pressure Filter State ----------------
 const int P_HISTORY_SIZE = 5;
@@ -150,6 +154,17 @@ bool readSafeBME(float &t, float &h, float &p) {
   return readAndValidate(t, h, p);
 }
 
+// ---------------- Read Measurement ----------------
+bool readMeasurement(float &t, float &h, float &p) {
+  bool success = readSafeBME(t, h, p);
+
+  if (!success) {
+    Serial.println("ERROR: Failed to get valid BME data.");
+  }
+
+  return success;
+}
+
 // ---------------- NTP ----------------
 void syncTime() {
   configTime(0, 0, "pool.ntp.org", "ntp.nict.jp"); // UTC
@@ -178,15 +193,8 @@ String generateJWT() {
 }
 
 // ---------------- POST ----------------
-void publishSensorData() {
-  float t, h, p;
-
-  if (!readSafeBME(t, h, p)) {
-    Serial.println("ERROR: Failed to get valid BME data.");
-    return;
-  }
-
-    Serial.printf("Temp: %.2f °C  Humidity: %.2f %%  Pressure: %.2f hPa\n", t, h, p);
+void publishSensorData(float t, float h, float p) {
+  Serial.printf("Temp: %.2f °C  Humidity: %.2f %%  Pressure: %.2f hPa\n", t, h, p);
 
   DynamicJsonDocument doc(256);
   doc["temperature"] = t;
@@ -232,13 +240,31 @@ void setup() {
   }
   
   initBLE();
+
+  unsigned long now = millis();
+  lastBleNotify   = now - BLE_INTERVAL_MS;
+  lastCloudPublish = now - CLOUD_INTERVAL_MS;
 }
 
 // ---------------- loop ----------------
 void loop() {
   unsigned long now = millis();
-  if (now - lastPublish >= PUBLISH_INTERVAL_MS) {
-    publishSensorData();
-    lastPublish = now;
+
+  // --- BLE notify (every 1min / connected only) ---
+  if (bleClientConnected && now - lastBleNotify >= BLE_INTERVAL_MS) {
+    float t, h, p;
+    if (readMeasurement(t, h, p)) {
+      notifyMeasurement(t, h, p);
+    }
+    lastBleNotify = now;
+  }
+
+  // --- Cloud publish (every 5min / always) ---
+  if (now - lastCloudPublish >= CLOUD_INTERVAL_MS) {
+    float t, h, p;
+    if (readMeasurement(t, h, p)) {
+      publishSensorData(t, h, p);
+    }
+    lastCloudPublish = now;
   }
 }
