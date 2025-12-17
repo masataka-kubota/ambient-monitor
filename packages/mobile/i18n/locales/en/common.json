@@ -12,5 +12,8 @@
     "temperature": "Temperature",
     "humidity": "Humidity",
     "pressure": "Pressure"
+  },
+  "form": {
+    "required": "※ Required"
   }
 }

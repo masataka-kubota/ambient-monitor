@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { memo, useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Pressable,
   StyleSheet,
@@ -35,6 +36,7 @@ const PrimaryTextInput = ({
   errorMessage,
 }: PrimaryTextInputProps) => {
   const { currentThemeColors } = useResolvedTheme();
+  const { t } = useTranslation();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -69,7 +71,9 @@ const PrimaryTextInput = ({
           {label && <ThemeText style={styles.label}>{label}</ThemeText>}
 
           {isRequired && (
-            <ThemeText style={styles.required}>※ Require</ThemeText>
+            <ThemeText style={styles.required}>
+              {t("common.form.required")}
+            </ThemeText>
           )}
         </View>
 
