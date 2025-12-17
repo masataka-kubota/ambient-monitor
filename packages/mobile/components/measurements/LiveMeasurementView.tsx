@@ -1,4 +1,3 @@
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Dimensions, StyleSheet, View } from "react-native";
@@ -14,7 +13,6 @@ import {
   TEMPERATURE_GRADIENTS,
   TEMPERATURE_THRESHOLDS,
 } from "@/constants";
-import { useResolvedTheme } from "@/hooks/common";
 import { useLiveMeasurement } from "@/hooks/measurements";
 import { formatToLocalTime } from "@/utils";
 
@@ -23,7 +21,6 @@ const bigRadius = width * 0.27;
 const smallRadius = width * 0.17;
 
 const HistoryMeasurementView = () => {
-  const { currentThemeColors } = useResolvedTheme();
   const { data: m, isLoading, source } = useLiveMeasurement();
   const { t } = useTranslation();
 
@@ -91,36 +88,14 @@ const HistoryMeasurementView = () => {
       <View style={styles.noteContainer}>
         {/* time */}
         <IconLabel
-          icon={
-            <Entypo
-              name="clock"
-              size={20}
-              color={currentThemeColors.mediumColor}
-            />
-          }
+          iconName="schedule"
           text={t("live.lastUpdate", { date: formattedDate })}
-          color={currentThemeColors.mediumColor}
         />
 
         {/* source */}
         <IconLabel
-          icon={
-            source === "ble" ? (
-              <MaterialCommunityIcons
-                name="bluetooth"
-                size={18}
-                color={currentThemeColors.mediumColor}
-              />
-            ) : (
-              <Entypo
-                name="cloud"
-                size={18}
-                color={currentThemeColors.mediumColor}
-              />
-            )
-          }
+          iconName={source === "ble" ? "bluetooth" : "cloud"}
           text={source === "ble" ? "Bluetooth (Live Data)" : "Cloud Data"}
-          color={currentThemeColors.mediumColor}
         />
       </View>
     </View>
