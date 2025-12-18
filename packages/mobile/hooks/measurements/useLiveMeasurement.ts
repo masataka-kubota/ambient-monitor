@@ -1,21 +1,15 @@
 import { useAtomValue } from "jotai";
 
-import { connectedDeviceAtom } from "@/atoms";
-import { BLE_MEASUREMENT_STALE_THRESHOLD_MS } from "@/constants";
+import { bleDataAvailabilityAtom } from "@/atoms";
 import useBleMeasurement from "@/hooks/measurements/useBleMeasurement";
 import useCloudLiveMeasurement from "@/hooks/measurements/useCloudLiveMeasurement";
 
 const useLiveMeasurement = () => {
-  const connectedDevice = useAtomValue(connectedDeviceAtom);
+  const bleDataAvailability = useAtomValue(bleDataAvailabilityAtom);
   const ble = useBleMeasurement();
   const cloud = useCloudLiveMeasurement();
 
-  const isBleFresh =
-    connectedDevice &&
-    ble.data &&
-    Date.now() - ble.data.receivedAt < BLE_MEASUREMENT_STALE_THRESHOLD_MS;
-
-  if (isBleFresh) {
+  if (bleDataAvailability === "usable") {
     return {
       data: ble.data,
       isLoading: ble.isLoading,

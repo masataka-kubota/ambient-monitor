@@ -1,32 +1,33 @@
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { BleError, Characteristic } from "react-native-ble-plx";
 
-import { connectedDeviceAtom } from "@/atoms";
+import { bleMeasurementAtom, connectedDeviceAtom } from "@/atoms";
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from "@/constants/ble";
-import { BleMeasurement, BleMeasurementPayload } from "@/types";
+import { BleMeasurementPayload } from "@/types";
 import { base64 } from "@/utils";
 
 const useBleMeasurement = () => {
   const connectedDevice = useAtomValue(connectedDeviceAtom);
+  const [bleMeasurement, setBleMeasurement] = useAtom(bleMeasurementAtom);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [bleMeasurement, setBleMeasurement] = useState<BleMeasurement | null>(
-    null,
+
+  const updateBleMeasurement = useCallback(
+    (base64Value: string) => {
+      const decoded = base64.decode(base64Value);
+      const parsed: BleMeasurementPayload = JSON.parse(decoded);
+
+      setBleMeasurement({
+        temperature: parsed.temperature,
+        humidity: parsed.humidity,
+        pressure: parsed.pressure,
+        createdAt: new Date(parsed.timestamp * 1000).toISOString(),
+        receivedAt: Date.now(),
+      });
+    },
+    [setBleMeasurement],
   );
-
-  const updateBleMeasurement = useCallback((base64Value: string) => {
-    const decoded = base64.decode(base64Value);
-    const parsed: BleMeasurementPayload = JSON.parse(decoded);
-
-    setBleMeasurement({
-      temperature: parsed.temperature,
-      humidity: parsed.humidity,
-      pressure: parsed.pressure,
-      createdAt: new Date(parsed.timestamp * 1000).toISOString(),
-      receivedAt: Date.now(),
-    });
-  }, []);
 
   const fetchInitialValue = useCallback(async () => {
     if (!connectedDevice) return;
@@ -73,7 +74,12 @@ const useBleMeasurement = () => {
     );
 
     return () => sub.remove();
-  }, [connectedDevice, fetchInitialValue, handleMeasurementUpdate]);
+  }, [
+    connectedDevice,
+    fetchInitialValue,
+    handleMeasurementUpdate,
+    setBleMeasurement,
+  ]);
 
   return { data: bleMeasurement, isLoading };
 };

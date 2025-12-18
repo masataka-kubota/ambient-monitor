@@ -26,3 +26,5 @@ export interface BleMeasurement {
   createdAt: string; // ISO8601
   receivedAt: number;
 }
+
+export type BleDataAvailability = "unknown" | "usable" | "unusable";
