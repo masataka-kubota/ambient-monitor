@@ -16,4 +16,4 @@ void initBLE();
 void setWiFiStatus(const char* status, const char* ssid = nullptr, bool notify = false);
 
 // Unified measurement notifier
-void notifyMeasurement(float t, float h, float p);
+void notifyMeasurement(float t, float h, float p, bool notify = false);

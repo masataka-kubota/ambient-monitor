@@ -1,4 +1,5 @@
 #include "ble_manager.h"
+#include "sensor_manager.h"
 #include "wifi_manager.h"
 
 // BLE constants
@@ -8,6 +9,8 @@
 #define MEASUREMENT_CHAR_UUID "1DE752AB-EA22-4757-85B2-AC35C7FBB5E1"
 
 const char* BLE_DEVICE_NAME = "ESP32-Monitor";
+
+extern unsigned long lastBleNotify; // defined in sketch.ino
 
 volatile bool bleClientConnected = false;
 
@@ -23,38 +26,19 @@ static BLECharacteristic* measurementChar = nullptr;
  */
 class SingleConnectionServerCallbacks : public BLEServerCallbacks {
 public:
-    void onConnect(BLEServer* pServer) override {
-      bleClientConnected = true;
-      BLEDevice::getAdvertising()->stop();
-      Serial.println("🔗 BLE client connected and advertising stopped.");
-    }
+  void onConnect(BLEServer* pServer) override {
+    bleClientConnected = true;
+    BLEDevice::getAdvertising()->stop();
+    Serial.println("🔗 BLE client connected and advertising stopped.");
+  }
 
-    void onDisconnect(BLEServer* pServer) override {
-      bleClientConnected = false;
-      BLEDevice::getAdvertising()->start();
-      Serial.println("❌ BLE client disconnected and advertising restarted.");
-    }
+  void onDisconnect(BLEServer* pServer) override {
+    bleClientConnected = false;
+    BLEDevice::getAdvertising()->start();
+    Serial.println("❌ BLE client disconnected and advertising restarted.");
+    lastBleNotify = 0;
+  }
 };
-
-/**
- * Set WiFi status (JSON unified)
- * - Used for both initial READ value and NOTIFY updates
- */
-void setWiFiStatus(const char* status, const char* ssid, bool notify) {
-  if (!wifiStatusChar) return;
-
-  DynamicJsonDocument doc(128);
-  doc["status"] = status;
-  if (ssid) doc["ssid"] = ssid;
-
-  String payload;
-  serializeJson(doc, payload);
-
-  wifiStatusChar->setValue(payload.c_str());
-  if (notify) wifiStatusChar->notify();
-
-  Serial.printf("📡 WiFi status %s: %s\n", notify ? "notified" : "set", payload.c_str());
-}
 
 /**
  * WiFi config write callback
@@ -94,6 +78,7 @@ class WiFiConfigCallbacks : public BLECharacteristicCallbacks {
 
 void initBLE() {
   BLEDevice::init(BLE_DEVICE_NAME);
+  BLEDevice::setMTU(128);
 
   BLEServer* server = BLEDevice::createServer();
   server->setCallbacks(new SingleConnectionServerCallbacks());
@@ -135,11 +120,32 @@ void initBLE() {
   BLEDevice::getAdvertising()->start();
 }
 
+// ---------------- Set WiFi Status ----------------
+void setWiFiStatus(const char* status, const char* ssid, bool notify) {
+  if (!wifiStatusChar) return;
+
+  DynamicJsonDocument doc(128);
+  doc["status"] = status;
+  if (ssid) doc["ssid"] = ssid;
+
+  String payload;
+  serializeJson(doc, payload);
+
+  wifiStatusChar->setValue(payload.c_str());
+  if (notify) wifiStatusChar->notify();
+
+  Serial.printf("📡 WiFi status %s: %s\n", notify ? "notified" : "set", payload.c_str());
+}
+
 // ---------------- Notify Measurement ----------------
-void notifyMeasurement(float t, float h, float p) {
+void notifyMeasurement(float t, float h, float p, bool notify) {
   if (!measurementChar || !bleClientConnected) return;
 
-  DynamicJsonDocument doc(256);
+  t = round(t * 100.0) / 100.0;
+  h = round(h * 100.0) / 100.0;
+  p = round(p * 100.0) / 100.0;
+
+  DynamicJsonDocument doc(128);
   doc["temperature"] = t;
   doc["humidity"] = h;
   doc["pressure"] = p;
@@ -149,5 +155,5 @@ void notifyMeasurement(float t, float h, float p) {
   serializeJson(doc, payload);
 
   measurementChar->setValue(payload.c_str());
-  measurementChar->notify();
+  if (notify) measurementChar->notify();
 }
