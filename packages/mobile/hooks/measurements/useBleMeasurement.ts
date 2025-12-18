@@ -1,5 +1,6 @@
 import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { BleError, Characteristic } from "react-native-ble-plx";
 
 import { connectedDeviceAtom } from "@/atoms";
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from "@/constants/ble";
@@ -14,6 +15,46 @@ const useBleMeasurement = () => {
     null,
   );
 
+  const updateBleMeasurement = useCallback((base64Value: string) => {
+    const decoded = base64.decode(base64Value);
+    const parsed: BleMeasurementPayload = JSON.parse(decoded);
+
+    setBleMeasurement({
+      temperature: parsed.temperature,
+      humidity: parsed.humidity,
+      pressure: parsed.pressure,
+      createdAt: new Date(parsed.timestamp * 1000).toISOString(),
+      receivedAt: Date.now(),
+    });
+  }, []);
+
+  const fetchInitialValue = useCallback(async () => {
+    if (!connectedDevice) return;
+
+    setIsLoading(true);
+    try {
+      const char = await connectedDevice.readCharacteristicForService(
+        BLE_SERVICE_UUID,
+        MEASUREMENT_CHAR_UUID,
+      );
+      if (char?.value) {
+        updateBleMeasurement(char.value);
+      }
+    } catch (e) {
+      console.error("Failed to read initial measurement", e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [connectedDevice, updateBleMeasurement]);
+
+  const handleMeasurementUpdate = useCallback(
+    (error: BleError | null, char: Characteristic | null) => {
+      if (error || !char?.value) return;
+      updateBleMeasurement(char.value);
+    },
+    [updateBleMeasurement],
+  );
+
   useEffect(() => {
     if (!connectedDevice) {
       setIsLoading(false);
@@ -21,30 +62,18 @@ const useBleMeasurement = () => {
       return;
     }
 
-    setIsLoading(true);
+    // Fetch initial value
+    fetchInitialValue();
 
+    // Subscribe notifications
     const sub = connectedDevice.monitorCharacteristicForService(
       BLE_SERVICE_UUID,
       MEASUREMENT_CHAR_UUID,
-      (error, char) => {
-        if (error || !char?.value) return;
-
-        const decoded = base64.decode(char.value);
-        const parsed: BleMeasurementPayload = JSON.parse(decoded);
-
-        setBleMeasurement({
-          temperature: parsed.temperature,
-          humidity: parsed.humidity,
-          pressure: parsed.pressure,
-          createdAt: new Date(parsed.timestamp * 1000).toISOString(), // UTC Unix time → ISO
-          receivedAt: Date.now(),
-        });
-        setIsLoading(false);
-      },
+      handleMeasurementUpdate,
     );
 
     return () => sub.remove();
-  }, [connectedDevice]);
+  }, [connectedDevice, fetchInitialValue, handleMeasurementUpdate]);
 
   return { data: bleMeasurement, isLoading };
 };

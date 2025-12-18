@@ -18,6 +18,7 @@ const useBleConnect = () => {
       try {
         const connectedDevice = await bleManager.connectToDevice(deviceId);
         await connectedDevice.discoverAllServicesAndCharacteristics();
+        await connectedDevice.requestMTU(100);
         setConnectedIdDevice(connectedDevice.id);
         setConnectedDevice(connectedDevice);
         setScannedDevices((prev) => prev.filter((d) => d.id !== deviceId));
@@ -33,6 +34,7 @@ const useBleConnect = () => {
       try {
         const connectedDevice = await bleManager.connectToDevice(deviceId);
         await connectedDevice.discoverAllServicesAndCharacteristics();
+        await connectedDevice.requestMTU(100);
         setConnectedDevice(connectedDevice);
         return true;
       } catch (error) {
