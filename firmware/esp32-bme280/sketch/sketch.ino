@@ -15,12 +15,12 @@ const unsigned long JWT_EXPIRATION_SEC = 60; // 60 seconds
 const unsigned long BLE_INTERVAL_MS  = 1 * 60 * 1000; // 1 minute
 const unsigned long CLOUD_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
-unsigned long lastBleNotify  = 0;
-unsigned long lastCloudPublish = 0;
+unsigned long lastBleTick  = 0;
+unsigned long lastCloudTick = 0;
 
-// ---------------- NTP ----------------
-void syncTime() {
-  configTime(0, 0, "pool.ntp.org", "ntp.nict.jp"); // UTC
+// ---------------- Time Sync ----------------
+static void syncTime() {
+  configTime(0, 0, "pool.ntp.org", "ntp.nict.jp");
 
   Serial.print("Syncing time");
   while (time(nullptr) < 1700000000) {
@@ -31,7 +31,7 @@ void syncTime() {
 }
 
 // ---------------- JWT ----------------
-String generateJWT() {
+static String generateJWT() {
   time_t now = time(nullptr);
 
   DynamicJsonDocument doc(256);
@@ -45,74 +45,71 @@ String generateJWT() {
   return JWTUtils::createJWT(payload, DEVICE_SECRET);
 }
 
-// ---------------- POST ----------------
-void publishSensorData(float t, float h, float p) {
+// ---------------- Cloud Publish ----------------
+static void publishSensorData(float t, float h, float p) {
+  if (WiFi.status() != WL_CONNECTED) return;
 
   DynamicJsonDocument doc(256);
   doc["temperature"] = t;
-  doc["humidity"] = h;
-  doc["pressure"] = p;
+  doc["humidity"]    = h;
+  doc["pressure"]    = p;
 
-  String jsonStr;
-  serializeJson(doc, jsonStr);
+  String body;
+  serializeJson(doc, body);
 
-  DEVICE_JWT = generateJWT();
+  HTTPClient http;
+  http.begin(HONO_API_URL);
+  http.addHeader("Content-Type", "application/json");
+  http.addHeader("Authorization", "Bearer " + generateJWT());
+  http.addHeader("X-Device-Id", DEVICE_ID);
 
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.begin(HONO_API_URL);
-    http.addHeader("Content-Type", "application/json");
-    http.addHeader("Authorization", String("Bearer ") + DEVICE_JWT);
-    http.addHeader("X-Device-Id", DEVICE_ID);
+  int status = http.POST(body);
+  Serial.printf("Cloud response: %d\n", status);
 
-    int status = http.POST(jsonStr);
+  http.end();
+}
 
-    Serial.print("Response code: ");
-    Serial.println(status);
-    Serial.println("Response body: " + http.getString());
-
-    http.end();
-  }
+// ---------------- Reset BLE tick ----------------
+void resetBleTick() {
+  lastBleTick = 0;
 }
 
 // ---------------- setup ----------------
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
 
-  if (!SensorManager::init()) {
-    Serial.println("FATAL: BME280 could not be initialized!");
-  }
+  SensorManager::init();
 
-  bool wifiConnected = connectToWiFi();
-  if (wifiConnected) {
+  if (WiFiManager::connect()) {
     syncTime();
   } else {
-    Serial.println("WiFi not connected, skip time sync");
+    Serial.println("WiFi not connected");
   }
-  
-  initBLE();
+
+  BLEManager::init();
 }
 
 // ---------------- loop ----------------
 void loop() {
-  unsigned long now = millis();
+  const unsigned long now = millis();
   float t, h, p;
 
-  // --- BLE notify (every 1min / connected only) ---
-  if (bleClientConnected && (lastBleNotify == 0 || now - lastBleNotify >= BLE_INTERVAL_MS)) {
+  // ---- BLE update (connected only) ----
+  if (BLEManager::isClientConnected() &&
+      (lastBleTick == 0 || now - lastBleTick >= BLE_INTERVAL_MS)) {
+
     if (SensorManager::readMeasurement(t, h, p)) {
-      bool doNotify = lastBleNotify != 0;
-      notifyMeasurement(t, h, p, doNotify);
+      const bool notify = (lastBleTick != 0);
+      BLEManager::updateMeasurement(t, h, p, notify);
     }
-    lastBleNotify = now;
+    lastBleTick = now;
   }
 
-  // --- Cloud publish (every 5min / always) ---
-  if ((lastCloudPublish == 0 || now - lastCloudPublish >= CLOUD_INTERVAL_MS)) {
+  // ---- Cloud publish ----
+  if (lastCloudTick == 0 || now - lastCloudTick >= CLOUD_INTERVAL_MS) {
     if (SensorManager::readMeasurement(t, h, p)) {
       publishSensorData(t, h, p);
     }
-    lastCloudPublish = now;
+    lastCloudTick = now;
   }
 }

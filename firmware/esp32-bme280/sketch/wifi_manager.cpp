@@ -1,10 +1,18 @@
 #include "wifi_manager.h"
 
-static Preferences preferences;
+// ---------------- Static members ----------------
+Preferences WiFiManager::preferences;
 
-// ---------------- connectToWiFiInternal ----------------
-static bool connectToWiFiInternal(const String& ssid, const String& password, unsigned long timeoutMs) {
-  if (ssid.isEmpty() || password.isEmpty()) return false;
+// ---------------- Internal connection logic ----------------
+bool WiFiManager::connectInternal(
+  const String& ssid,
+  const String& password,
+  unsigned long timeoutMs
+) {
+  if (ssid.isEmpty() || password.isEmpty()) {
+    Serial.println("WiFi credentials missing");
+    return false;
+  }
 
   Serial.print("Connecting to WiFi: ");
   Serial.println(ssid);
@@ -16,7 +24,8 @@ static bool connectToWiFiInternal(const String& ssid, const String& password, un
   WiFi.begin(ssid.c_str(), password.c_str());
 
   unsigned long start = millis();
-  while (WiFi.status() != WL_CONNECTED && millis() - start < timeoutMs) {
+  while (WiFi.status() != WL_CONNECTED &&
+         millis() - start < timeoutMs) {
     delay(500);
     Serial.print(".");
   }
@@ -32,22 +41,48 @@ static bool connectToWiFiInternal(const String& ssid, const String& password, un
   return false;
 }
 
-// ---------------- Initializer ----------------
-void initWiFiManager() {
-  // Currently do nothing, but may be used in the future.
+// ---------------- Public API ----------------
+bool WiFiManager::connect() {
+  WiFiConfig config;
+  if (!loadConfig(config)) {
+    Serial.println("WiFi not configured");
+    return false;
+  }
+  return connectInternal(config.ssid, config.password, 8000);
 }
 
-// ---------------- NVS ----------------
-bool loadWiFiConfig(WiFiConfig &config) {
-  preferences.begin("wifi", true); // read-only
-  config.ssid = preferences.getString("ssid", "");
+bool WiFiManager::temporaryConnect(
+  const String& ssid,
+  const String& password
+) {
+  return connectInternal(ssid, password, 8000);
+}
+
+bool WiFiManager::reconnect() {
+  Serial.println("Reconnecting WiFi...");
+
+  if (WiFi.status() == WL_CONNECTED) {
+    WiFi.disconnect(true);
+    delay(300);
+  }
+
+  return connect();
+}
+
+// ---------------- Configuration ----------------
+bool WiFiManager::loadConfig(WiFiConfig& config) {
+  preferences.begin("wifi", true);
+  config.ssid     = preferences.getString("ssid", "");
   config.password = preferences.getString("password", "");
   preferences.end();
 
   return !config.ssid.isEmpty();
 }
 
-void saveWiFiConfig(const String &ssid, const String &password) {
+void WiFiManager::saveConfig(
+  const String& ssid,
+  const String& password
+) {
   preferences.begin("wifi", false);
   preferences.putString("ssid", ssid);
   preferences.putString("password", password);
@@ -56,43 +91,10 @@ void saveWiFiConfig(const String &ssid, const String &password) {
   Serial.println("WiFi config saved to NVS");
 }
 
-void clearWiFiConfig() {
+void WiFiManager::clearConfig() {
   preferences.begin("wifi", false);
   preferences.clear();
   preferences.end();
 
   Serial.println("WiFi config cleared");
-}
-
-bool isWiFiConfigured() {
-  WiFiConfig config;
-  return loadWiFiConfig(config);
-}
-
-// ---------------- Wi-Fi Core ----------------
-bool connectToWiFi() {
-  WiFiConfig config;
-  if (!loadWiFiConfig(config)) {
-    Serial.println("WiFi not configured");
-    return false;
-  }
-  return connectToWiFiInternal(config.ssid, config.password, 8000);
-}
-
-// ---------------- Temporary Connection ----------------
-bool temporaryConnectToWiFi(const String& ssid, const String& password) {
-  return connectToWiFiInternal(ssid, password, 8000);
-}
-
-// ---------------- Reconnection ----------------
-bool reconnectWiFi() {
-  Serial.println("Reconnecting WiFi...");
-
-  // Disconnect WiFi, if existing connection.
-  if (WiFi.status() == WL_CONNECTED) {
-    WiFi.disconnect(true);
-    delay(300);
-  }
-
-  return connectToWiFi();
 }

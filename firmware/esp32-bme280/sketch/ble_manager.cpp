@@ -1,49 +1,37 @@
 #include "ble_manager.h"
-#include "sensor_manager.h"
 #include "wifi_manager.h"
+#include "secrets.h"
 
-// BLE constants
-#define BLE_SERVICE_UUID "43373C9D-F63D-4C72-A978-ABD8523DABFB"
-#define WIFI_CONFIG_CHAR_UUID "5FD5AD97-4A4E-4E7E-BB31-7D69E179D965"
-#define WIFI_STATUS_CHAR_UUID "76B20411-217E-49E4-87DE-D544FB19A443"
-#define MEASUREMENT_CHAR_UUID "1DE752AB-EA22-4757-85B2-AC35C7FBB5E1"
+// Forward declaration (defined in sketch.ino)
+extern void resetBleTick();
 
-const char* BLE_DEVICE_NAME = "ESP32-Monitor";
+// ---------------- BLE UUIDs ----------------
+#define BLE_SERVICE_UUID        "43373C9D-F63D-4C72-A978-ABD8523DABFB"
+#define WIFI_CONFIG_CHAR_UUID   "5FD5AD97-4A4E-4E7E-BB31-7D69E179D965"
+#define WIFI_STATUS_CHAR_UUID   "76B20411-217E-49E4-87DE-D544FB19A443"
+#define MEASUREMENT_CHAR_UUID   "1DE752AB-EA22-4757-85B2-AC35C7FBB5E1"
 
-extern unsigned long lastBleNotify; // defined in sketch.ino
+static const char* BLE_DEVICE_NAME = "ESP32-Monitor";
 
-volatile bool bleClientConnected = false;
+// ---------------- Static members ----------------
+volatile bool BLEManager::clientConnected = false;
 
-// Characteristic pointers
-static BLECharacteristic* wifiConfigChar = nullptr;
-static BLECharacteristic* wifiStatusChar = nullptr;
-static BLECharacteristic* measurementChar = nullptr;
+BLECharacteristic* BLEManager::wifiConfigChar   = nullptr;
+BLECharacteristic* BLEManager::wifiStatusChar   = nullptr;
+BLECharacteristic* BLEManager::measurementChar  = nullptr;
 
-/**
- * BLE server callbacks
- * - Allow only one client connection
- * - Stop advertising while connected
- */
-class SingleConnectionServerCallbacks : public BLEServerCallbacks {
-public:
-  void onConnect(BLEServer* pServer) override {
-    bleClientConnected = true;
-    BLEDevice::getAdvertising()->stop();
-    Serial.println("🔗 BLE client connected and advertising stopped.");
+// ---------------- Server Callbacks ----------------
+class ServerCallbacks : public BLEServerCallbacks {
+  void onConnect(BLEServer*) override {
+    BLEManager::onClientConnected();
   }
 
-  void onDisconnect(BLEServer* pServer) override {
-    bleClientConnected = false;
-    BLEDevice::getAdvertising()->start();
-    Serial.println("❌ BLE client disconnected and advertising restarted.");
-    lastBleNotify = 0;
+  void onDisconnect(BLEServer*) override {
+    BLEManager::onClientDisconnected();
   }
 };
 
-/**
- * WiFi config write callback
- * Called immediately when UI writes WiFi JSON
- */
+// ---------------- WiFi Config Write Callback ----------------
 class WiFiConfigCallbacks : public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic* characteristic) override {
     String value = characteristic->getValue();
@@ -56,37 +44,32 @@ class WiFiConfigCallbacks : public BLECharacteristicCallbacks {
     String password = doc["password"] | "";
 
     if (ssid.isEmpty()) {
-      // Initialize to factory settings
-      clearWiFiConfig();
-      setWiFiStatus("not_configured", nullptr, true);
-      Serial.println("📡 Wi-Fi initialized to factory settings");
+      WiFiManager::clearConfig();
+      BLEManager::setWiFiStatus("not_configured", nullptr, true);
       return;
     }
 
-    setWiFiStatus("connecting", ssid.c_str(), true);
+    BLEManager::setWiFiStatus("connecting", ssid.c_str(), true);
 
-    bool ok = temporaryConnectToWiFi(ssid, password);
-
-    if (ok) {
-        saveWiFiConfig(ssid, password);
-        setWiFiStatus("connected", ssid.c_str(), true);
+    if (WiFiManager::temporaryConnect(ssid, password)) {
+      WiFiManager::saveConfig(ssid, password);
+      BLEManager::setWiFiStatus("connected", ssid.c_str(), true);
     } else {
-        setWiFiStatus("failed", nullptr, true);
+      BLEManager::setWiFiStatus("failed", nullptr, true);
     }
   }
 };
 
-void initBLE() {
+// ---------------- Public API ----------------
+void BLEManager::init() {
   BLEDevice::init(BLE_DEVICE_NAME);
   BLEDevice::setMTU(128);
 
   BLEServer* server = BLEDevice::createServer();
-  server->setCallbacks(new SingleConnectionServerCallbacks());
+  server->setCallbacks(new ServerCallbacks());
 
-  // ---- create service ----
   BLEService* service = server->createService(BLE_SERVICE_UUID);
 
-  // ---- create characteristic ----
   wifiConfigChar = service->createCharacteristic(
     WIFI_CONFIG_CHAR_UUID,
     BLECharacteristic::PROPERTY_WRITE
@@ -105,14 +88,13 @@ void initBLE() {
   );
   measurementChar->addDescriptor(new BLE2902());
 
-  // ---- initial status ----
   WiFiConfig config;
-  if (!loadWiFiConfig(config)) {
+  if (!WiFiManager::loadConfig(config)) {
     setWiFiStatus("not_configured", nullptr, false);
   } else if (WiFi.status() == WL_CONNECTED) {
     setWiFiStatus("connected", config.ssid.c_str(), false);
   } else {
-    setWiFiStatus("configured", config.ssid.c_str(), false);
+        setWiFiStatus("configured", config.ssid.c_str(), false);
   }
 
   service->start();
@@ -120,8 +102,11 @@ void initBLE() {
   BLEDevice::getAdvertising()->start();
 }
 
-// ---------------- Set WiFi Status ----------------
-void setWiFiStatus(const char* status, const char* ssid, bool notify) {
+bool BLEManager::isClientConnected() {
+  return clientConnected;
+}
+
+void BLEManager::setWiFiStatus(const char* status, const char* ssid, bool notify) {
   if (!wifiStatusChar) return;
 
   DynamicJsonDocument doc(128);
@@ -133,27 +118,32 @@ void setWiFiStatus(const char* status, const char* ssid, bool notify) {
 
   wifiStatusChar->setValue(payload.c_str());
   if (notify) wifiStatusChar->notify();
-
-  Serial.printf("📡 WiFi status %s: %s\n", notify ? "notified" : "set", payload.c_str());
 }
 
-// ---------------- Notify Measurement ----------------
-void notifyMeasurement(float t, float h, float p, bool notify) {
-  if (!measurementChar || !bleClientConnected) return;
-
-  t = round(t * 100.0) / 100.0;
-  h = round(h * 100.0) / 100.0;
-  p = round(p * 100.0) / 100.0;
+void BLEManager::updateMeasurement(float t, float h, float p, bool notify) {
+  if (!measurementChar || !clientConnected) return;
 
   DynamicJsonDocument doc(128);
-  doc["temperature"] = t;
-  doc["humidity"] = h;
-  doc["pressure"] = p;
-  doc["timestamp"] = time(nullptr);
+  doc["temperature"] = round(t * 100) / 100;
+  doc["humidity"]    = round(h * 100) / 100;
+  doc["pressure"]    = round(p * 100) / 100;
+  doc["timestamp"]   = time(nullptr);
 
   String payload;
   serializeJson(doc, payload);
 
   measurementChar->setValue(payload.c_str());
   if (notify) measurementChar->notify();
+}
+
+// ---------------- Internal ----------------
+void BLEManager::onClientConnected() {
+  clientConnected = true;
+  BLEDevice::getAdvertising()->stop();
+}
+
+void BLEManager::onClientDisconnected() {
+  clientConnected = false;
+  resetBleTick();
+  BLEDevice::getAdvertising()->start();
 }

@@ -8,16 +8,31 @@ struct WiFiConfig {
   String password;
 };
 
-// WiFi initialization
-void initWiFiManager();
+class WiFiManager {
+public:
+  // ---- Connection ----
+  static bool connect();           // Connect using stored config
+  static bool reconnect();         // Force reconnect
+  static bool temporaryConnect(
+    const String& ssid,
+    const String& password
+  );                               // One-shot connect
 
-// NVS Operation
-bool loadWiFiConfig(WiFiConfig &config);
-void saveWiFiConfig(const String &ssid, const String &password);
-void clearWiFiConfig();
+  // ---- Configuration ----
+  static bool loadConfig(WiFiConfig& config);
+  static void saveConfig(
+    const String& ssid,
+    const String& password
+  );
+  static void clearConfig();
 
-// WiFi Operation
-bool connectToWiFi();
-bool temporaryConnectToWiFi(const String& ssid, const String& password);
-bool isWiFiConfigured();
-bool reconnectWiFi();
+private:
+  // ---- Internal helpers ----
+  static bool connectInternal(
+    const String& ssid,
+    const String& password,
+    unsigned long timeoutMs
+  );
+
+  static Preferences preferences;
+};

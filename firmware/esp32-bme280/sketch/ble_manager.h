@@ -1,19 +1,44 @@
 #pragma once
+
+#include <Arduino.h>
+#include <ArduinoJson.h>
 #include <BLEDevice.h>
-#include <BLEUtils.h>
 #include <BLEServer.h>
 #include <BLEAdvertising.h>
 #include <BLE2902.h>
-#include <Arduino.h>
-#include <ArduinoJson.h>
-#include "secrets.h"
 
-extern volatile bool bleClientConnected;
+class BLEManager {
+public:
+  // Initialize BLE service & characteristics
+  static void init();
 
-void initBLE();
+  // Connection state
+  static bool isClientConnected();
 
-// Unified WiFi status setter
-void setWiFiStatus(const char* status, const char* ssid = nullptr, bool notify = false);
+  // WiFi status update
+  static void setWiFiStatus(
+    const char* status,
+    const char* ssid = nullptr,
+    bool notify = false
+  );
 
-// Unified measurement notifier
-void notifyMeasurement(float t, float h, float p, bool notify = false);
+  // Measurement update / notify
+  static void updateMeasurement(
+    float t,
+    float h,
+    float p,
+    bool notify = false
+  );
+
+  // BLE callbacks
+  static void onClientConnected();
+  static void onClientDisconnected();
+
+private:
+  // BLE state
+  static volatile bool clientConnected;
+
+  static BLECharacteristic* wifiConfigChar;
+  static BLECharacteristic* wifiStatusChar;
+  static BLECharacteristic* measurementChar;
+};
