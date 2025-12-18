@@ -31,10 +31,17 @@ const LiveMeasurementSkeleton = ({
       </View>
 
       <SkeletonItem
-        width={bigRadius}
+        width={bigRadius * 1.5}
         height={16}
         borderRadius={8}
         style={styles.timeWrapper}
+      />
+
+      <SkeletonItem
+        width={bigRadius}
+        height={16}
+        borderRadius={8}
+        style={styles.sourceWrapper}
       />
     </View>
   );
@@ -56,7 +63,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   timeWrapper: {
-    marginVertical: 20,
+    marginTop: 20,
+  },
+  sourceWrapper: {
+    marginTop: 10,
   },
 });
 

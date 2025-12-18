@@ -14,6 +14,8 @@ export const MEASUREMENT_SETTINGS: MeasurementSettings = {
 
 export const MEASUREMENT_RANGES = ["1d", "7d", "30d"] as const;
 
+export const BLE_MEASUREMENT_STALE_THRESHOLD_MS = 90_000; // 90 seconds
+
 // Gradients and thresholds
 export const TEMPERATURE_GRADIENTS = [
   { start: "#0000FF", end: "#00BFFF" },

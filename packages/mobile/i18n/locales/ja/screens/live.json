@@ -1,4 +1,8 @@
 {
   "title": "Live",
-  "lastUpdate": "最終更新: {{date}}"
+  "lastUpdate": "最終更新: {{date}}",
+  "source": {
+    "ble": "Bluetooth (1分更新)",
+    "cloud": "クラウド (5分更新)"
+  }
 }

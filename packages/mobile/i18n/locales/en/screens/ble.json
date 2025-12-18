@@ -1,0 +1,21 @@
+{
+  "title": "Bluetooth settings",
+  "notConnected": {
+    "title": "Press the BOOT button on your ESP32",
+    "description": "Then tap the Scan button to find nearby devices.",
+    "scanButton": "Scan for Devices",
+    "emptyList": "No devices found yet",
+    "unknownDevice": "Unknown Device"
+  },
+  "reconnect": {
+    "title": "Lost connection to {{deviceName}}",
+    "description": "Press the BOOT button on your ESP32 to reconnect.\nOr disconnect and start over.",
+    "reconnectButton": "Reconnect",
+    "disconnectButton": "Disconnect"
+  },
+  "connected": {
+    "title": "Connected to {{deviceName}}",
+    "description": "You can now send or receive data from your ESP32.",
+    "disconnectButton": "Disconnect"
+  }
+}

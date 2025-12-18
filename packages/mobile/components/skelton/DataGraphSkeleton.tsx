@@ -5,9 +5,10 @@ import { LineChart } from "react-native-gifted-charts";
 import SkeletonItem from "@/components/skelton/SkeletonItem";
 import { useResolvedTheme } from "@/hooks/common";
 
-const _paddingHorizontal = 20;
-const _gap = 5;
-const _space = (_paddingHorizontal + _gap) * 2;
+const PADDING_HORIZONTAL = 20;
+const GAP = 5;
+const SPACE = (PADDING_HORIZONTAL + GAP) * 2;
+const DUMMY_DATA = [{ value: 21 }, { value: 22 }, { value: 21 }, { value: 22 }];
 
 interface DataGraphSkeletonProps {
   width: number;
@@ -24,10 +25,6 @@ const DataGraphSkeleton = ({
 }: DataGraphSkeletonProps) => {
   const { currentThemeColors } = useResolvedTheme();
 
-  const dummyData = Array.from({ length: 10 }).map(() => ({
-    value: 20 + Math.random() * (23 - 20),
-  }));
-
   return (
     <View>
       <View style={styles.container}>
@@ -36,7 +33,7 @@ const DataGraphSkeleton = ({
           {Array.from({ length: tabLength }).map((_, index) => (
             <SkeletonItem
               key={index}
-              width={tabWidth / tabLength - _space}
+              width={tabWidth / tabLength - SPACE}
               height={65}
               borderRadius={10}
             />
@@ -45,7 +42,7 @@ const DataGraphSkeleton = ({
 
         {/* Dummy Chart */}
         <LineChart
-          data={dummyData}
+          data={DUMMY_DATA}
           width={width}
           height={height}
           roundToDigits={0} // No decimals on y axis
@@ -85,7 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     marginBottom: 30,
     paddingVertical: 8,
-    gap: _gap,
+    gap: GAP,
   },
 });
 

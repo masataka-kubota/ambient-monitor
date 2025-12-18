@@ -1,11 +1,26 @@
 {
   "title": {
-    "theme": "テーマ設定",
-    "lang": "言語設定"
+    "theme": "テーマ",
+    "lang": "言語",
+    "ble": "Bluetooth"
   },
   "theme": {
     "system": "端末の設定に合わせる",
     "light": "ライト",
     "dark": "ダーク"
+  },
+  "ble": {
+    "link": "Bluetooth設定",
+    "status": {
+      "connected": "接続済み",
+      "disconnected": "未接続"
+    }
+  },
+  "wifi": {
+    "link": "Wi-Fi設定",
+    "status": {
+      "connected": "接続済み",
+      "disconnected": "未接続"
+    }
   }
 }

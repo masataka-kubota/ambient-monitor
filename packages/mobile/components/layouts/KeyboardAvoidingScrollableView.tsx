@@ -13,17 +13,24 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+const HEADER_HEIGHT = 50;
+
 interface KeyboardAvoidingScrollableViewProps {
   children: React.ReactNode;
+  hasHeader?: boolean;
 }
 
 const KeyboardAvoidingScrollableView = ({
   children,
+  hasHeader = false,
 }: KeyboardAvoidingScrollableViewProps) => {
   const keyboard = useAnimatedKeyboard();
   const insets = useSafeAreaInsets();
 
-  const paddingTop = insets.top + 20;
+  const basePaddingTop = insets.top + 20;
+  const paddingTop = hasHeader
+    ? basePaddingTop + HEADER_HEIGHT
+    : basePaddingTop;
   const paddingBottom = insets.bottom + 120; // 100 is the height of the TabBar
 
   const animatedStyle = useAnimatedStyle(() => {

@@ -4,6 +4,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 
+import { BleAutoReconnectInitializer } from "@/components/ble";
+import WifiWifiStatusSync from "@/components/ble/WifiWifiStatusSync";
 import { AppProviders } from "@/components/layouts";
 import { APP_THEME_SCHEME } from "@/constants";
 import { useI18nInitializer, useResolvedTheme } from "@/hooks/common";
@@ -29,6 +31,8 @@ const RootLayout = () => {
 
   return (
     <AppProviders>
+      <BleAutoReconnectInitializer />
+      <WifiWifiStatusSync />
       <ThemeProvider
         value={
           isDarkMode
@@ -36,8 +40,8 @@ const RootLayout = () => {
             : APP_THEME_SCHEME.defaultTheme
         }
       >
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
         </Stack>
         <StatusBar style={isDarkMode ? "light" : "dark"} />
       </ThemeProvider>
