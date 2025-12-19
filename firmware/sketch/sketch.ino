@@ -1,11 +1,10 @@
-#include <WiFi.h>
-
 #include "ble_manager.h"
 #include "cloud_client.h"
 #include "sensor_manager.h"
 #include "wifi_manager.h"
 #include "secrets.h"
 
+// ---------------- Constants ----------------
 const unsigned long BLE_INTERVAL_MS  = 1 * 60 * 1000; // 1 minute
 const unsigned long CLOUD_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 

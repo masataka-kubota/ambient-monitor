@@ -1,7 +1,10 @@
 #include "cloud_client.h"
 #include "secrets.h"
+#include "root_ca.h"
 
 const unsigned long JWT_EXPIRATION_SEC = 60;
+
+NetworkClientSecure client;
 
 void CloudClient::init() {}
 
@@ -20,17 +23,25 @@ String CloudClient::generateJWT() {
 
 bool CloudClient::publishMeasurement(const SensorMeasurement& m) {
   if (WiFi.status() != WL_CONNECTED) return false;
-
-  DynamicJsonDocument doc(256);
-  doc["temperature"] = m.temperature;
-  doc["humidity"]    = m.humidity;
-  doc["pressure"]    = m.pressure;
-
+  
+  StaticJsonDocument<128> doc;
+  doc["temperature"] = round(m.temperature * 100.0f) / 100.0f;
+  doc["humidity"]    = round(m.humidity * 100.0f) / 100.0f;
+  doc["pressure"]    = round(m.pressure * 100.0f) / 100.0f;
+  
   String body;
   serializeJson(doc, body);
-
+  
   HTTPClient http;
-  http.begin(HONO_API_URL);
+  bool isHttps = String(HONO_API_URL).startsWith("https://");
+
+  if (isHttps) {
+      client.setCACert(ROOT_CA);
+      http.begin(client, HONO_API_URL);
+  } else {
+      http.begin(HONO_API_URL);
+  }
+
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Authorization", "Bearer " + generateJWT());
   http.addHeader("X-Device-Id", DEVICE_ID);

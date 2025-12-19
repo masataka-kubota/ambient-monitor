@@ -2,10 +2,19 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <BLEDevice.h>
-#include <BLEServer.h>
-#include <BLEAdvertising.h>
-#include <BLE2902.h>
+#include <NimBLEDevice.h>
+
+struct __attribute__((packed)) Measurement {
+  int16_t  t;   // temperature * 100
+  int16_t  h;   // humidity * 100
+  int32_t  p;   // pressure (Pa)
+  uint32_t ts;  // unix seconds
+};
+
+struct __attribute__((packed)) WiFiStatusPayload {
+  uint8_t status;
+  char ssid[32];
+};
 
 class BLEManager {
 public:
@@ -38,7 +47,7 @@ private:
   // BLE state
   static volatile bool clientConnected;
 
-  static BLECharacteristic* wifiConfigChar;
-  static BLECharacteristic* wifiStatusChar;
-  static BLECharacteristic* measurementChar;
+  static NimBLECharacteristic* wifiConfigChar;
+  static NimBLECharacteristic* wifiStatusChar;
+  static NimBLECharacteristic* measurementChar;
 };

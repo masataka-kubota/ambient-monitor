@@ -16,28 +16,28 @@ static const char* BLE_DEVICE_NAME = "ESP32-Monitor";
 // ---------------- Static members ----------------
 volatile bool BLEManager::clientConnected = false;
 
-BLECharacteristic* BLEManager::wifiConfigChar   = nullptr;
-BLECharacteristic* BLEManager::wifiStatusChar   = nullptr;
-BLECharacteristic* BLEManager::measurementChar  = nullptr;
+NimBLECharacteristic* BLEManager::wifiConfigChar   = nullptr;
+NimBLECharacteristic* BLEManager::wifiStatusChar   = nullptr;
+NimBLECharacteristic* BLEManager::measurementChar  = nullptr;
 
 // ---------------- Server Callbacks ----------------
-class ServerCallbacks : public BLEServerCallbacks {
-  void onConnect(BLEServer*) override {
+class ServerCallbacks : public NimBLEServerCallbacks {
+  void onConnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo) override {
     BLEManager::onClientConnected();
   }
 
-  void onDisconnect(BLEServer*) override {
+  void onDisconnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo, int reason) override {
     BLEManager::onClientDisconnected();
   }
 };
 
 // ---------------- WiFi Config Write Callback ----------------
-class WiFiConfigCallbacks : public BLECharacteristicCallbacks {
-  void onWrite(BLECharacteristic* characteristic) override {
-    String value = characteristic->getValue();
+class WiFiConfigCallbacks : public NimBLECharacteristicCallbacks {
+  void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) override {
+    String value = pCharacteristic->getValue();
     if (value.isEmpty()) return;
 
-    DynamicJsonDocument doc(256);
+    DynamicJsonDocument doc(128);
     if (deserializeJson(doc, value)) return;
 
     String ssid = doc["ssid"] | "";
@@ -62,31 +62,28 @@ class WiFiConfigCallbacks : public BLECharacteristicCallbacks {
 
 // ---------------- Public API ----------------
 void BLEManager::init() {
-  BLEDevice::init(BLE_DEVICE_NAME);
-  BLEDevice::setMTU(128);
+  NimBLEDevice::init(BLE_DEVICE_NAME);
 
-  BLEServer* server = BLEDevice::createServer();
+  NimBLEServer* server = NimBLEDevice::createServer();
   server->setCallbacks(new ServerCallbacks());
 
-  BLEService* service = server->createService(BLE_SERVICE_UUID);
+  NimBLEService* service = server->createService(BLE_SERVICE_UUID);
 
   wifiConfigChar = service->createCharacteristic(
     WIFI_CONFIG_CHAR_UUID,
-    BLECharacteristic::PROPERTY_WRITE
+    NIMBLE_PROPERTY::WRITE
   );
   wifiConfigChar->setCallbacks(new WiFiConfigCallbacks());
 
   wifiStatusChar = service->createCharacteristic(
     WIFI_STATUS_CHAR_UUID,
-    BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY
+    NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::NOTIFY
   );
-  wifiStatusChar->addDescriptor(new BLE2902());
 
   measurementChar = service->createCharacteristic(
     MEASUREMENT_CHAR_UUID,
-    BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY
+    NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::NOTIFY
   );
-  measurementChar->addDescriptor(new BLE2902());
 
   WiFiConfig config;
   if (!WiFiManager::loadConfig(config)) {
@@ -94,12 +91,15 @@ void BLEManager::init() {
   } else if (WiFi.status() == WL_CONNECTED) {
     setWiFiStatus("connected", config.ssid.c_str(), false);
   } else {
-        setWiFiStatus("configured", config.ssid.c_str(), false);
+      setWiFiStatus("configured", config.ssid.c_str(), false);
   }
 
   service->start();
-  BLEDevice::getAdvertising()->addServiceUUID(BLE_SERVICE_UUID);
-  BLEDevice::getAdvertising()->start();
+  NimBLEAdvertising* adv = NimBLEDevice::getAdvertising();
+  adv->enableScanResponse(true);
+  adv->addServiceUUID(BLE_SERVICE_UUID);
+  adv->setName(BLE_DEVICE_NAME);
+  adv->start();
 }
 
 bool BLEManager::isClientConnected() {
@@ -109,41 +109,40 @@ bool BLEManager::isClientConnected() {
 void BLEManager::setWiFiStatus(const char* status, const char* ssid, bool notify) {
   if (!wifiStatusChar) return;
 
-  DynamicJsonDocument doc(128);
-  doc["status"] = status;
-  if (ssid) doc["ssid"] = ssid;
+  WiFiStatusPayload payload = {0};
+  if (strcmp(status, "not_configured") == 0) payload.status = 0;
+  else if (strcmp(status, "configured") == 0) payload.status = 1;
+  else if (strcmp(status, "connecting") == 0) payload.status = 2;
+  else if (strcmp(status, "connected") == 0) payload.status = 3;
+  else if (strcmp(status, "failed") == 0) payload.status = 4;
 
-  String payload;
-  serializeJson(doc, payload);
+  if (ssid) strncpy(payload.ssid, ssid, sizeof(payload.ssid)-1);
 
-  wifiStatusChar->setValue(payload.c_str());
+  wifiStatusChar->setValue((uint8_t*)&payload, sizeof(payload));
   if (notify) wifiStatusChar->notify();
 }
 
 void BLEManager::updateMeasurement(float t, float h, float p, bool notify) {
   if (!measurementChar || !clientConnected) return;
 
-  DynamicJsonDocument doc(128);
-  doc["temperature"] = round(t * 100) / 100;
-  doc["humidity"]    = round(h * 100) / 100;
-  doc["pressure"]    = round(p * 100) / 100;
-  doc["timestamp"]   = time(nullptr);
+  Measurement m;
+  m.t  = (int16_t)round(t * 100.0f);
+  m.h  = (int16_t)round(h * 100.0f);
+  m.p  = (int32_t)round(p * 100.0f); // hPa → Pa
+  m.ts = (uint32_t)time(nullptr);
 
-  String payload;
-  serializeJson(doc, payload);
-
-  measurementChar->setValue(payload.c_str());
+  measurementChar->setValue((uint8_t*)&m, sizeof(m));
   if (notify) measurementChar->notify();
 }
 
 // ---------------- Internal ----------------
 void BLEManager::onClientConnected() {
   clientConnected = true;
-  BLEDevice::getAdvertising()->stop();
+  NimBLEDevice::getAdvertising()->stop();
 }
 
 void BLEManager::onClientDisconnected() {
   clientConnected = false;
   resetBleTick();
-  BLEDevice::getAdvertising()->start();
+  NimBLEDevice::getAdvertising()->start();
 }
