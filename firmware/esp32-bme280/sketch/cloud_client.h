@@ -2,6 +2,7 @@
 
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <NetworkClientSecure.h>
 #include <ArduinoJson.h>
 #include <JWTUtils.h>
 
