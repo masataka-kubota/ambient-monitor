@@ -7,6 +7,18 @@
 #include <BLEAdvertising.h>
 #include <BLE2902.h>
 
+struct __attribute__((packed)) Measurement {
+  int16_t  t;   // temperature * 100
+  int16_t  h;   // humidity * 100
+  int32_t  p;   // pressure (Pa)
+  uint32_t ts;  // unix seconds
+};
+
+struct __attribute__((packed)) WiFiStatusPayload {
+  uint8_t status;
+  char ssid[32];
+};
+
 class BLEManager {
 public:
   // Initialize BLE service & characteristics

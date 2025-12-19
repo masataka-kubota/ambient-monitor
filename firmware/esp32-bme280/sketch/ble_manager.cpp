@@ -37,7 +37,7 @@ class WiFiConfigCallbacks : public BLECharacteristicCallbacks {
     String value = characteristic->getValue();
     if (value.isEmpty()) return;
 
-    DynamicJsonDocument doc(256);
+    DynamicJsonDocument doc(128);
     if (deserializeJson(doc, value)) return;
 
     String ssid = doc["ssid"] | "";
@@ -63,7 +63,6 @@ class WiFiConfigCallbacks : public BLECharacteristicCallbacks {
 // ---------------- Public API ----------------
 void BLEManager::init() {
   BLEDevice::init(BLE_DEVICE_NAME);
-  BLEDevice::setMTU(128);
 
   BLEServer* server = BLEDevice::createServer();
   server->setCallbacks(new ServerCallbacks());
@@ -109,30 +108,29 @@ bool BLEManager::isClientConnected() {
 void BLEManager::setWiFiStatus(const char* status, const char* ssid, bool notify) {
   if (!wifiStatusChar) return;
 
-  DynamicJsonDocument doc(128);
-  doc["status"] = status;
-  if (ssid) doc["ssid"] = ssid;
+  WiFiStatusPayload payload = {0};
+  if (strcmp(status, "not_configured") == 0) payload.status = 0;
+  else if (strcmp(status, "configured") == 0) payload.status = 1;
+  else if (strcmp(status, "connecting") == 0) payload.status = 2;
+  else if (strcmp(status, "connected") == 0) payload.status = 3;
+  else if (strcmp(status, "failed") == 0) payload.status = 4;
 
-  String payload;
-  serializeJson(doc, payload);
+  if (ssid) strncpy(payload.ssid, ssid, sizeof(payload.ssid)-1);
 
-  wifiStatusChar->setValue(payload.c_str());
+  wifiStatusChar->setValue((uint8_t*)&payload, sizeof(payload));
   if (notify) wifiStatusChar->notify();
 }
 
 void BLEManager::updateMeasurement(float t, float h, float p, bool notify) {
   if (!measurementChar || !clientConnected) return;
 
-  DynamicJsonDocument doc(128);
-  doc["temperature"] = round(t * 100) / 100;
-  doc["humidity"]    = round(h * 100) / 100;
-  doc["pressure"]    = round(p * 100) / 100;
-  doc["timestamp"]   = time(nullptr);
+  Measurement m;
+  m.t  = (int16_t)round(t * 100.0f);
+  m.h  = (int16_t)round(h * 100.0f);
+  m.p  = (int32_t)round(p * 100.0f); // hPa → Pa
+  m.ts = (uint32_t)time(nullptr);
 
-  String payload;
-  serializeJson(doc, payload);
-
-  measurementChar->setValue(payload.c_str());
+  measurementChar->setValue((uint8_t*)&m, sizeof(m));
   if (notify) measurementChar->notify();
 }
 
