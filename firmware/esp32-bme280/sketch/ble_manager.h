@@ -2,10 +2,7 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <BLEDevice.h>
-#include <BLEServer.h>
-#include <BLEAdvertising.h>
-#include <BLE2902.h>
+#include <NimBLEDevice.h>
 
 struct __attribute__((packed)) Measurement {
   int16_t  t;   // temperature * 100
@@ -50,7 +47,7 @@ private:
   // BLE state
   static volatile bool clientConnected;
 
-  static BLECharacteristic* wifiConfigChar;
-  static BLECharacteristic* wifiStatusChar;
-  static BLECharacteristic* measurementChar;
+  static NimBLECharacteristic* wifiConfigChar;
+  static NimBLECharacteristic* wifiStatusChar;
+  static NimBLECharacteristic* measurementChar;
 };
