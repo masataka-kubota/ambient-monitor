@@ -1,0 +1,27 @@
+name: Check Merge Source
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-merge-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Check merge source
+        run: |
+          TARGET_BRANCH="${{ github.base_ref }}"
+          SOURCE_BRANCH="${{ github.head_ref }}"
+
+          echo "PR target: $TARGET_BRANCH"
+          echo "PR source: $SOURCE_BRANCH"
+
+          # develop -> main
+          if [ "$TARGET_BRANCH" = "main" ] && [ "$SOURCE_BRANCH" != "develop" ]; then
+            echo "Error: 'main' can only be merged from 'develop'"
+            exit 1
+          fi
