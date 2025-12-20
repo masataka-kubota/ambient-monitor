@@ -7,9 +7,7 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "env": {
-        "APP_VARIANT": "development"
-      },
+      "env": {},
       "android": {},
       "ios": {
         "simulator": true
@@ -17,9 +15,7 @@
     },
     "preview": {
       "distribution": "internal",
-      "env": {
-        "APP_VARIANT": "preview"
-      }
+      "env": {}
     },
     "production": {
       "autoIncrement": true
