@@ -2,7 +2,7 @@ import { useForm } from "@tanstack/react-form";
 import { useAtomValue } from "jotai";
 import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, Keyboard, StyleSheet, View } from "react-native";
 
 import { wifiStatusAtom } from "@/atoms";
 import { PrimaryButton, PrimaryTextInput } from "@/components/ui";
@@ -31,6 +31,7 @@ const BleWifiForm = () => {
         return;
       }
 
+      Keyboard.dismiss();
       form.reset();
     },
   });
@@ -43,6 +44,7 @@ const BleWifiForm = () => {
       return;
     }
 
+    Keyboard.dismiss();
     form.reset();
   }, [initializeWifiConfig, form, t]);
 
