@@ -1,5 +1,7 @@
 import { ConfigContext, ExpoConfig } from "expo/config";
 
+import pkg from "./package.json";
+
 const IS_DEV = process.env.APP_VARIANT === "development";
 const IS_PREVIEW = process.env.APP_VARIANT === "preview";
 
@@ -19,7 +21,7 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: getAppName(),
   slug: "ambient-monitor",
-  version: "1.0.0",
+  version: pkg.version,
   orientation: "portrait",
   icon: "./assets/icons/icon.png",
   scheme: "dev.ambientmonitor",
