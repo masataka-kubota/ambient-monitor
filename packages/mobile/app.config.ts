@@ -21,22 +21,26 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
   slug: "ambient-monitor",
   version: "1.0.0",
   orientation: "portrait",
-  icon: "./assets/images/icon.png",
-  scheme: "ambientmonitor",
+  icon: "./assets/icons/icon.png",
+  scheme: "dev.ambientmonitor",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
 
   ios: {
     supportsTablet: true,
     bundleIdentifier: getUniqueIdentifier(),
+    icon: {
+      light: "./assets/icons/ios-icon-light.png",
+      dark: "./assets/icons/ios-icon-dark.png",
+      tinted: "./assets/icons/ios-icon-tinted.png",
+    },
   },
 
   android: {
     adaptiveIcon: {
-      backgroundColor: "#E6F4FE",
-      foregroundImage: "./assets/images/android-icon-foreground.png",
-      backgroundImage: "./assets/images/android-icon-background.png",
-      monochromeImage: "./assets/images/android-icon-monochrome.png",
+      backgroundColor: "#f5f5f5",
+      foregroundImage: "./assets/icons/adaptive-icon.png",
+      monochromeImage: "./assets/icons/adaptive-icon-monochrome.png",
     },
     package: getUniqueIdentifier(),
     edgeToEdgeEnabled: true,
@@ -46,7 +50,7 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
 
   web: {
     output: "static",
-    favicon: "./assets/images/favicon.png",
+    favicon: "./assets/icons/favicon.png",
   },
 
   plugins: [
@@ -55,12 +59,13 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-splash-screen",
       {
-        image: "./assets/images/splash-icon.png",
+        image: "./assets/icons/splash-icon-light.png",
         imageWidth: 200,
         resizeMode: "contain",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#f5f5f5",
         dark: {
-          backgroundColor: "#000000",
+          image: "./assets/icons/splash-icon-dark.png",
+          backgroundColor: "#2f2f2f",
         },
       },
     ],
