@@ -1,0 +1,66 @@
+name: EAS Production Build Notification
+
+on:
+  pull_request:
+    types: [opened, synchronize, labeled, unlabeled]
+    branches: ["main"]
+
+jobs:
+  manage-comments:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Manage PR comment
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+
+            // Current labels
+            const currentLabels = pr.labels.map(l => l.name);
+
+            const BOT_MARKER = "### 🤖 EAS Build notification";
+            const ANDROID_LABEL = "eas-build-android:production";
+            const IOS_LABEL = "eas-build-ios:production";
+
+            // Find current bot comment
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+            });
+            const currentBotComment = comments.data.find(
+              c => c.user.login === "github-actions[bot]" && c.body.includes(BOT_MARKER)
+            );
+
+            // Build the comment body based on currentLabels
+            let message = `${BOT_MARKER}\n`;
+
+            const hasAndroidLabel = currentLabels.includes(ANDROID_LABEL);
+            const hasIosLabel = currentLabels.includes(IOS_LABEL);
+
+            message += "This PR is marked for an EAS Production Build:\n\n";
+            message += `- ${hasAndroidLabel ? "✅" : "⬜"} **Android build will be triggered after merge** 🚀\n(triggered by label: \`${ANDROID_LABEL}\`)\n`;
+            message += `- ${hasIosLabel ? "✅" : "⬜"} **iOS build will be triggered after merge** 🚀\n(triggered by label: \`${IOS_LABEL}\`)\n`;
+
+            // Delete existing bot comment if it exists
+            if (currentBotComment) {
+              await github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: currentBotComment.id
+              });
+            }
+
+            // Create new bot comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: message
+            });
