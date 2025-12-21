@@ -6,9 +6,9 @@ const IS_DEV = process.env.APP_VARIANT === "development";
 const IS_PREVIEW = process.env.APP_VARIANT === "preview";
 
 const getUniqueIdentifier = () => {
-  if (IS_DEV) return "com.example.ambientmonitor.dev";
-  if (IS_PREVIEW) return "com.example.ambientmonitor.preview";
-  return "com.example.ambientmonitor";
+  if (IS_DEV) return "dev.ambientmonitor.dev";
+  if (IS_PREVIEW) return "dev.ambientmonitor.preview";
+  return "dev.ambientmonitor";
 };
 
 const getAppName = () => {
