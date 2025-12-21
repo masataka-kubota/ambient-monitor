@@ -12,5 +12,8 @@
     "temperature": "温度",
     "humidity": "湿度",
     "pressure": "気圧"
+  },
+  "form": {
+    "required": "※ 必須"
   }
 }

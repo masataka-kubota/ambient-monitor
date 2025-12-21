@@ -59,6 +59,8 @@ export const APP_THEME_COLORS: AppThemeColors = {
     shadow: shadowLight,
     tint: tint,
     onTint: onTint,
+    link: blue,
+    error: red,
   },
   dark: {
     mainColor: white,
@@ -70,5 +72,7 @@ export const APP_THEME_COLORS: AppThemeColors = {
     shadow: shadowDark,
     tint: tint,
     onTint: onTint,
+    link: blue,
+    error: red,
   },
 };

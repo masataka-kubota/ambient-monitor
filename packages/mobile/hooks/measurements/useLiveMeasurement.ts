@@ -1,35 +1,27 @@
-import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 
-import { selectedDeviceIdAtom } from "@/atoms";
-import { API_TOKEN } from "@/constants";
-import { apiClient } from "@/lib";
+import { bleDataAvailabilityAtom } from "@/atoms";
+import useBleMeasurement from "@/hooks/measurements/useBleMeasurement";
+import useCloudLiveMeasurement from "@/hooks/measurements/useCloudLiveMeasurement";
 
 const useLiveMeasurement = () => {
-  const selectedDeviceId = useAtomValue(selectedDeviceIdAtom);
+  const bleDataAvailability = useAtomValue(bleDataAvailabilityAtom);
+  const ble = useBleMeasurement();
+  const cloud = useCloudLiveMeasurement();
 
-  const onFetchMeasurements = async () => {
-    const res = await apiClient.measurements.latest.$get({
-      header: { Authorization: `Bearer ${API_TOKEN}` },
-      query: { deviceId: selectedDeviceId },
-    });
+  if (bleDataAvailability === "usable") {
+    return {
+      data: ble.data,
+      isLoading: ble.isLoading,
+      source: "ble" as const,
+    };
+  }
 
-    const data = await res.json();
-
-    if (!data.success) {
-      throw new Error("Failed to fetch measurements");
-    }
-
-    return data.data; // Return the latest measurement
+  return {
+    data: cloud.data,
+    isLoading: cloud.isLoading,
+    source: "cloud" as const,
   };
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["liveMeasurement", selectedDeviceId],
-    queryFn: onFetchMeasurements,
-    refetchInterval: 5 * 60 * 1000,
-  });
-
-  return { data, isLoading };
 };
 
 export default useLiveMeasurement;

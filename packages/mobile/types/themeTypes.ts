@@ -12,6 +12,8 @@ export interface ThemeColors {
   shadow: string;
   tint: string;
   onTint: string;
+  link: string;
+  error: string;
 }
 
 export interface AppThemeColors {

@@ -1,8 +1,10 @@
 import { Entypo } from "@expo/vector-icons";
+import { useCallback } from "react";
 import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 
 import ThemeText from "@/components/ui/ThemeText";
 import { useResolvedTheme } from "@/hooks/common";
+import { triggerLightHaptics } from "@/utils";
 
 const _paddingHorizontal = 20;
 const _gap = 5;
@@ -30,6 +32,14 @@ const IconTabs = <T extends string>({
 
   const tabWidth = (width - _space) / tabs.length;
 
+  const handlePress = useCallback(
+    (key: T) => {
+      triggerLightHaptics();
+      onTabPress(key);
+    },
+    [onTabPress],
+  );
+
   return (
     <View style={styles.tabContainer}>
       {tabs.map((tab, i) => {
@@ -45,7 +55,7 @@ const IconTabs = <T extends string>({
               },
               { width: tabWidth },
             ]}
-            onPress={() => onTabPress(tab.key)}
+            onPress={() => handlePress(tab.key)}
           >
             <Entypo
               name={tab.iconName}

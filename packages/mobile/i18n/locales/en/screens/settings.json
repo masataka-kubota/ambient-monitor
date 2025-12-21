@@ -1,11 +1,26 @@
 {
   "title": {
-    "theme": "Theme Settings",
-    "lang": "Language Settings"
+    "theme": "Theme",
+    "lang": "Language",
+    "ble": "Bluetooth"
   },
   "theme": {
     "system": "Follow system",
     "light": "Light",
     "dark": "Dark"
+  },
+  "ble": {
+    "link": "Bluetooth Settings",
+    "status": {
+      "connected": "Connected",
+      "disconnected": "Not connected"
+    }
+  },
+  "wifi": {
+    "link": "Wi-Fi Settings",
+    "status": {
+      "connected": "Connected",
+      "disconnected": "Not connected"
+    }
   }
 }

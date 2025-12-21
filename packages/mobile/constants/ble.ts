@@ -1,0 +1,16 @@
+import { WifiStatusCode } from "@/types";
+
+export const BLE_DEVICE_NAME = "ESP32-Monitor";
+
+export const BLE_SERVICE_UUID = "43373C9D-F63D-4C72-A978-ABD8523DABFB";
+export const WIFI_CONFIG_CHAR_UUID = "5FD5AD97-4A4E-4E7E-BB31-7D69E179D965";
+export const WIFI_STATUS_CHAR_UUID = "76B20411-217E-49E4-87DE-D544FB19A443";
+export const MEASUREMENT_CHAR_UUID = "1DE752AB-EA22-4757-85B2-AC35C7FBB5E1";
+
+export const STATUS_MAP: Record<number, WifiStatusCode> = {
+  0: "not_configured",
+  1: "configured",
+  2: "connecting",
+  3: "connected",
+  4: "failed",
+};

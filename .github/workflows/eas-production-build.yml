@@ -1,0 +1,51 @@
+name: EAS Production Build
+
+on:
+  pull_request:
+    types: [closed]
+    branches: ["main"]
+
+jobs:
+  eas-build:
+    if: |
+      github.event.pull_request.merged == true &&
+      (
+        contains(github.event.pull_request.labels.*.name, 'eas-build-android:production') ||
+        contains(github.event.pull_request.labels.*.name, 'eas-build-ios:production')
+      )
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v5
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22.x
+
+      - name: 🏗 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 🏗 Setup EAS CLI
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          packager: bun
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 📦 Install dependencies
+        run: bun install
+
+      - name: 🚀 Build Android
+        if: contains(github.event.pull_request.labels.*.name, 'eas-build-android:production')
+        run: eas build --platform android --profile production --non-interactive
+
+      - name: 🚀 Build iOS
+        if: contains(github.event.pull_request.labels.*.name, 'eas-build-ios:production')
+        run: eas build --platform ios --profile production --non-interactive

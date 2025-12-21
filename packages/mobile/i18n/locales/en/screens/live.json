@@ -1,4 +1,8 @@
 {
   "title": "Live",
-  "lastUpdate": "Last update: {{date}}"
+  "lastUpdate": "Last update: {{date}}",
+  "source": {
+    "ble": "Bluetooth (1 min refresh)",
+    "cloud": "Cloud (5 min refresh)"
+  }
 }

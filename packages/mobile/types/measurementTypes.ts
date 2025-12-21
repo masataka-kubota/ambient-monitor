@@ -11,3 +11,13 @@ export interface MeasurementSetting {
 export type MeasurementSettings = Record<MeasurementKey, MeasurementSetting>;
 
 export type MeasurementRange = (typeof MEASUREMENT_RANGES)[number];
+
+export interface BleMeasurement {
+  temperature: number;
+  humidity: number;
+  pressure: number;
+  createdAt: string; // ISO8601
+  receivedAt: number;
+}
+
+export type BleDataAvailability = "unknown" | "usable" | "unusable";
