@@ -34,14 +34,19 @@ class ServerCallbacks : public NimBLEServerCallbacks {
 // ---------------- WiFi Config Write Callback ----------------
 class WiFiConfigCallbacks : public NimBLECharacteristicCallbacks {
   void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) override {
-    String value = pCharacteristic->getValue();
-    if (value.isEmpty()) return;
+    const std::string& value = pCharacteristic->getValue();
+    if (value.size() != sizeof(WiFiConfigPayload)) {
+      return;
+    }
 
-    DynamicJsonDocument doc(128);
-    if (deserializeJson(doc, value)) return;
+    WiFiConfigPayload payload;
+    memcpy(&payload, value.data(), sizeof(payload));
 
-    String ssid = doc["ssid"] | "";
-    String password = doc["password"] | "";
+    payload.ssid[WIFI_SSID_MAX_LEN - 1] = '\0';
+    payload.password[WIFI_PASSWORD_MAX_LEN - 1] = '\0';
+
+    String ssid(payload.ssid);
+    String password(payload.password);
 
     if (ssid.isEmpty()) {
       WiFiManager::clearConfig();
