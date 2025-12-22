@@ -1,3 +1,5 @@
+import { Buffer } from "buffer";
+
 import { ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -9,6 +11,8 @@ import WifiWifiStatusSync from "@/components/ble/WifiWifiStatusSync";
 import { AppProviders } from "@/components/layouts";
 import { APP_THEME_SCHEME } from "@/constants";
 import { useI18nInitializer, useResolvedTheme } from "@/hooks/common";
+
+global.Buffer = Buffer;
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
