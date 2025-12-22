@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { atom } from "jotai";
 import { atomWithStorage, createJSONStorage } from "jotai/utils";
-import { Device } from "react-native-ble-plx";
+import { Peripheral } from "react-native-ble-manager";
 
 import { WifiStatus } from "@/types";
 
@@ -14,9 +14,9 @@ export const connectedDeviceIdAtom = atomWithStorage<string | null>(
   { getOnInit: true },
 );
 
-export const connectedDeviceAtom = atom<Device | null>(null);
+export const connectedDeviceAtom = atom<Peripheral | null>(null);
 
-export const scannedDevicesAtom = atom<Device[]>([]);
+export const scannedDevicesAtom = atom<Peripheral[]>([]);
 
 export const isBleConnectedAtom = atom<boolean | null>(null);
 

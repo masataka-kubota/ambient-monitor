@@ -1,63 +1,33 @@
 import * as ExpoDevice from "expo-device";
 import { useCallback } from "react";
-import { PermissionsAndroid, Platform } from "react-native";
+import { Permission, PermissionsAndroid, Platform } from "react-native";
 
 const useBlePermissions = () => {
-  const requestAndroid31Permissions = useCallback(async () => {
-    const bluetoothScanPermission = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-      {
-        title: "Location Permission",
-        message: "Bluetooth Low Energy requires Location",
-        buttonPositive: "OK",
-      },
-    );
-    const bluetoothConnectPermission = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-      {
-        title: "Location Permission",
-        message: "Bluetooth Low Energy requires Location",
-        buttonPositive: "OK",
-      },
-    );
-    const fineLocationPermission = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: "Location Permission",
-        message: "Bluetooth Low Energy requires Location",
-        buttonPositive: "OK",
-      },
-    );
-
-    return (
-      bluetoothScanPermission === "granted" &&
-      bluetoothConnectPermission === "granted" &&
-      fineLocationPermission === "granted"
-    );
-  }, []);
-
   const requestBlePermissions = useCallback(async () => {
-    if (Platform.OS === "android") {
-      if ((ExpoDevice.platformApiLevel ?? -1) < 31) {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          {
-            title: "Location Permission",
-            message: "Bluetooth Low Energy requires Location",
-            buttonPositive: "OK",
-          },
-        );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } else {
-        const isAndroid31PermissionsGranted =
-          await requestAndroid31Permissions();
+    if (Platform.OS !== "android") return true;
 
-        return isAndroid31PermissionsGranted;
-      }
-    } else {
+    const permissions: Permission[] = [];
+
+    const version = ExpoDevice.platformApiLevel ?? -1;
+
+    if (version >= 23 && version <= 30) {
+      permissions.push(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+    } else if (Platform.Version >= 31) {
+      permissions.push(
+        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+      );
+    }
+
+    if (permissions.length === 0) {
       return true;
     }
-  }, [requestAndroid31Permissions]);
+
+    const granted = await PermissionsAndroid.requestMultiple(permissions);
+    return Object.values(granted).every(
+      (result) => result === PermissionsAndroid.RESULTS.GRANTED,
+    );
+  }, []);
 
   return { requestBlePermissions };
 };

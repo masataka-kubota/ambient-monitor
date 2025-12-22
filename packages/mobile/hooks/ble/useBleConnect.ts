@@ -1,5 +1,6 @@
 import { useSetAtom } from "jotai";
 import { useCallback } from "react";
+import { Peripheral } from "react-native-ble-manager";
 
 import {
   connectedDeviceAtom,
@@ -7,6 +8,15 @@ import {
   scannedDevicesAtom,
 } from "@/atoms";
 import { bleManager } from "@/lib";
+
+export const getDeviceData = async (
+  deviceId: string,
+): Promise<Peripheral | null> => {
+  if (!deviceId) return null;
+
+  const peripherals = await bleManager.getDiscoveredPeripherals();
+  return peripherals.find((p) => p.id === deviceId) ?? null;
+};
 
 const useBleConnect = () => {
   const setConnectedIdDevice = useSetAtom(connectedDeviceIdAtom);
@@ -16,11 +26,12 @@ const useBleConnect = () => {
   const connectToDevice = useCallback(
     async (deviceId: string) => {
       try {
-        const connectedDevice = await bleManager.connectToDevice(deviceId);
-        await connectedDevice.discoverAllServicesAndCharacteristics();
-        await connectedDevice.requestMTU(100);
-        setConnectedIdDevice(connectedDevice.id);
-        setConnectedDevice(connectedDevice);
+        await bleManager.connect(deviceId);
+        await bleManager.retrieveServices(deviceId);
+        await bleManager.requestMTU(deviceId, 100);
+        const deviceData = await getDeviceData(deviceId);
+        setConnectedDevice(deviceData);
+        setConnectedIdDevice(deviceId);
         setScannedDevices((prev) => prev.filter((d) => d.id !== deviceId));
       } catch (error) {
         console.error("Connection failed:", error);
@@ -32,10 +43,11 @@ const useBleConnect = () => {
   const autoConnectToDevice = useCallback(
     async (deviceId: string) => {
       try {
-        const connectedDevice = await bleManager.connectToDevice(deviceId);
-        await connectedDevice.discoverAllServicesAndCharacteristics();
-        await connectedDevice.requestMTU(100);
-        setConnectedDevice(connectedDevice);
+        await bleManager.connect(deviceId);
+        await bleManager.retrieveServices(deviceId);
+        await bleManager.requestMTU(deviceId, 100);
+        const deviceData = await getDeviceData(deviceId);
+        setConnectedDevice(deviceData || null);
         return true;
       } catch (error) {
         console.error("Auto connection failed:", error);
@@ -48,7 +60,7 @@ const useBleConnect = () => {
   const disconnectDevice = useCallback(
     async (deviceId: string) => {
       try {
-        await bleManager.cancelDeviceConnection(deviceId);
+        await bleManager.disconnect(deviceId);
         setConnectedIdDevice(null);
         setConnectedDevice(null);
       } catch (error) {

@@ -8,7 +8,6 @@ const useBleAutoReconnect = (
   autoConnectToDevice: (deviceId: string) => Promise<boolean>,
 ) => {
   const connectedDeviceId = useAtomValue(connectedDeviceIdAtom);
-
   const setIsBleConnected = useSetAtom(isBleConnectedAtom);
 
   useEffect(() => {
@@ -17,9 +16,9 @@ const useBleAutoReconnect = (
       return;
     }
 
-    const subscription = bleManager.onStateChange(async (state) => {
-      if (state === "PoweredOn") {
-        (async () => {
+    const subscription = bleManager.onDidUpdateState(
+      async ({ state }: { state: string }) => {
+        if (state === "on") {
           try {
             const success = await autoConnectToDevice(connectedDeviceId);
             setIsBleConnected(success);
@@ -27,11 +26,11 @@ const useBleAutoReconnect = (
             console.error("connection check error", error);
             setIsBleConnected(false);
           }
-        })();
+        }
+      },
+    );
 
-        subscription.remove();
-      }
-    }, true);
+    bleManager.checkState();
 
     return () => subscription.remove();
   }, [autoConnectToDevice, connectedDeviceId, setIsBleConnected]);

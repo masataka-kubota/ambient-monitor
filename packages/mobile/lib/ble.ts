@@ -1,3 +1,5 @@
-import { BleManager } from "react-native-ble-plx";
+import BleManager from "react-native-ble-manager";
 
-export const bleManager = new BleManager();
+BleManager.start({ showAlert: false });
+
+export const bleManager = BleManager;

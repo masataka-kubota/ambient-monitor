@@ -1,4 +1,6 @@
 import { useSetAtom } from "jotai";
+import { useEffect } from "react";
+import { Peripheral } from "react-native-ble-manager";
 
 import { scannedDevicesAtom } from "@/atoms";
 import { BLE_DEVICE_NAME, BLE_SERVICE_UUID } from "@/constants/ble";
@@ -7,22 +9,38 @@ import { bleManager } from "@/lib";
 const useBleScan = () => {
   const setScannedDevices = useSetAtom(scannedDevicesAtom);
 
-  const scanForPeripherals = () => {
+  useEffect(() => {
+    const discoverSubscription = bleManager.onDiscoverPeripheral(
+      (peripheral: Peripheral) => {
+        const name = peripheral.name ?? peripheral.advertising?.localName ?? "";
+
+        if (name.startsWith(BLE_DEVICE_NAME)) {
+          setScannedDevices((prev) =>
+            prev.some((d) => d.id === peripheral.id)
+              ? prev
+              : [...prev, peripheral],
+          );
+        }
+      },
+    );
+
+    const stopSubscription = bleManager.onStopScan(() => {
+      console.log("Scan stopped");
+    });
+
+    return () => {
+      discoverSubscription.remove();
+      stopSubscription.remove();
+    };
+  }, [setScannedDevices]);
+
+  const scanForPeripherals = async () => {
     setScannedDevices([]);
 
-    bleManager.startDeviceScan([BLE_SERVICE_UUID], null, (error, device) => {
-      if (error || !device) {
-        console.error(error);
-        bleManager.stopDeviceScan();
-        return;
-      }
-
-      if (device.localName?.startsWith(BLE_DEVICE_NAME)) {
-        setScannedDevices((prev) =>
-          prev.some((d) => d.id === device.id) ? prev : [...prev, device],
-        );
-        bleManager.stopDeviceScan();
-      }
+    await bleManager.scan({
+      serviceUUIDs: [BLE_SERVICE_UUID],
+      seconds: 5,
+      allowDuplicates: false,
     });
   };
 
