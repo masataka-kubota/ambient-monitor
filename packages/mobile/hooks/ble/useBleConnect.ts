@@ -7,6 +7,7 @@ import {
   connectedDeviceIdAtom,
   scannedDevicesAtom,
 } from "@/atoms";
+import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from "@/constants/ble";
 import { bleManager } from "@/lib";
 
 export const getDeviceData = async (
@@ -60,6 +61,11 @@ const useBleConnect = () => {
   const disconnectDevice = useCallback(
     async (deviceId: string) => {
       try {
+        await bleManager.stopNotification(
+          deviceId,
+          BLE_SERVICE_UUID,
+          MEASUREMENT_CHAR_UUID,
+        );
         await bleManager.disconnect(deviceId);
         setConnectedIdDevice(null);
         setConnectedDevice(null);

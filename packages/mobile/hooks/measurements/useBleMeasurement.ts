@@ -98,11 +98,6 @@ const useBleMeasurement = () => {
 
     return () => {
       subscription.remove();
-      bleManager.stopNotification(
-        connectedDevice.id,
-        BLE_SERVICE_UUID,
-        MEASUREMENT_CHAR_UUID,
-      );
     };
   }, [
     connectedDevice,
