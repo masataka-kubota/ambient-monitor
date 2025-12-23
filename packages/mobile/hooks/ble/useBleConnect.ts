@@ -30,6 +30,7 @@ const useBleConnect = () => {
     async (deviceId: string) => {
       setIsConnecting(true);
       try {
+        await bleManager.stopScan();
         await bleManager.connect(deviceId);
         await bleManager.retrieveServices(deviceId);
         if (Platform.OS === "android") {

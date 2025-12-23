@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 
 import { bleDataAvailabilityAtom, selectedDeviceIdAtom } from "@/atoms";
-import { API_TOKEN } from "@/constants";
 import { apiClient } from "@/lib";
 
 const useCloudLiveMeasurement = () => {
@@ -11,7 +10,6 @@ const useCloudLiveMeasurement = () => {
 
   const onFetchMeasurements = async () => {
     const res = await apiClient.measurements.latest.$get({
-      header: { Authorization: `Bearer ${API_TOKEN}` },
       query: { deviceId: selectedDeviceId },
     });
 

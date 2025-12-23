@@ -1,22 +1,16 @@
 import type { z } from '@hono/zod-openapi'
 import { env } from 'cloudflare:test'
 import { testClient } from 'hono/testing'
-import { SEED_MEASUREMENTS, TEST_DEVICE, TEST_ENV } from 'test/constants'
+import { SEED_MEASUREMENTS, TEST_DEVICE } from 'test/constants'
 
 import app from '@/index'
-import type {
-  MeasurementLatestResponseSchema,
-  NotFoundErrorSchema,
-  UnauthorizedErrorSchema,
-} from '@/schemas'
+import type { MeasurementLatestResponseSchema, NotFoundErrorSchema } from '@/schemas'
 
 describe('GET /measurements/latest', () => {
   const client = testClient(app, env)
-  const headerData = { Authorization: `Bearer ${TEST_ENV.EXPO_API_TOKEN}` }
 
   it('should return latest measurement', async () => {
     const res = await client.measurements.latest.$get({
-      header: headerData,
       query: { deviceId: TEST_DEVICE.externalId },
     })
 
@@ -39,25 +33,10 @@ describe('GET /measurements/latest', () => {
   })
 
   // -------------------------
-  // 401 tests
-  // -------------------------
-  it('should return 401 if Authorization header is missing', async () => {
-    const res = await client.measurements.latest.$get({
-      header: { Authorization: 'Bearer invalid-token' },
-      query: { deviceId: TEST_DEVICE.externalId },
-    })
-    expect(res.status).toBe(401)
-    const json = (await res.json()) as z.infer<typeof UnauthorizedErrorSchema>
-    expect(json.success).toBe(false)
-    expect(json.error.message).toMatch(/Unauthorized error/i)
-  })
-
-  // -------------------------
   // 404 tests
   // -------------------------
   it('should return 404 if deviceId is missing', async () => {
     const res = await client.measurements.latest.$get({
-      header: headerData,
       query: {},
     })
     expect(res.status).toBe(404)
@@ -68,7 +47,6 @@ describe('GET /measurements/latest', () => {
 
   it('should return 404 if device does not exist', async () => {
     const res = await client.measurements.latest.$get({
-      header: headerData,
       query: { deviceId: 'unknown' },
     })
     expect(res.status).toBe(404)
@@ -88,7 +66,6 @@ describe('GET /measurements/latest', () => {
     await env.DB.prepare(`DELETE FROM measurements WHERE device_id = ?`).bind(device.id).run()
 
     const res = await client.measurements.latest.$get({
-      header: headerData,
       query: { deviceId: TEST_DEVICE.externalId },
     })
 

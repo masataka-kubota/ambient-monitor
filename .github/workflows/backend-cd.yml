@@ -36,7 +36,3 @@ jobs:
           workingDirectory: "packages/backend"
           packageManager: bun # Required for monorepo; root bun.lock is used
           command: deploy --minify
-          secrets: |
-            EXPO_API_TOKEN
-        env:
-          EXPO_API_TOKEN: ${{ secrets.EXPO_API_TOKEN }}

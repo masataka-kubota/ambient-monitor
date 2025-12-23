@@ -4,10 +4,6 @@ export const TEST_DEVICE = {
   isActive: true,
 }
 
-export const TEST_ENV = {
-  EXPO_API_TOKEN: 'expo-api-token-for-test',
-}
-
 export const SEED_MEASUREMENTS = [
   // 2 hours ago
   { temperature: 24.9, humidity: 28.9, pressure: 1024.3, minutesAgo: 120 },

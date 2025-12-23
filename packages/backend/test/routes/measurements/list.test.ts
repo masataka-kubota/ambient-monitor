@@ -1,27 +1,24 @@
 import type { z } from '@hono/zod-openapi'
 import { env } from 'cloudflare:test'
 import { testClient } from 'hono/testing'
-import { TEST_DEVICE, TEST_ENV } from 'test/constants'
+import { TEST_DEVICE } from 'test/constants'
 
 import { PERIOD_INTERVAL_MINUTES } from '@/constants'
 import app from '@/index'
 import type {
   MeasurementListResponseSchema,
   NotFoundErrorSchema,
-  UnauthorizedErrorSchema,
   ValidationErrorSchema,
 } from '@/schemas'
 
 describe('GET /measurements', () => {
   const client = testClient(app, env)
-  const headerData = { Authorization: `Bearer ${TEST_ENV.EXPO_API_TOKEN}` }
 
   // -------------------------
   // 1day test
   // -------------------------
   it('1d: should return correct aggregated measurements', async () => {
     const res = await client.measurements.$get({
-      header: headerData,
       query: { deviceId: TEST_DEVICE.externalId, period: '1d' },
     })
 
@@ -44,7 +41,6 @@ describe('GET /measurements', () => {
   // -------------------------
   it('7d: should return correct aggregated measurements', async () => {
     const res = await client.measurements.$get({
-      header: headerData,
       query: { deviceId: TEST_DEVICE.externalId, period: '7d' },
     })
 
@@ -67,7 +63,6 @@ describe('GET /measurements', () => {
   // -------------------------
   it('30d: should return correct aggregated measurements', async () => {
     const res = await client.measurements.$get({
-      header: headerData,
       query: { deviceId: TEST_DEVICE.externalId, period: '30d' },
     })
 
@@ -86,25 +81,10 @@ describe('GET /measurements', () => {
   })
 
   // -------------------------
-  // 401 tests
-  // -------------------------
-  it('should return 401 if authorization header is missing', async () => {
-    const res = await client.measurements.$get({
-      header: { Authorization: 'Bearer invalid-token' },
-      query: { deviceId: TEST_DEVICE.externalId, period: '1d' },
-    })
-    expect(res.status).toBe(401)
-    const json = (await res.json()) as z.infer<typeof UnauthorizedErrorSchema>
-    expect(json.success).toBe(false)
-    expect(json.error.message).toMatch(/Unauthorized error/i)
-  })
-
-  // -------------------------
   // 404 tests
   // -------------------------
   it('should return 404 if deviceId is missing', async () => {
     const res = await client.measurements.$get({
-      header: headerData,
       query: { period: '1d' },
     })
     expect(res.status).toBe(404)
@@ -115,7 +95,6 @@ describe('GET /measurements', () => {
 
   it('should return 404 if device does not exist', async () => {
     const res = await client.measurements.$get({
-      header: headerData,
       query: { deviceId: 'unknown', period: '1d' },
     })
     expect(res.status).toBe(404)
@@ -131,7 +110,6 @@ describe('GET /measurements', () => {
     const query: unknown = { deviceId: TEST_DEVICE.externalId, period: 'invalid' }
 
     const res = await client.measurements.$get({
-      header: headerData,
       query: query as Record<string, unknown>,
     })
     expect(res.status).toBe(422)
