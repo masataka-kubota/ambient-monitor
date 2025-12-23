@@ -31,6 +31,11 @@ const useBleMeasurement = () => {
 
   const updateBleMeasurement = useCallback(
     (value: number[]) => {
+      if (value.length < 12) {
+        setBleMeasurement(null);
+        return;
+      }
+
       const parsed = decodeMeasurement(value);
 
       setBleMeasurement({
