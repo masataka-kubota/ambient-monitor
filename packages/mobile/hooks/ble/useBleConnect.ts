@@ -1,5 +1,6 @@
 import { useSetAtom } from "jotai";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import { Platform } from "react-native";
 import { Peripheral } from "react-native-ble-manager";
 
 import {
@@ -23,19 +24,25 @@ const useBleConnect = () => {
   const setConnectedIdDevice = useSetAtom(connectedDeviceIdAtom);
   const setConnectedDevice = useSetAtom(connectedDeviceAtom);
   const setScannedDevices = useSetAtom(scannedDevicesAtom);
+  const [isConnecting, setIsConnecting] = useState(false);
 
   const connectToDevice = useCallback(
     async (deviceId: string) => {
+      setIsConnecting(true);
       try {
         await bleManager.connect(deviceId);
         await bleManager.retrieveServices(deviceId);
-        await bleManager.requestMTU(deviceId, 100);
+        if (Platform.OS === "android") {
+          await bleManager.requestMTU(deviceId, 100);
+        }
         const deviceData = await getDeviceData(deviceId);
         setConnectedDevice(deviceData);
         setConnectedIdDevice(deviceId);
         setScannedDevices((prev) => prev.filter((d) => d.id !== deviceId));
       } catch (error) {
         console.error("Connection failed:", error);
+      } finally {
+        setIsConnecting(false);
       }
     },
     [setConnectedDevice, setConnectedIdDevice, setScannedDevices],
@@ -46,7 +53,9 @@ const useBleConnect = () => {
       try {
         await bleManager.connect(deviceId);
         await bleManager.retrieveServices(deviceId);
-        await bleManager.requestMTU(deviceId, 100);
+        if (Platform.OS === "android") {
+          await bleManager.requestMTU(deviceId, 100);
+        }
         const deviceData = await getDeviceData(deviceId);
         setConnectedDevice(deviceData || null);
         return true;
@@ -76,7 +85,12 @@ const useBleConnect = () => {
     [setConnectedDevice, setConnectedIdDevice],
   );
 
-  return { connectToDevice, autoConnectToDevice, disconnectDevice };
+  return {
+    connectToDevice,
+    autoConnectToDevice,
+    disconnectDevice,
+    isConnecting,
+  };
 };
 
 export default useBleConnect;
