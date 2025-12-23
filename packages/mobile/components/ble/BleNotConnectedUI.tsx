@@ -11,12 +11,14 @@ interface BleNotConnectedUIProps {
   scannedDevices: Peripheral[];
   onScan: () => void;
   onConnect: (deviceId: string) => void;
+  isConnecting?: boolean;
 }
 
 const BleNotConnectedUI = ({
   scannedDevices,
   onScan,
   onConnect,
+  isConnecting = false,
 }: BleNotConnectedUIProps) => {
   const { currentThemeColors } = useResolvedTheme();
   const { t } = useTranslation();
@@ -38,58 +40,67 @@ const BleNotConnectedUI = ({
           {t("ble.notConnected.title")}
         </ThemeText>
         <ThemeText>{t("ble.notConnected.description")}</ThemeText>
+        {isConnecting && (
+          <ThemeText style={styles.connectingMessage}>
+            {t("ble.notConnected.connecting")}
+          </ThemeText>
+        )}
       </View>
 
-      {/* Scan button */}
-      <PrimaryButton
-        title={t("ble.notConnected.scanButton")}
-        onPress={onScan}
-      />
+      {!isConnecting && (
+        <>
+          {/* Scan button */}
+          <PrimaryButton
+            title={t("ble.notConnected.scanButton")}
+            onPress={onScan}
+          />
 
-      {/* Device list */}
-      <FlatList
-        data={scannedDevices}
-        keyExtractor={(item) => item.id}
-        scrollEnabled={false}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <MaterialIcons
-              name="devices-other"
-              size={40}
-              color={currentThemeColors.mainColor}
-            />
-            <ThemeText style={styles.emptyText}>
-              {t("ble.notConnected.emptyList")}
-            </ThemeText>
-          </View>
-        }
-        renderItem={({ item }) => (
-          <Pressable
-            onPress={() => onConnect(item.id)}
-            style={[
-              styles.itemContainer,
-              {
-                backgroundColor: currentThemeColors.secondaryBackground,
-              },
-            ]}
-          >
-            <View style={styles.itemLeftContainer}>
-              <ThemeText style={styles.itemName}>
-                {item.name || t("ble.notConnected.unknownDevice")}
-              </ThemeText>
-              <ThemeText style={styles.itemId} truncate>
-                {item.id}
-              </ThemeText>
-            </View>
+          {/* Device list */}
+          <FlatList
+            data={scannedDevices}
+            keyExtractor={(item) => item.id}
+            scrollEnabled={false}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <MaterialIcons
+                  name="devices-other"
+                  size={40}
+                  color={currentThemeColors.mainColor}
+                />
+                <ThemeText style={styles.emptyText}>
+                  {t("ble.notConnected.emptyList")}
+                </ThemeText>
+              </View>
+            }
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() => onConnect(item.id)}
+                style={[
+                  styles.itemContainer,
+                  {
+                    backgroundColor: currentThemeColors.secondaryBackground,
+                  },
+                ]}
+              >
+                <View style={styles.itemLeftContainer}>
+                  <ThemeText style={styles.itemName}>
+                    {item.name || t("ble.notConnected.unknownDevice")}
+                  </ThemeText>
+                  <ThemeText style={styles.itemId} truncate>
+                    {item.id}
+                  </ThemeText>
+                </View>
 
-            <MaterialIcons
-              name="chevron-right"
-              size={24}
-              color={currentThemeColors.mainColor}
-            />
-          </Pressable>
-        )}
-      />
+                <MaterialIcons
+                  name="chevron-right"
+                  size={24}
+                  color={currentThemeColors.mainColor}
+                />
+              </Pressable>
+            )}
+          />
+        </>
+      )}
     </View>
   );
 };
@@ -106,6 +117,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
+    fontWeight: "bold",
+  },
+  connectingMessage: {
+    fontSize: 16,
     fontWeight: "bold",
   },
   emptyContainer: {
