@@ -6,6 +6,7 @@ float SensorManager::pHistory[5] = {0};
 int SensorManager::pHistoryIndex = 0;
 bool SensorManager::pHistoryFilled = false;
 float SensorManager::prevPressure = NAN;
+float SensorManager::lastValidH = NAN;
 
 // ---------------- Initialization ----------------
 bool SensorManager::init() {
@@ -16,10 +17,10 @@ bool SensorManager::init() {
   if (bme.begin(0x76)) {
     Serial.println("BME280 initialized!");
     bme.setSampling(Adafruit_BME280::MODE_FORCED,
-                    Adafruit_BME280::SAMPLING_X16, // Temp
+                    Adafruit_BME280::SAMPLING_X2, // Temp
                     Adafruit_BME280::SAMPLING_X16, // Pressure
-                    Adafruit_BME280::SAMPLING_X16, // Humidity
-                    Adafruit_BME280::FILTER_X16);
+                    Adafruit_BME280::SAMPLING_X1, // Humidity
+                    Adafruit_BME280::FILTER_OFF);
     return true;
   }
 
@@ -62,13 +63,15 @@ bool SensorManager::readSafeBME(float &t, float &h, float &p) {
 bool SensorManager::readAndValidate(float &t, float &h, float &p) {
   // Set Forced Mode
   bme.setSampling(Adafruit_BME280::MODE_FORCED,
-                  Adafruit_BME280::SAMPLING_X16, // Temp
+                  Adafruit_BME280::SAMPLING_X2, // Temp
                   Adafruit_BME280::SAMPLING_X16, // Pressure
-                  Adafruit_BME280::SAMPLING_X16, // Humidity
-                  Adafruit_BME280::FILTER_X16);
+                  Adafruit_BME280::SAMPLING_X1, // Humidity
+                  Adafruit_BME280::FILTER_OFF);
 
   // Wait for measurement to complete
   bme.takeForcedMeasurement();
+
+  delay(100);
 
   // Read measurements
   t = bme.readTemperature();
@@ -76,6 +79,7 @@ bool SensorManager::readAndValidate(float &t, float &h, float &p) {
   p = bme.readPressure() / 100.0;
 
   if (!validateReading(t, h, p)) return false;
+  if (!validateHumidityAdvanced(h)) return false;
   if (!validatePressureAdvanced(p)) return false;
 
   return true;
@@ -86,18 +90,20 @@ bool SensorManager::recoverBME() {
   Serial.println("Recovering BME280...");
 
   Wire.end();
-  delay(50);
+  delay(100);
   Wire.begin(21, 22, 50000);
-  delay(50);
+  delay(100);
 
   bool ok = bme.begin(0x76);
   if (ok) {
-    Serial.println("BME280 recovered!");
+    delay(100);
+    Serial.println("BME280 recovered! Applying settings...");
     bme.setSampling(Adafruit_BME280::MODE_FORCED,
-                    Adafruit_BME280::SAMPLING_X16, // Temp
+                    Adafruit_BME280::SAMPLING_X2, // Temp
                     Adafruit_BME280::SAMPLING_X16, // Pressure
-                    Adafruit_BME280::SAMPLING_X16, // Humidity
-                    Adafruit_BME280::FILTER_X16);
+                    Adafruit_BME280::SAMPLING_X1, // Humidity
+                    Adafruit_BME280::FILTER_OFF);
+    delay(100);
   } else {
     Serial.println("BME280 recovery failed.");
   }
@@ -111,6 +117,23 @@ bool SensorManager::validateReading(float t, float h, float p) {
   if (t < -10 || t > 40) return false;
   if (h < 0 || h > 100) return false;
   if (p < 850 || p > 1100) return false;
+  return true;
+}
+
+// ---------------- Advanced humidity validation ----------------
+bool SensorManager::validateHumidityAdvanced(float h) {
+  if (isnan(lastValidH)) {
+    lastValidH = h;
+    return true;
+  }
+
+  // Jump detection (20% or more change)
+  if (fabs(h - lastValidH) > 20.0) {
+    Serial.printf("Humidity jump detected! Prev: %.2f%%, New: %.2f%%\n", lastValidH, h);
+    return false;
+  }
+
+  lastValidH = h;
   return true;
 }
 
