@@ -2,13 +2,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import { Device } from "react-native-ble-plx";
+import { Peripheral } from "react-native-ble-manager";
 
 import { PrimaryButton, ThemeText } from "@/components/ui";
 import { useResolvedTheme } from "@/hooks/common";
 
 interface BleConnectedUIProps {
-  connectedDevice: Device;
+  connectedDevice: Peripheral;
   onDisconnect: (deviceId: string) => Promise<void>;
 }
 

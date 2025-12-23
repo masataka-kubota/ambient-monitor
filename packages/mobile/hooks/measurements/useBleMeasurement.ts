@@ -1,18 +1,20 @@
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback, useEffect, useState } from "react";
-import { BleError, Characteristic } from "react-native-ble-plx";
 
 import { bleMeasurementAtom, connectedDeviceAtom } from "@/atoms";
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from "@/constants/ble";
+import { bleManager } from "@/lib";
 
-export const decodeMeasurement = (base64Value: string) => {
-  const binary = atob(base64Value);
+interface DidUpdateValueForCharacteristicArgs {
+  value: number[];
+  peripheral: string;
+  characteristic: string;
+  service: string;
+}
 
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  const view = new DataView(bytes.buffer);
+export const decodeMeasurement = (value: number[]) => {
+  const buffer = new Uint8Array(value).buffer;
+  const view = new DataView(buffer);
 
   return {
     temperature: view.getInt16(0, true) / 100,
@@ -25,12 +27,16 @@ export const decodeMeasurement = (base64Value: string) => {
 const useBleMeasurement = () => {
   const connectedDevice = useAtomValue(connectedDeviceAtom);
   const [bleMeasurement, setBleMeasurement] = useAtom(bleMeasurementAtom);
-
   const [isLoading, setIsLoading] = useState(true);
 
   const updateBleMeasurement = useCallback(
-    (base64Value: string) => {
-      const parsed = decodeMeasurement(base64Value);
+    (value: number[]) => {
+      if (value.length < 12) {
+        setBleMeasurement(null);
+        return;
+      }
+
+      const parsed = decodeMeasurement(value);
 
       setBleMeasurement({
         temperature: parsed.temperature,
@@ -43,32 +49,31 @@ const useBleMeasurement = () => {
     [setBleMeasurement],
   );
 
-  const fetchInitialValue = useCallback(async () => {
+  const startMonitoring = useCallback(async () => {
     if (!connectedDevice) return;
 
     setIsLoading(true);
     try {
-      const char = await connectedDevice.readCharacteristicForService(
+      // Read initial value
+      const bytes = await bleManager.read(
+        connectedDevice.id,
         BLE_SERVICE_UUID,
         MEASUREMENT_CHAR_UUID,
       );
-      if (char?.value) {
-        updateBleMeasurement(char.value);
-      }
+      updateBleMeasurement(bytes);
+
+      // Start monitoring
+      await bleManager.startNotification(
+        connectedDevice.id,
+        BLE_SERVICE_UUID,
+        MEASUREMENT_CHAR_UUID,
+      );
     } catch (e) {
-      console.error("Failed to read initial measurement", e);
+      console.error("Monitoring error", e);
     } finally {
       setIsLoading(false);
     }
-  }, [connectedDevice, updateBleMeasurement]);
-
-  const handleMeasurementUpdate = useCallback(
-    (error: BleError | null, char: Characteristic | null) => {
-      if (error || !char?.value) return;
-      updateBleMeasurement(char.value);
-    },
-    [updateBleMeasurement],
-  );
+  }, [connectedDevice, setIsLoading, updateBleMeasurement]);
 
   useEffect(() => {
     if (!connectedDevice) {
@@ -77,22 +82,33 @@ const useBleMeasurement = () => {
       return;
     }
 
-    // Fetch initial value
-    fetchInitialValue();
+    // Start monitoring
+    startMonitoring();
 
-    // Subscribe notifications
-    const sub = connectedDevice.monitorCharacteristicForService(
-      BLE_SERVICE_UUID,
-      MEASUREMENT_CHAR_UUID,
-      handleMeasurementUpdate,
+    // Subscription
+    const subscription = bleManager.onDidUpdateValueForCharacteristic(
+      (dates: DidUpdateValueForCharacteristicArgs) => {
+        const isTargetDevice = dates.peripheral === connectedDevice.id;
+        const isTargetService =
+          dates.service.toLowerCase() === BLE_SERVICE_UUID.toLowerCase();
+        const isTargetChar =
+          dates.characteristic.toLowerCase() ===
+          MEASUREMENT_CHAR_UUID.toLowerCase();
+
+        if (isTargetDevice && isTargetService && isTargetChar) {
+          updateBleMeasurement(dates.value);
+        }
+      },
     );
 
-    return () => sub.remove();
+    return () => {
+      subscription.remove();
+    };
   }, [
     connectedDevice,
-    fetchInitialValue,
-    handleMeasurementUpdate,
+    updateBleMeasurement,
     setBleMeasurement,
+    startMonitoring,
   ]);
 
   return { data: bleMeasurement, isLoading };

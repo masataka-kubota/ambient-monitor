@@ -72,9 +72,10 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     [
-      "react-native-ble-plx",
+      "react-native-ble-manager",
       {
-        modes: ["central"],
+        neverForLocation: true,
+        isBleRequired: true,
         bluetoothAlwaysPermission:
           "Allow $(getAppName()) to connect to bluetooth devices",
       },

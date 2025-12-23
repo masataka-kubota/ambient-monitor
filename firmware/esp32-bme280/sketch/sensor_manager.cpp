@@ -10,11 +10,16 @@ float SensorManager::prevPressure = NAN;
 // ---------------- Initialization ----------------
 bool SensorManager::init() {
   Serial.println("Initializing BME280...");
-  Wire.begin(21, 22, 100000); // Initialize I2C with SDA=21, SCL=22
-  delay(50);
+  Wire.begin(21, 22, 50000); // Initialize I2C with SDA=21, SCL=22
+  delay(100);
 
   if (bme.begin(0x76)) {
     Serial.println("BME280 initialized!");
+    bme.setSampling(Adafruit_BME280::MODE_FORCED,
+                    Adafruit_BME280::SAMPLING_X16, // Temp
+                    Adafruit_BME280::SAMPLING_X16, // Pressure
+                    Adafruit_BME280::SAMPLING_X16, // Humidity
+                    Adafruit_BME280::FILTER_X16);
     return true;
   }
 
@@ -37,21 +42,35 @@ bool SensorManager::readMeasurement(float &t, float &h, float &p) {
 
 // ---------------- Internal reading with retries ----------------
 bool SensorManager::readSafeBME(float &t, float &h, float &p) {
-  for (int i = 0; i < 5; i++) {
+  const int maxRetries = 10;
+  const int retryDelayMs = 200;
+
+  for (int i = 0; i < maxRetries; i++) {
     if (readAndValidate(t, h, p)) return true;
 
     Serial.println("Invalid reading, retrying...");
-    delay(50);
+    delay(retryDelayMs);
   }
 
   if (!recoverBME()) return false;
 
-  delay(50);
+  delay(200);
   return readAndValidate(t, h, p);
 }
 
 // ---------------- Read and validate single measurement ----------------
 bool SensorManager::readAndValidate(float &t, float &h, float &p) {
+  // Set Forced Mode
+  bme.setSampling(Adafruit_BME280::MODE_FORCED,
+                  Adafruit_BME280::SAMPLING_X16, // Temp
+                  Adafruit_BME280::SAMPLING_X16, // Pressure
+                  Adafruit_BME280::SAMPLING_X16, // Humidity
+                  Adafruit_BME280::FILTER_X16);
+
+  // Wait for measurement to complete
+  bme.takeForcedMeasurement();
+
+  // Read measurements
   t = bme.readTemperature();
   h = bme.readHumidity();
   p = bme.readPressure() / 100.0;
@@ -68,12 +87,20 @@ bool SensorManager::recoverBME() {
 
   Wire.end();
   delay(50);
-  Wire.begin(21, 22, 100000);
+  Wire.begin(21, 22, 50000);
   delay(50);
 
   bool ok = bme.begin(0x76);
-  if (ok) Serial.println("BME280 recovered!");
-  else Serial.println("BME280 recovery failed.");
+  if (ok) {
+    Serial.println("BME280 recovered!");
+    bme.setSampling(Adafruit_BME280::MODE_FORCED,
+                    Adafruit_BME280::SAMPLING_X16, // Temp
+                    Adafruit_BME280::SAMPLING_X16, // Pressure
+                    Adafruit_BME280::SAMPLING_X16, // Humidity
+                    Adafruit_BME280::FILTER_X16);
+  } else {
+    Serial.println("BME280 recovery failed.");
+  }
 
   return ok;
 }

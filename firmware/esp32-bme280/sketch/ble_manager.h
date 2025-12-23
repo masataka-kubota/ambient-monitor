@@ -4,6 +4,11 @@
 #include <ArduinoJson.h>
 #include <NimBLEDevice.h>
 
+// ---------------- Constants ----------------
+#define WIFI_SSID_MAX_LEN     32
+#define WIFI_PASSWORD_MAX_LEN 64
+
+// ---------------- BLE Payloads ----------------
 struct __attribute__((packed)) Measurement {
   int16_t  t;   // temperature * 100
   int16_t  h;   // humidity * 100
@@ -13,9 +18,15 @@ struct __attribute__((packed)) Measurement {
 
 struct __attribute__((packed)) WiFiStatusPayload {
   uint8_t status;
-  char ssid[32];
+  char ssid[WIFI_SSID_MAX_LEN];
 };
 
+struct __attribute__((packed)) WiFiConfigPayload {
+  char ssid[WIFI_SSID_MAX_LEN];
+  char password[WIFI_PASSWORD_MAX_LEN];
+};
+
+// ---------------- BLE Manager ----------------
 class BLEManager {
 public:
   // Initialize BLE service & characteristics
