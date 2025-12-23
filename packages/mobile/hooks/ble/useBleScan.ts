@@ -25,7 +25,7 @@ const useBleScan = () => {
     );
 
     const stopSubscription = bleManager.onStopScan(() => {
-      console.log("Scan stopped");
+      // console.log("Scan stopped");
     });
 
     return () => {
