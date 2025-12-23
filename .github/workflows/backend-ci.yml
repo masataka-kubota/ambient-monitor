@@ -21,13 +21,13 @@ jobs:
         run: bun install
 
       - name: Generate Cloudflare types
-        run: bun --cwd packages/backend cf-typegen
+        run: bun run --filter backend cf-typegen
 
       - name: Type-check
-        run: bun --cwd packages/backend type-check
+        run: bun run --filter backend type-check
 
       - name: Lint
-        run: bun --cwd packages/backend lint
+        run: bun run --filter backend lint
 
       - name: Run tests
-        run: bun --cwd packages/backend test
+        run: bun run --filter backend test
