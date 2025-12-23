@@ -2,7 +2,7 @@ import { createRoute, z } from '@hono/zod-openapi'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 
 import { measurements } from '@/db/schema'
-import { jwtHmacAuth, verifyExpoToken, withDb } from '@/middleware'
+import { jwtHmacAuth, withDb } from '@/middleware'
 import {
   BearerAuthHeaderSchema,
   NotFoundErrorSchema,
@@ -82,19 +82,14 @@ export const MeasurementListQuerySchema = z.object({
 export const listMeasurementsRoute = createRoute({
   method: 'get',
   path: '/',
-  middleware: [withDb, verifyExpoToken],
+  middleware: [withDb],
   request: {
-    headers: BearerAuthHeaderSchema,
     query: MeasurementListQuerySchema,
   },
   responses: {
     200: {
       content: { 'application/json': { schema: MeasurementListResponseSchema } },
       description: 'List of measurements',
-    },
-    401: {
-      content: { 'application/json': { schema: UnauthorizedErrorSchema } },
-      description: 'Unauthorized',
     },
     404: {
       content: { 'application/json': { schema: NotFoundErrorSchema } },
@@ -117,19 +112,14 @@ export const MeasurementLatestQuerySchema = z.object({
 export const latestMeasurementRoute = createRoute({
   method: 'get',
   path: '/latest',
-  middleware: [withDb, verifyExpoToken],
+  middleware: [withDb],
   request: {
-    headers: BearerAuthHeaderSchema,
     query: MeasurementLatestQuerySchema,
   },
   responses: {
     200: {
       content: { 'application/json': { schema: MeasurementLatestResponseSchema } },
       description: 'List of measurements',
-    },
-    401: {
-      content: { 'application/json': { schema: UnauthorizedErrorSchema } },
-      description: 'Unauthorized',
     },
     404: {
       content: { 'application/json': { schema: NotFoundErrorSchema } },
