@@ -3,6 +3,7 @@
   "notConnected": {
     "title": "Press the BOOT button on your ESP32",
     "description": "Then tap the Scan button to find nearby devices.",
+    "connecting": "Connecting...",
     "scanButton": "Scan for Devices",
     "emptyList": "No devices found yet",
     "unknownDevice": "Unknown Device"

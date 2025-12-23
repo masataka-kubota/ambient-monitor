@@ -2,19 +2,18 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import { Device } from "react-native-ble-plx";
 
 import { PrimaryButton, ThemeText } from "@/components/ui";
 import { useResolvedTheme } from "@/hooks/common";
 
 interface BleReconnectUIProps {
-  connectedDevice: Device;
+  connectedDeviceId: string;
   onReconnect: (deviceId: string) => Promise<void>;
   onDisconnect: (deviceId: string) => Promise<void>;
 }
 
 const BleReconnectUI = ({
-  connectedDevice,
+  connectedDeviceId,
   onReconnect,
   onDisconnect,
 }: BleReconnectUIProps) => {
@@ -32,7 +31,7 @@ const BleReconnectUI = ({
         />
 
         <ThemeText style={styles.title}>
-          {t("ble.reconnect.title", { deviceName: connectedDevice.name })}
+          {t("ble.reconnect.title", { deviceName: connectedDeviceId })}
         </ThemeText>
 
         <ThemeText style={styles.description}>
@@ -43,13 +42,13 @@ const BleReconnectUI = ({
       {/* Reconnect button */}
       <PrimaryButton
         title={t("ble.reconnect.reconnectButton")}
-        onPress={() => onReconnect(connectedDevice.id)}
+        onPress={() => onReconnect(connectedDeviceId)}
       />
 
       {/* Disconnect button */}
       <PrimaryButton
         title={t("ble.reconnect.disconnectButton")}
-        onPress={() => onDisconnect(connectedDevice.id)}
+        onPress={() => onDisconnect(connectedDeviceId)}
         backgroundColor={currentThemeColors.error}
         style={styles.disconnectButton}
       />

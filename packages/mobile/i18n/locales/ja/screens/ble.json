@@ -3,6 +3,7 @@
   "notConnected": {
     "title": "ESP32 の BOOT ボタンを押してください",
     "description": "その後、Scan ボタンをタップして近くのデバイスを検索してください。",
+    "connecting": "接続中...",
     "scanButton": "デバイスをスキャン",
     "emptyList": "デバイスが見つかっていません",
     "unknownDevice": "不明なデバイス"
