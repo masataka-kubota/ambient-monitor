@@ -34,7 +34,7 @@ on a mobile application (Expo / React Native).
 ## 🎥 App Demo
 
 <p align="center">
-  <video src="./videos/ambient-monitor-demo.mp4" controls autoplay muted width="300"></video>
+  <img src="images/ambient-monitor-demo.gif" alt="App Demo" width="300">
 </p>
 
 ---
