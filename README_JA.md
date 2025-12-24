@@ -277,7 +277,7 @@ graph LR
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/masataka-kubota/ambient-monitor/main/images/esp32-bme280-wiring.jpg?token=GHSAT0AAAAAAC3QHM2TIQGJTQBY2B2UET4Q2KLOYMQ" alt="ESP32 - BME280 配線図" width="60%">
+  <img src="./images/esp32-bme280-wiring.jpg" alt="ESP32 - BME280 配線図" width="60%">
   <br>
   <sub>ESP32 - BME280 配線図</sub>
 </p>
