@@ -9,7 +9,7 @@ ESP32 + BME280 で取得した環境データ（気温・湿度・気圧）を�
 
 ### 📱 アプリ画面
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">>
+<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
   <figure style="text-align: center; width: 30%; margin: 0;">
     <img src="images/screenshot_live_ble.png" alt="ホーム画面 (Bluetooth接続)" style="width:100%; max-width:300px; border-radius:12px;">
     <figcaption style="margin-top: 10px; font-size: 0.9em;">ホーム画面: 現在の温度・湿度・気圧を表示（Bluetooth接続時）</figcaption>
@@ -174,7 +174,7 @@ API 定義から以下の箇所で型安全性を担保しています。
 - 型定義を共有しており、バックエンド API 変更時もコンパイル時に検出可能
 
 <!-- Home -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">>
+<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
   <figure style="text-align: center; width: 45%; margin: 0;">
     <img src="images/screenshot_live_ble.png" alt="ホーム画面 (Bluetooth接続)" style="width:100%; max-width:300px; border-radius:12px;">
     <figcaption style="margin-top: 10px; font-size: 0.9em;">ホーム画面: 現在の温度・湿度・気圧を表示（Bluetooth接続時）</figcaption>
