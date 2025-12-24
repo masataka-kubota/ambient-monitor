@@ -31,6 +31,14 @@ on a mobile application (Expo / React Native).
 
 ---
 
+## 🎥 App Demo
+
+<p align="center">
+  <video src="./videos/ambient-monitor-demo.mp4" controls autoplay muted width="300"></video>
+</p>
+
+---
+
 ## 💡 Motivation
 
 I wanted to monitor indoor temperature and humidity in real-time on my smartphone,
