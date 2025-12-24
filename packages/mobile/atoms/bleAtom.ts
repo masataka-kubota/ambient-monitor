@@ -18,6 +18,4 @@ export const connectedDeviceAtom = atom<Peripheral | null>(null);
 
 export const scannedDevicesAtom = atom<Peripheral[]>([]);
 
-export const isBleConnectedAtom = atom<boolean | null>(null);
-
 export const wifiStatusAtom = atom<WifiStatus | null>(null);

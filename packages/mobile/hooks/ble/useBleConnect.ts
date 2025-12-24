@@ -26,18 +26,23 @@ const useBleConnect = () => {
   const setScannedDevices = useSetAtom(scannedDevicesAtom);
   const [isConnecting, setIsConnecting] = useState(false);
 
+  const performBleConnect = useCallback(
+    async (deviceId: string) => {
+      await bleManager.connect(deviceId);
+      await bleManager.retrieveServices(deviceId);
+      if (Platform.OS === "android") await bleManager.requestMTU(deviceId, 100);
+      const deviceData = await getDeviceData(deviceId);
+      setConnectedDevice(deviceData);
+    },
+    [setConnectedDevice],
+  );
+
   const connectToDevice = useCallback(
     async (deviceId: string) => {
       setIsConnecting(true);
       try {
         await bleManager.stopScan();
-        await bleManager.connect(deviceId);
-        await bleManager.retrieveServices(deviceId);
-        if (Platform.OS === "android") {
-          await bleManager.requestMTU(deviceId, 100);
-        }
-        const deviceData = await getDeviceData(deviceId);
-        setConnectedDevice(deviceData);
+        await performBleConnect(deviceId);
         setConnectedIdDevice(deviceId);
         setScannedDevices((prev) => prev.filter((d) => d.id !== deviceId));
       } catch (error) {
@@ -46,26 +51,21 @@ const useBleConnect = () => {
         setIsConnecting(false);
       }
     },
-    [setConnectedDevice, setConnectedIdDevice, setScannedDevices],
+    [performBleConnect, setConnectedIdDevice, setScannedDevices],
   );
 
   const autoConnectToDevice = useCallback(
     async (deviceId: string) => {
       try {
-        await bleManager.connect(deviceId);
-        await bleManager.retrieveServices(deviceId);
-        if (Platform.OS === "android") {
-          await bleManager.requestMTU(deviceId, 100);
+        const isConnected = await bleManager.isPeripheralConnected(deviceId);
+        if (!isConnected) {
+          await performBleConnect(deviceId);
         }
-        const deviceData = await getDeviceData(deviceId);
-        setConnectedDevice(deviceData || null);
-        return true;
       } catch (error) {
         console.error("Auto connection failed:", error);
-        return false;
       }
     },
-    [setConnectedDevice],
+    [performBleConnect],
   );
 
   const disconnectDevice = useCallback(
