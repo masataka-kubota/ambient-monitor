@@ -20,6 +20,12 @@ export const getDeviceData = async (
   return peripherals.find((p) => p.id === deviceId) ?? null;
 };
 
+const getBleErrorMessage = (error: unknown): string =>
+  String((error as any)?.message ?? (error as any)?.error ?? error);
+
+const isExpectedBleError = (error: unknown): boolean =>
+  getBleErrorMessage(error).toLowerCase().includes("disconnect");
+
 const useBleConnect = () => {
   const setConnectedIdDevice = useSetAtom(connectedDeviceIdAtom);
   const setConnectedDevice = useSetAtom(connectedDeviceAtom);
@@ -61,8 +67,20 @@ const useBleConnect = () => {
         if (!isConnected) {
           await performBleConnect(deviceId);
         }
-      } catch (error) {
-        console.error("Auto connection failed:", error);
+      } catch (error: unknown) {
+        if (isExpectedBleError(error)) {
+          // Android often throws "Device disconnected" when the device
+          // is already connected from another phone. This is an expected case.
+          if (__DEV__) {
+            console.info(
+              "[BLE] expected reconnect failure is dev:",
+              getBleErrorMessage(error),
+            );
+          }
+          return;
+        }
+
+        console.error("[BLE] auto reconnect failed:", error);
       }
     },
     [performBleConnect],
