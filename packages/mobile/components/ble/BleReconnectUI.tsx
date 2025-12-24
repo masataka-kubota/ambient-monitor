@@ -1,4 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
@@ -7,18 +8,13 @@ import { PrimaryButton, ThemeText } from "@/components/ui";
 import { useResolvedTheme } from "@/hooks/common";
 
 interface BleReconnectUIProps {
-  connectedDeviceId: string;
-  onReconnect: (deviceId: string) => Promise<void>;
-  onDisconnect: (deviceId: string) => Promise<void>;
+  forgetDevice: () => void;
 }
 
-const BleReconnectUI = ({
-  connectedDeviceId,
-  onReconnect,
-  onDisconnect,
-}: BleReconnectUIProps) => {
+const BleReconnectUI = ({ forgetDevice }: BleReconnectUIProps) => {
   const { currentThemeColors } = useResolvedTheme();
   const { t } = useTranslation();
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -30,27 +26,25 @@ const BleReconnectUI = ({
           color={currentThemeColors.mainColor}
         />
 
-        <ThemeText style={styles.title}>
-          {t("ble.reconnect.title", { deviceName: connectedDeviceId })}
-        </ThemeText>
+        <ThemeText style={styles.title}>{t("ble.reconnect.title")}</ThemeText>
 
         <ThemeText style={styles.description}>
           {t("ble.reconnect.description")}
         </ThemeText>
       </View>
 
-      {/* Reconnect button */}
+      {/* Back button */}
       <PrimaryButton
-        title={t("ble.reconnect.reconnectButton")}
-        onPress={() => onReconnect(connectedDeviceId)}
+        title={t("ble.reconnect.backButton")}
+        onPress={() => router.back()}
       />
 
-      {/* Disconnect button */}
+      {/* Forget button */}
       <PrimaryButton
-        title={t("ble.reconnect.disconnectButton")}
-        onPress={() => onDisconnect(connectedDeviceId)}
+        title={t("ble.reconnect.forgetButton")}
+        onPress={forgetDevice}
         backgroundColor={currentThemeColors.error}
-        style={styles.disconnectButton}
+        style={styles.forgetButton}
       />
     </View>
   );
@@ -73,7 +67,7 @@ const styles = StyleSheet.create({
   description: {
     textAlign: "center",
   },
-  disconnectButton: {
+  forgetButton: {
     marginTop: 0,
   },
 });

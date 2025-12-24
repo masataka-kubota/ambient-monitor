@@ -86,10 +86,18 @@ const useBleConnect = () => {
     [setConnectedDevice, setConnectedIdDevice],
   );
 
+  // Forget the previously connected device.
+  // This does NOT call bleManager.disconnect because the device is already disconnected.
+  // Used in the reconnect screen to allow users to set up a new device.
+  const forgetDevice = useCallback(() => {
+    setConnectedIdDevice(null);
+  }, [setConnectedIdDevice]);
+
   return {
     connectToDevice,
     autoConnectToDevice,
     disconnectDevice,
+    forgetDevice,
     isConnecting,
   };
 };
