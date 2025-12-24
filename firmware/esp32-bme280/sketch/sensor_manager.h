@@ -18,6 +18,7 @@ private:
   static bool readSafeBME(float &t, float &h, float &p);
   static bool recoverBME();
   static bool validateReading(float t, float h, float p);
+  static bool validateHumidityAdvanced(float h);
   static bool validatePressureAdvanced(float p);
 
   // Smoothing and history management for pressure
@@ -32,4 +33,5 @@ private:
   static int pHistoryIndex;        // Current index in pressure history
   static bool pHistoryFilled;      // Indicates if history buffer is fully filled
   static float prevPressure;       // Previous pressure reading for jump detection
+  static float lastValidH;         // Last valid humidity reading
 };
