@@ -9,7 +9,7 @@ on a mobile application (Expo / React Native).
 
 ### 📱 App Screenshots
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">>
+<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
   <figure style="text-align: center; width: 30%; margin: 0;">
     <img src="images/screenshot_live_ble.png" alt="Home Screen (Bluetooth)" style="width:100%; max-width:300px; border-radius:12px;">
     <figcaption style="margin-top: 10px; font-size: 0.9em;">Home Screen: Shows current temperature, humidity, and pressure (Bluetooth)</figcaption>
@@ -175,7 +175,7 @@ Development is focused on these three components:
 - Shared types enable compile-time detection of backend API changes
 
 <!-- Home -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">>
+<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
   <figure style="text-align: center; width: 45%; margin: 0;">
     <img src="images/screenshot_live_ble.png" alt="Home Screen (Bluetooth)" style="width:100%; max-width:300px; border-radius:12px;">
     <figcaption style="margin-top: 10px; font-size: 0.9em;">Home Screen: Shows current temperature, humidity, and pressure (Bluetooth)</figcaption>
