@@ -1,18 +1,18 @@
 {
   "title": "Bluetooth設定",
   "notConnected": {
-    "title": "ESP32 の BOOT ボタンを押してください",
-    "description": "その後、Scan ボタンをタップして近くのデバイスを検索してください。",
+    "title": "ESP32 を電源オンにしてください",
+    "description": "その後、スキャンボタンをタップして近くのデバイスを検索してください。",
     "connecting": "接続中...",
     "scanButton": "デバイスをスキャン",
     "emptyList": "デバイスが見つかっていません",
     "unknownDevice": "不明なデバイス"
   },
   "reconnect": {
-    "title": "{{deviceName}} との接続が失われました",
-    "description": "ESP32 の BOOT ボタンを押して再接続してください。\nまたは、切断してやり直すこともできます。",
-    "reconnectButton": "再接続",
-    "disconnectButton": "切断"
+    "title": "設定済みの端末との接続が失われました",
+    "description": "他の端末でBluetoothに接続している可能性があります。\nその端末との接続が切れると、自動で再接続します。",
+    "backButton": "戻る",
+    "forgetButton": "この端末の接続を解除"
   },
   "connected": {
     "title": "{{deviceName}} に接続しました",
