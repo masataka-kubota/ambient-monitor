@@ -31,6 +31,14 @@ ESP32 + BME280 で取得した環境データ（気温・湿度・気圧）を�
 
 ---
 
+## 🎥 アプリデモ
+
+<p align="center">
+  <video src="./videos/ambient-monitor-demo.mp4" controls autoplay muted width="300"></video>
+</p>
+
+---
+
 ## 💡 モチベーション
 
 自宅内の温度・湿度をスマートフォンでリアルタイムに把握したいと考え、
