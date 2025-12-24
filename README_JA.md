@@ -9,20 +9,33 @@ ESP32 + BME280 で取得した環境データ（気温・湿度・気圧）を�
 
 ### 📱 アプリ画面
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">>
-  <figure style="text-align: center; width: 30%; margin: 0;">
-    <img src="images/screenshot_live_ble.png" alt="ホーム画面 (Bluetooth接続)" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">ホーム画面: 現在の温度・湿度・気圧を表示（Bluetooth接続時）</figcaption>
-  </figure>
-  <figure style="text-align: center; width: 30%; margin: 0;">
-    <img src="images/screenshot_graph.png" alt="過去24時間のグラフ" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">グラフ表示: 過去24時間、7日間、30日間のデータを可視化</figcaption>
-  </figure>
-  <figure style="text-align: center; width: 30%; margin: 0;">
-    <img src="images/screenshot_settings.png" alt="設定画面" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">設定画面: テーマ、言語、Bluetooth・Wi-Fi設定一覧</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="images/screenshot_live_ble.png" alt="ホーム画面 (Bluetooth接続)" width="100%">
+      <br>
+      <sub>ホーム画面: 現在の温度・湿度・気圧を表示（Bluetooth接続時）</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="images/screenshot_graph.png" alt="過去24時間のグラフ" width="100%">
+      <br>
+      <sub>グラフ表示: 過去24時間、7日間、30日間のデータを可視化</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="images/screenshot_settings.png" alt="設定画面" width="100%">
+      <br>
+      <sub>設定画面: テーマ、言語、Bluetooth・Wi-Fi設定一覧</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 🎥 アプリデモ
+
+<p align="center">
+  <img src="images/ambient-monitor-demo.gif" alt="アプリデモ" width="300">
+</p>
 
 ---
 
@@ -174,52 +187,78 @@ API 定義から以下の箇所で型安全性を担保しています。
 - 型定義を共有しており、バックエンド API 変更時もコンパイル時に検出可能
 
 <!-- Home -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">>
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_live_ble.png" alt="ホーム画面 (Bluetooth接続)" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">ホーム画面: 現在の温度・湿度・気圧を表示（Bluetooth接続時）</figcaption>
-  </figure>
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_live_cloud.png" alt="ホーム画面 (API接続)" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">ホーム画面: 現在の温度・湿度・気圧を表示（API接続時）</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_live_ble.png" alt="ホーム画面 (Bluetooth接続)" width="100%">
+      <br>
+      <sub>ホーム画面: 現在の温度・湿度・気圧を表示（Bluetooth接続時）</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="images/screenshot_live_cloud.png" alt="ホーム画面 (API接続)" width="100%">
+      <br>
+      <sub>ホーム画面: 現在の温度・湿度・気圧を表示（API接続時）</sub>
+    </td>
+  </tr>
+</table>
 
 <!-- Graph -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_graph.png" alt="過去24時間のグラフ" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">グラフ表示: 過去24時間、7日間、30日間のデータを可視化</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_graph.png" alt="過去24時間のグラフ" width="100%">
+      <br>
+      <sub>グラフ表示: 過去24時間、7日間、30日間のデータを可視化</sub>
+    </td>
+    <td align="center" width="50%">
+      <!--  -->
+    </td>
+  </tr>
+</table>
 
 <!-- Settings -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_settings.png" alt="設定画面" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">設定画面: テーマ、言語、Bluetooth・Wi-Fi設定一覧</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_settings.png" alt="設定画面" width="100%">
+      <br>
+      <sub>設定画面: テーマ、言語、Bluetooth・Wi-Fi設定一覧</sub>
+    </td>
+    <td align="center" width="50%">
+      <!--  -->
+    </td>
+  </tr>
+</table>
 
 <!-- Bluetooth -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_ble_connected.png" alt="Bluetooth接続中" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Bluetooth接続画面: ESP32との接続中</figcaption>
-  </figure>
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_ble_disconnected.png" alt="Bluetooth接続設定" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Bluetooth接続画面: ESP32との接続設定</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_ble_connected.png" alt="Bluetooth接続中" width="100%">
+      <br>
+      <sub>Bluetooth接続画面: ESP32との接続中</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="images/screenshot_ble_disconnected.png" alt="Bluetooth接続設定" width="100%">
+      <br>
+      <sub>Bluetooth接続画面: ESP32との接続設定</sub>
+    </td>
+  </tr>
+</table>
 
 <!-- Wi-Fi -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_wifi_settings.png" alt="Wi-Fi接続画面" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Wi-Fi接続画面: パスワードは非表示</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_wifi_settings.png" alt="Wi-Fi接続画面" width="100%">
+      <br>
+      <sub>Wi-Fi接続画面: パスワードは非表示</sub>
+    </td>
+    <td align="center" width="50%">
+      <!--  -->
+    </td>
+  </tr>
+</table>
 
 ### 🤖 ESP32 Firmware
 
@@ -245,4 +284,8 @@ graph LR
     style BME280 fill:#9b59b6,stroke:#2c3e50,stroke-width:2px,color:#fff
 ```
 
-![ESP32 - BME280 配線図](images/esp32-bme280-wiring.jpg "ESP32 - BME280 配線図")
+<p align="center">
+  <img src="./images/esp32-bme280-wiring.jpg" alt="ESP32 - BME280 配線図" width="60%">
+  <br>
+  <sub>ESP32 - BME280 配線図</sub>
+</p>

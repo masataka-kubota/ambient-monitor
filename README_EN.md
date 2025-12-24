@@ -9,20 +9,33 @@ on a mobile application (Expo / React Native).
 
 ### 📱 App Screenshots
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">>
-  <figure style="text-align: center; width: 30%; margin: 0;">
-    <img src="images/screenshot_live_ble.png" alt="Home Screen (Bluetooth)" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Home Screen: Shows current temperature, humidity, and pressure (Bluetooth)</figcaption>
-  </figure>
-  <figure style="text-align: center; width: 30%; margin: 0;">
-    <img src="images/screenshot_graph.png" alt="24h Graph" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Graph Screen: Visualizes data for the past 24 hours, 7 days, and 30 days</figcaption>
-  </figure>
-  <figure style="text-align: center; width: 30%; margin: 0;">
-    <img src="images/screenshot_settings.png" alt="Settings Screen" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Settings Screen: Theme, language, Bluetooth & Wi-Fi settings</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="images/screenshot_live_ble.png" alt="Home Screen (Bluetooth)" width="100%">
+      <br>
+      <sub>Home Screen: Shows current temperature, humidity, and pressure (Bluetooth)</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="images/screenshot_graph.png" alt="24h Graph" width="100%">
+      <br>
+      <sub>Graph Screen: Visualizes data for the past 24 hours, 7 days, and 30 days</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="images/screenshot_settings.png" alt="Settings Screen" width="100%">
+      <br>
+      <sub>Settings Screen: Theme, language, Bluetooth & Wi-Fi settings</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 🎥 App Demo
+
+<p align="center">
+  <img src="images/ambient-monitor-demo.gif" alt="App Demo" width="300">
+</p>
 
 ---
 
@@ -175,52 +188,78 @@ Development is focused on these three components:
 - Shared types enable compile-time detection of backend API changes
 
 <!-- Home -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">>
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_live_ble.png" alt="Home Screen (Bluetooth)" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Home Screen: Shows current temperature, humidity, and pressure (Bluetooth)</figcaption>
-  </figure>
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_live_cloud.png" alt="Home Screen (API)" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Home Screen: Shows current temperature, humidity, and pressure (API)</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_live_ble.png" alt="Home Screen (Bluetooth)" width="100%">
+      <br>
+      <sub>Home Screen: Shows current temperature, humidity, and pressure (Bluetooth)</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="images/screenshot_live_cloud.png" alt="Home Screen (API)" width="100%">
+      <br>
+      <sub>Home Screen: Shows current temperature, humidity, and pressure (API)</sub>
+    </td>
+  </tr>
+</table>
 
 <!-- Graph -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_graph.png" alt="24h Graph" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Graph Screen: Visualizes data for the past 24 hours, 7 days, and 30 days</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_graph.png" alt="24h Graph" width="100%">
+      <br>
+      <sub>Graph Screen: Visualizes data for the past 24 hours, 7 days, and 30 days</sub>
+    </td>
+    <td align="center" width="50%">
+      <!--  -->
+    </td>
+  </tr>
+</table>
 
 <!-- Settings -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_settings.png" alt="Settings Screen" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Settings Screen: Theme, language, Bluetooth & Wi-Fi settings</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_settings.png" alt="Settings Screen" width="100%">
+      <br>
+      <sub>Settings Screen: Theme, language, Bluetooth & Wi-Fi settings</sub>
+    </td>
+    <td align="center" width="50%">
+      <!--  -->
+    </td>
+  </tr>
+</table>
 
 <!-- Bluetooth -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_ble_connected.png" alt="Bluetooth Connected" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Bluetooth Screen: Connected to ESP32</figcaption>
-  </figure>
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_ble_disconnected.png" alt="Bluetooth Setup" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Bluetooth Screen: ESP32 connection setup</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_ble_connected.png" alt="Bluetooth Connected" width="100%">
+      <br>
+      <sub>Bluetooth Screen: Connected to ESP32</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="images/screenshot_ble_disconnected.png" alt="Bluetooth Setup" width="100%">
+      <br>
+      <sub>Bluetooth Screen: ESP32 connection setup</sub>
+    </td>
+  </tr>
+</table>
 
 <!-- Wi-Fi -->
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 20px 0;">
-  <figure style="text-align: center; width: 45%; margin: 0;">
-    <img src="images/screenshot_wifi_settings.png" alt="Wi-Fi Screen" style="width:100%; max-width:300px; border-radius:12px;">
-    <figcaption style="margin-top: 10px; font-size: 0.9em;">Wi-Fi Screen: Password hidden</figcaption>
-  </figure>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/screenshot_wifi_settings.png" alt="Wi-Fi Screen" width="100%">
+      <br>
+      <sub>Wi-Fi Screen: Password hidden</sub>
+    </td>
+    <td align="center" width="50%">
+      <!--  -->
+    </td>
+  </tr>
+</table>
 
 ### 🤖 ESP32 Firmware
 
@@ -246,4 +285,8 @@ graph LR
     style BME280 fill:#9b59b6,stroke:#2c3e50,stroke-width:2px,color:#fff
 ```
 
-![ESP32 - BME280 Wiring Diagram](images/esp32-bme280-wiring.jpg "ESP32 - BME280 Wiring Diagram")
+<p align="center">
+  <img src="./images/esp32-bme280-wiring.jpg" alt="ESP32 - BME280 Wiring Diagram" width="60%">
+  <br>
+  <sub>ESP32 - BME280 Wiring Diagram</sub>
+</p>
