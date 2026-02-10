@@ -1,8 +1,11 @@
 import baseConfig from '@hono/eslint-config'
 import eslintPluginImport from 'eslint-plugin-import'
+import drizzle from 'eslint-plugin-drizzle'
 
 export default [
   ...baseConfig,
+
+  // TypeScript project settings
   {
     languageOptions: {
       parserOptions: {
@@ -11,6 +14,8 @@ export default [
       },
     },
   },
+
+  // Import order rules
   {
     ignores: ['node_modules', '/.wrangler'],
     plugins: {
@@ -29,6 +34,17 @@ export default [
     },
   },
 
+  // Drizzle safety rules
+  {
+    plugins: {
+      drizzle,
+    },
+    rules: {
+      ...drizzle.configs.recommended.rules,
+    },
+  },
+
+  // Global ignores
   {
     ignores: ['node_modules', '/.wrangler', 'eslint.config.mjs'],
   },
