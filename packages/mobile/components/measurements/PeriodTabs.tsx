@@ -1,12 +1,12 @@
-import { memo, useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, View } from "react-native";
+import { memo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pressable, StyleSheet, View } from 'react-native';
 
-import { ThemeText } from "@/components/ui";
-import { MEASUREMENT_RANGES } from "@/constants";
-import { useResolvedTheme } from "@/hooks/common";
-import { MeasurementRange } from "@/types";
-import { triggerLightHaptics } from "@/utils";
+import { ThemeText } from '@/components/ui';
+import { MEASUREMENT_RANGES } from '@/constants';
+import { useResolvedTheme } from '@/hooks/common';
+import { MeasurementRange } from '@/types';
+import { triggerLightHaptics } from '@/utils';
 
 interface PeriodTabsProps {
   selectedPeriod: MeasurementRange;
@@ -42,7 +42,7 @@ const PeriodTabs = ({ selectedPeriod, onSelectPeriod }: PeriodTabsProps) => {
           >
             <ThemeText
               style={{
-                fontWeight: focused ? "bold" : "normal",
+                fontWeight: focused ? 'bold' : 'normal',
                 color: focused
                   ? currentThemeColors.mainBackground
                   : currentThemeColors.mediumColor,
@@ -59,17 +59,17 @@ const PeriodTabs = ({ selectedPeriod, onSelectPeriod }: PeriodTabsProps) => {
 
 const style = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 5,
     marginBottom: 15,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 5,
   },
   tabButton: {
     paddingVertical: 6,
     paddingHorizontal: 12,
-    alignItems: "center",
+    alignItems: 'center',
     borderRadius: 10,
   },
 });

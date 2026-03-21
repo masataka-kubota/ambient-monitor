@@ -1,6 +1,6 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { Link, LinkProps } from "expo-router";
-import { memo, useCallback } from "react";
+import { MaterialIcons } from '@expo/vector-icons';
+import { Link, LinkProps } from 'expo-router';
+import { memo, useCallback } from 'react';
 import {
   GestureResponderEvent,
   Pressable,
@@ -9,22 +9,22 @@ import {
   TextStyle,
   View,
   ViewStyle,
-} from "react-native";
+} from 'react-native';
 
-import ThemeText from "@/components/ui/ThemeText";
-import { useResolvedTheme } from "@/hooks/common";
-import { triggerLightHaptics } from "@/utils";
+import ThemeText from '@/components/ui/ThemeText';
+import { useResolvedTheme } from '@/hooks/common';
+import { triggerLightHaptics } from '@/utils';
 
 interface MenuLinkProps {
   title: string;
   textStyle?: StyleProp<TextStyle>;
-  itemColor?: TextStyle["color"];
+  itemColor?: TextStyle['color'];
   iconName?: keyof typeof MaterialIcons.glyphMap;
   infoText?: string;
 }
 
 interface MenuLinkWithHrefProps extends MenuLinkProps {
-  href: LinkProps["href"];
+  href: LinkProps['href'];
   onPress?: never;
   linkStyle?: StyleProp<TextStyle>;
   buttonStyle?: never;
@@ -32,7 +32,7 @@ interface MenuLinkWithHrefProps extends MenuLinkProps {
 
 interface MenuLinkWithOnPressProps extends MenuLinkProps {
   href?: never;
-  onPress: LinkProps["onPress"];
+  onPress: LinkProps['onPress'];
   linkStyle?: never;
   buttonStyle?: StyleProp<ViewStyle>;
 }
@@ -47,7 +47,7 @@ const MenuLinkItem = ({
   buttonStyle,
   textStyle,
   itemColor,
-  iconName = "keyboard-arrow-right",
+  iconName = 'keyboard-arrow-right',
   infoText,
   href,
   onPress,
@@ -103,15 +103,15 @@ const MenuLinkItem = ({
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 15,
     marginVertical: 5,
   },
   rightContent: {
-    flexDirection: "row",
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   infoText: {
     opacity: 0.5,

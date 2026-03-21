@@ -1,17 +1,17 @@
-import { Buffer } from "buffer";
+import { Buffer } from 'buffer';
 
-import { ThemeProvider } from "@react-navigation/native";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { ThemeProvider } from '@react-navigation/native';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 
-import { BleAutoReconnectInitializer } from "@/components/ble";
-import WifiWifiStatusSync from "@/components/ble/WifiWifiStatusSync";
-import { AppProviders } from "@/components/layouts";
-import { APP_THEME_SCHEME } from "@/constants";
-import { useI18nInitializer, useResolvedTheme } from "@/hooks/common";
-import { initBLE } from "@/lib";
+import { BleAutoReconnectInitializer } from '@/components/ble';
+import WifiWifiStatusSync from '@/components/ble/WifiWifiStatusSync';
+import { AppProviders } from '@/components/layouts';
+import { APP_THEME_SCHEME } from '@/constants';
+import { useI18nInitializer, useResolvedTheme } from '@/hooks/common';
+import { initBLE } from '@/lib';
 
 global.Buffer = Buffer;
 
@@ -52,7 +52,7 @@ const RootLayout = () => {
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
         </Stack>
-        <StatusBar style={isDarkMode ? "light" : "dark"} />
+        <StatusBar style={isDarkMode ? 'light' : 'dark'} />
       </ThemeProvider>
     </AppProviders>
   );

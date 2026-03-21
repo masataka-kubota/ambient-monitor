@@ -1,12 +1,12 @@
-import { memo } from "react";
-import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
-import Svg, { Path } from "react-native-svg";
+import { memo } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Animated from 'react-native-reanimated';
+import Svg, { Path } from 'react-native-svg';
 
-import SkeletonItem from "@/components/skelton/SkeletonItem";
-import { useResolvedTheme } from "@/hooks/common";
-import { useSkeletonAnimation } from "@/hooks/ui";
-import { describeArc } from "@/utils";
+import SkeletonItem from '@/components/skelton/SkeletonItem';
+import { useResolvedTheme } from '@/hooks/common';
+import { useSkeletonAnimation } from '@/hooks/ui';
+import { describeArc } from '@/utils';
 
 interface CShapeGaugeSkeletonProps {
   radius: number;
@@ -54,12 +54,12 @@ const CShapeGaugeSkeleton = ({
 
 const styles = StyleSheet.create({
   wrapper: {
-    alignItems: "center",
+    alignItems: 'center',
     margin: 5,
   },
   centered: {
-    position: "absolute",
-    alignItems: "center",
+    position: 'absolute',
+    alignItems: 'center',
   },
   labelContainer: {
     bottom: 0,

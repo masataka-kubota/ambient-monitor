@@ -1,5 +1,5 @@
-import { parseISO } from "date-fns";
-import { format, toZonedTime } from "date-fns-tz";
+import { parseISO } from 'date-fns';
+import { format, toZonedTime } from 'date-fns-tz';
 
 /**
  * Converts a UTC datetime string to the local timezone and formats it.
@@ -7,10 +7,10 @@ import { format, toZonedTime } from "date-fns-tz";
  */
 export const formatToLocalTime = (
   utcString: string,
-  dateFormat = "yyyy-MM-dd HH:mm:ss",
+  dateFormat = 'yyyy-MM-dd HH:mm:ss',
 ) => {
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const utcIsoString = utcString.endsWith("Z") ? utcString : `${utcString}Z`;
+  const utcIsoString = utcString.endsWith('Z') ? utcString : `${utcString}Z`;
   const utcDate = parseISO(utcIsoString); // Convert the UTC string to a Date object
   const zonedDate = toZonedTime(utcDate, timeZone); // Convert to local timezone
   return format(zonedDate, dateFormat); // Format the date

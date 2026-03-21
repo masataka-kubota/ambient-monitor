@@ -1,10 +1,10 @@
-import { useSetAtom } from "jotai";
-import { useEffect } from "react";
-import { Peripheral } from "react-native-ble-manager";
+import { useSetAtom } from 'jotai';
+import { useEffect } from 'react';
+import { Peripheral } from 'react-native-ble-manager';
 
-import { scannedDevicesAtom } from "@/atoms";
-import { BLE_DEVICE_NAME, BLE_SERVICE_UUID } from "@/constants/ble";
-import { bleManager } from "@/lib";
+import { scannedDevicesAtom } from '@/atoms';
+import { BLE_DEVICE_NAME, BLE_SERVICE_UUID } from '@/constants/ble';
+import { bleManager } from '@/lib';
 
 const useBleScan = () => {
   const setScannedDevices = useSetAtom(scannedDevicesAtom);
@@ -12,7 +12,7 @@ const useBleScan = () => {
   useEffect(() => {
     const discoverSubscription = bleManager.onDiscoverPeripheral(
       (peripheral: Peripheral) => {
-        const name = peripheral.name ?? peripheral.advertising?.localName ?? "";
+        const name = peripheral.name ?? peripheral.advertising?.localName ?? '';
 
         if (name.startsWith(BLE_DEVICE_NAME)) {
           setScannedDevices((prev) =>

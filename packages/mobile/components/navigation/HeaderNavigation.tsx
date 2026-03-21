@@ -1,9 +1,9 @@
-import { memo } from "react";
-import { StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { memo } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import HeaderBackButton from "@/components/navigation/HeaderBackButton";
-import { ThemeText } from "@/components/ui";
+import HeaderBackButton from '@/components/navigation/HeaderBackButton';
+import { ThemeText } from '@/components/ui';
 
 interface HeaderNavigationProps {
   title: string;
@@ -27,17 +27,17 @@ const HeaderNavigation = ({
 
 const styles = StyleSheet.create({
   headerContainer: {
-    position: "absolute",
-    width: "100%",
+    position: 'absolute',
+    width: '100%',
     height: 50,
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "transparent",
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

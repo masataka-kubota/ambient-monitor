@@ -1,8 +1,8 @@
-import { Entypo, MaterialIcons } from "@expo/vector-icons";
-import { StyleSheet, TextProps, View, ViewStyle } from "react-native";
+import { Entypo, MaterialIcons } from '@expo/vector-icons';
+import { StyleSheet, TextProps, View, ViewStyle } from 'react-native';
 
-import ThemeText from "@/components/ui/ThemeText";
-import { useResolvedTheme } from "@/hooks/common";
+import ThemeText from '@/components/ui/ThemeText';
+import { useResolvedTheme } from '@/hooks/common';
 
 const ICON_LIBS = {
   Entypo,
@@ -11,28 +11,28 @@ const ICON_LIBS = {
 
 type IconLib = keyof typeof ICON_LIBS;
 
-type IconName<T extends IconLib> = keyof (typeof ICON_LIBS)[T]["glyphMap"];
+type IconName<T extends IconLib> = keyof (typeof ICON_LIBS)[T]['glyphMap'];
 
-interface HeadingProps<T extends IconLib = "Entypo"> extends TextProps {
-  mt?: ViewStyle["marginTop"];
+interface HeadingProps<T extends IconLib = 'Entypo'> extends TextProps {
+  mt?: ViewStyle['marginTop'];
   fontSize?: number;
   iconLib?: T;
   iconName?: IconName<T>;
-  align?: "flex-start" | "center" | "flex-end";
+  align?: 'flex-start' | 'center' | 'flex-end';
 }
 
-const Heading = <T extends IconLib = "Entypo">({
+const Heading = <T extends IconLib = 'Entypo'>({
   mt = 20,
   fontSize = 20,
   iconLib,
   iconName,
-  align = "flex-start",
+  align = 'flex-start',
   style,
   ...props
 }: HeadingProps<T>) => {
   const { currentThemeColors } = useResolvedTheme();
 
-  const safeIconLib: IconLib = iconLib ?? "Entypo";
+  const safeIconLib: IconLib = iconLib ?? 'Entypo';
   const Icon = ICON_LIBS[safeIconLib];
 
   return (
@@ -66,10 +66,10 @@ const Heading = <T extends IconLib = "Entypo">({
 
 const styles = StyleSheet.create({
   headingContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   heading: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
   },
 });

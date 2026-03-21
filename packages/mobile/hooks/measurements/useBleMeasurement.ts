@@ -1,9 +1,9 @@
-import { useAtom, useAtomValue } from "jotai";
-import { useCallback, useEffect, useState } from "react";
+import { useAtom, useAtomValue } from 'jotai';
+import { useCallback, useEffect, useState } from 'react';
 
-import { bleMeasurementAtom, connectedDeviceAtom } from "@/atoms";
-import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from "@/constants/ble";
-import { bleManager } from "@/lib";
+import { bleMeasurementAtom, connectedDeviceAtom } from '@/atoms';
+import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';
+import { bleManager } from '@/lib';
 
 interface DidUpdateValueForCharacteristicArgs {
   value: number[];
@@ -69,7 +69,7 @@ const useBleMeasurement = () => {
         MEASUREMENT_CHAR_UUID,
       );
     } catch (e) {
-      console.error("Monitoring error", e);
+      console.error('Monitoring error', e);
     } finally {
       setIsLoading(false);
     }

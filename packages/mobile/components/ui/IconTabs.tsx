@@ -1,10 +1,10 @@
-import { Entypo } from "@expo/vector-icons";
-import { useCallback } from "react";
-import { Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
+import { Entypo } from '@expo/vector-icons';
+import { useCallback } from 'react';
+import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
-import ThemeText from "@/components/ui/ThemeText";
-import { useResolvedTheme } from "@/hooks/common";
-import { triggerLightHaptics } from "@/utils";
+import ThemeText from '@/components/ui/ThemeText';
+import { useResolvedTheme } from '@/hooks/common';
+import { triggerLightHaptics } from '@/utils';
 
 const _paddingHorizontal = 20;
 const _gap = 5;
@@ -83,14 +83,14 @@ const IconTabs = <T extends string>({
 
 const styles = StyleSheet.create({
   tabContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingVertical: 8,
     marginBottom: 30,
     gap: _gap,
   },
   tabButton: {
     padding: 6,
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
 

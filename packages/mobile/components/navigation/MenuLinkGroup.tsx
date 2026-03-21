@@ -1,7 +1,7 @@
-import { Children, memo } from "react";
-import { StyleSheet, View } from "react-native";
+import { Children, memo } from 'react';
+import { StyleSheet, View } from 'react-native';
 
-import { useResolvedTheme } from "@/hooks/common";
+import { useResolvedTheme } from '@/hooks/common';
 
 interface MenuLinkGroupProps {
   children: React.ReactNode;

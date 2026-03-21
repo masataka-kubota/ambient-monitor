@@ -1,10 +1,10 @@
-import { memo } from "react";
-import { StyleSheet, View } from "react-native";
-import { LineChart, lineDataItem } from "react-native-gifted-charts";
+import { memo } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { LineChart, lineDataItem } from 'react-native-gifted-charts';
 
-import { ThemeText } from "@/components/ui";
-import { useResolvedTheme } from "@/hooks/common";
-import { MeasurementSetting } from "@/types";
+import { ThemeText } from '@/components/ui';
+import { useResolvedTheme } from '@/hooks/common';
+import { MeasurementSetting } from '@/types';
 
 interface LineChartDataPoint {
   labelComponent?: React.ReactNode;
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   pointerLabelContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     padding: 5,
     borderRadius: 5,
   },

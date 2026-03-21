@@ -1,1 +1,1 @@
-export { default as useSkeletonAnimation } from "./useSkeletonAnimation";
+export { default as useSkeletonAnimation } from './useSkeletonAnimation';

@@ -1,29 +1,29 @@
-import { DarkTheme, DefaultTheme, Theme } from "@react-navigation/native";
+import { DarkTheme, DefaultTheme, Theme } from '@react-navigation/native';
 
-import { AppThemeColors } from "@/types";
+import { AppThemeColors } from '@/types';
 
 // common
-const black = "rgba(62, 62, 62, 1)"; // #3e3e3e)
-const white = "rgba(245, 245, 245, 1)"; // #f5f5f5
-const gray = "rgba(154, 154, 154, 1)"; // #9a9a9a
-const blue = "rgba(0, 113, 227, 1)"; // #0071e3
-const red = "rgba(255, 59, 48, 1)"; // #e03440
-const tint = "rgba(74, 208, 186, 1)"; // #4ad0ba
-const onTint = "rgba(255, 255, 255, 1)"; // #ffffff
+const black = 'rgba(62, 62, 62, 1)'; // #3e3e3e)
+const white = 'rgba(245, 245, 245, 1)'; // #f5f5f5
+const gray = 'rgba(154, 154, 154, 1)'; // #9a9a9a
+const blue = 'rgba(0, 113, 227, 1)'; // #0071e3
+const red = 'rgba(255, 59, 48, 1)'; // #e03440
+const tint = 'rgba(74, 208, 186, 1)'; // #4ad0ba
+const onTint = 'rgba(255, 255, 255, 1)'; // #ffffff
 
 // default (light)
-const inputBackgroundLight = "rgba(232, 232, 232, 1)"; // #e8e8e8
-const navBackgroundLight = "rgba(251, 251, 251, 1)"; // #fbfbfb
-const lightGrayLight = "rgba(187, 187, 187, 1)"; // #bbbbbb
-const shadowLight = "rgba(0, 0, 0, 1)"; // #000000
+const inputBackgroundLight = 'rgba(232, 232, 232, 1)'; // #e8e8e8
+const navBackgroundLight = 'rgba(251, 251, 251, 1)'; // #fbfbfb
+const lightGrayLight = 'rgba(187, 187, 187, 1)'; // #bbbbbb
+const shadowLight = 'rgba(0, 0, 0, 1)'; // #000000
 
 // dark
-const inputBackgroundDark = "rgba(74, 74, 74, 1)"; // #4a4a4a
-const navBackgroundDark = "rgba(32, 32, 32, 1)"; // #202020
-const lightGrayDark = "rgba(122, 122, 122, 1)"; // #7a7a7a
-const shadowDark = "rgba(255, 255, 255, 1)"; // #ffffff
+const inputBackgroundDark = 'rgba(74, 74, 74, 1)'; // #4a4a4a
+const navBackgroundDark = 'rgba(32, 32, 32, 1)'; // #202020
+const lightGrayDark = 'rgba(122, 122, 122, 1)'; // #7a7a7a
+const shadowDark = 'rgba(255, 255, 255, 1)'; // #ffffff
 
-export const APP_THEME_SCHEME: Record<"defaultTheme" | "darkTheme", Theme> = {
+export const APP_THEME_SCHEME: Record<'defaultTheme' | 'darkTheme', Theme> = {
   defaultTheme: {
     ...DefaultTheme,
     colors: {

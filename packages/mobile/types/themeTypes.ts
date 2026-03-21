@@ -1,6 +1,6 @@
-export type ThemeSchemeName = "light" | "dark";
+export type ThemeSchemeName = 'light' | 'dark';
 
-export type ThemeMode = "system" | "light" | "dark";
+export type ThemeMode = 'system' | 'light' | 'dark';
 
 export interface ThemeColors {
   mainColor: string;

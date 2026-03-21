@@ -1,14 +1,14 @@
-import { useForm } from "@tanstack/react-form";
-import { useAtomValue } from "jotai";
-import { memo, useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { Alert, Keyboard, StyleSheet, View } from "react-native";
+import { useForm } from '@tanstack/react-form';
+import { useAtomValue } from 'jotai';
+import { memo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Alert, Keyboard, StyleSheet, View } from 'react-native';
 
-import { wifiStatusAtom } from "@/atoms";
-import { PrimaryButton, PrimaryTextInput } from "@/components/ui";
-import { useBleWifiActions } from "@/hooks/ble";
-import { useResolvedTheme } from "@/hooks/common";
-import { WifiFormValues } from "@/types";
+import { wifiStatusAtom } from '@/atoms';
+import { PrimaryButton, PrimaryTextInput } from '@/components/ui';
+import { useBleWifiActions } from '@/hooks/ble';
+import { useResolvedTheme } from '@/hooks/common';
+import { WifiFormValues } from '@/types';
 
 const BleWifiForm = () => {
   const wifiStatus = useAtomValue(wifiStatusAtom);
@@ -17,8 +17,8 @@ const BleWifiForm = () => {
   const { t } = useTranslation();
 
   const defaultWifiFormValues: WifiFormValues = {
-    ssid: wifiStatus?.ssid || "",
-    password: "",
+    ssid: wifiStatus?.ssid || '',
+    password: '',
   };
 
   const form = useForm({
@@ -26,8 +26,8 @@ const BleWifiForm = () => {
     onSubmit: async ({ value }) => {
       const status = await updateWifiConfig(value);
 
-      if (!status || status.status !== "connected") {
-        Alert.alert(t("wifi.alert.connect_failed"));
+      if (!status || status.status !== 'connected') {
+        Alert.alert(t('wifi.alert.connect_failed'));
         return;
       }
 
@@ -39,8 +39,8 @@ const BleWifiForm = () => {
   const handleInitialize = useCallback(async () => {
     const status = await initializeWifiConfig();
 
-    if (!status || status.status !== "not_configured") {
-      Alert.alert(t("wifi.alert.initialize_failed"));
+    if (!status || status.status !== 'not_configured') {
+      Alert.alert(t('wifi.alert.initialize_failed'));
       return;
     }
 
@@ -55,14 +55,14 @@ const BleWifiForm = () => {
         name="ssid"
         validators={{
           onChange: ({ value }) =>
-            value.trim().length === 0 ? "SSID is required" : undefined,
+            value.trim().length === 0 ? 'SSID is required' : undefined,
         }}
       >
         {(field) => (
           <PrimaryTextInput
             isRequired
-            label={t("wifi.form.ssid")}
-            placeholder={t("wifi.form.ssid")}
+            label={t('wifi.form.ssid')}
+            placeholder={t('wifi.form.ssid')}
             value={field.state.value}
             onChangeText={field.handleChange}
             errorMessage={field.state.meta.errors[0]}
@@ -75,17 +75,17 @@ const BleWifiForm = () => {
         name="password"
         validators={{
           onChange: ({ value }) =>
-            value.trim().length === 0 ? "Password is required" : undefined,
+            value.trim().length === 0 ? 'Password is required' : undefined,
         }}
       >
         {(field) => (
           <PrimaryTextInput
             isRequired
-            label={t("wifi.form.password")}
+            label={t('wifi.form.password')}
             placeholder={
-              wifiStatus?.status === "connected"
-                ? t("wifi.form.password_placeholder_connected")
-                : t("wifi.form.password")
+              wifiStatus?.status === 'connected'
+                ? t('wifi.form.password_placeholder_connected')
+                : t('wifi.form.password')
             }
             value={field.state.value}
             secureTextEntry
@@ -105,19 +105,19 @@ const BleWifiForm = () => {
       >
         {([canSubmit, isSubmitting, isDirty]) => (
           <PrimaryButton
-            title={isSubmitting ? t("wifi.form.saving") : t("wifi.form.save")}
+            title={isSubmitting ? t('wifi.form.saving') : t('wifi.form.save')}
             onPress={form.handleSubmit}
             disabled={
-              wifiStatus?.status === "connecting" || !canSubmit || !isDirty
+              wifiStatus?.status === 'connecting' || !canSubmit || !isDirty
             }
           />
         )}
       </form.Subscribe>
 
       {/* Initialize Button */}
-      {wifiStatus?.status === "connected" && (
+      {wifiStatus?.status === 'connected' && (
         <PrimaryButton
-          title={t("wifi.form.initialize")}
+          title={t('wifi.form.initialize')}
           onPress={handleInitialize}
           backgroundColor={currentThemeColors.error}
         />

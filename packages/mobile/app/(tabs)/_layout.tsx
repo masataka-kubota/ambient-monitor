@@ -1,8 +1,8 @@
-import { Entypo } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
-import { useTranslation } from "react-i18next";
+import { Entypo } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
-import { TabBar } from "@/components/navigation";
+import { TabBar } from '@/components/navigation';
 
 const TabLayout = () => {
   const { t } = useTranslation();
@@ -14,11 +14,11 @@ const TabLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarLabel: t("navigation.tabBarLabel.live"),
+          tabBarLabel: t('navigation.tabBarLabel.live'),
           tabBarIcon: ({ color, size, focused }) => (
             <Entypo
               size={size * 1.2}
-              name={focused ? "thermometer" : "flash"}
+              name={focused ? 'thermometer' : 'flash'}
               color={color}
             />
           ),
@@ -27,11 +27,11 @@ const TabLayout = () => {
       <Tabs.Screen
         name="data"
         options={{
-          tabBarLabel: t("navigation.tabBarLabel.history"),
+          tabBarLabel: t('navigation.tabBarLabel.history'),
           tabBarIcon: ({ color, size, focused }) => (
             <Entypo
               size={size * 1.2}
-              name={focused ? "database" : "line-graph"}
+              name={focused ? 'database' : 'line-graph'}
               color={color}
             />
           ),
@@ -40,11 +40,11 @@ const TabLayout = () => {
       <Tabs.Screen
         name="settings"
         options={{
-          tabBarLabel: t("navigation.tabBarLabel.settings"),
+          tabBarLabel: t('navigation.tabBarLabel.settings'),
           tabBarIcon: ({ color, size, focused }) => (
             <Entypo
               size={size * 1.2}
-              name={focused ? "tools" : "cog"}
+              name={focused ? 'tools' : 'cog'}
               color={color}
             />
           ),

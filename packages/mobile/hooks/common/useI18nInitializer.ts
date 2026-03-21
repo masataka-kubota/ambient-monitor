@@ -1,11 +1,11 @@
-import { getLocales } from "expo-localization";
-import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { getLocales } from 'expo-localization';
+import { useAtom } from 'jotai';
+import { useEffect, useState } from 'react';
 
-import { languageAtom } from "@/atoms";
-import { INITIAL_LANGUAGE_CODE } from "@/constants";
-import { initI18n } from "@/i18n";
-import { isSupportedLanguageCode } from "@/utils";
+import { languageAtom } from '@/atoms';
+import { INITIAL_LANGUAGE_CODE } from '@/constants';
+import { initI18n } from '@/i18n';
+import { isSupportedLanguageCode } from '@/utils';
 
 const useI18nInitializer = () => {
   const [storedLanguage, setStoredLanguage] = useAtom(languageAtom);

@@ -1,20 +1,20 @@
-import { memo } from "react";
-import { StyleProp, ViewStyle } from "react-native";
-import Animated from "react-native-reanimated";
+import { memo } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
+import Animated from 'react-native-reanimated';
 
-import { useResolvedTheme } from "@/hooks/common";
-import { useSkeletonAnimation } from "@/hooks/ui";
+import { useResolvedTheme } from '@/hooks/common';
+import { useSkeletonAnimation } from '@/hooks/ui';
 
 interface SkeletonItemProps {
-  width?: ViewStyle["width"];
-  height?: ViewStyle["height"];
-  borderRadius?: ViewStyle["borderRadius"];
-  backgroundColor?: ViewStyle["backgroundColor"];
+  width?: ViewStyle['width'];
+  height?: ViewStyle['height'];
+  borderRadius?: ViewStyle['borderRadius'];
+  backgroundColor?: ViewStyle['backgroundColor'];
   style?: StyleProp<ViewStyle>;
 }
 
 const SkeletonItem = ({
-  width = "100%",
+  width = '100%',
   height = 21,
   borderRadius = 5,
   backgroundColor,

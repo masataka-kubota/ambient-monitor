@@ -1,11 +1,11 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { memo } from "react";
-import { useTranslation } from "react-i18next";
-import { FlatList, Pressable, StyleSheet, View } from "react-native";
-import { Peripheral } from "react-native-ble-manager";
+import { MaterialIcons } from '@expo/vector-icons';
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { Peripheral } from 'react-native-ble-manager';
 
-import { PrimaryButton, ThemeText } from "@/components/ui";
-import { useResolvedTheme } from "@/hooks/common";
+import { PrimaryButton, ThemeText } from '@/components/ui';
+import { useResolvedTheme } from '@/hooks/common';
 
 interface BleNotConnectedUIProps {
   scannedDevices: Peripheral[];
@@ -30,19 +30,19 @@ const BleNotConnectedUI = ({
         <MaterialIcons
           name={
             scannedDevices.length > 0
-              ? "bluetooth-searching"
-              : "bluetooth-disabled"
+              ? 'bluetooth-searching'
+              : 'bluetooth-disabled'
           }
           size={48}
           color={currentThemeColors.mainColor}
         />
         <ThemeText style={styles.title}>
-          {t("ble.notConnected.title")}
+          {t('ble.notConnected.title')}
         </ThemeText>
-        <ThemeText>{t("ble.notConnected.description")}</ThemeText>
+        <ThemeText>{t('ble.notConnected.description')}</ThemeText>
         {isConnecting && (
           <ThemeText style={styles.connectingMessage}>
-            {t("ble.notConnected.connecting")}
+            {t('ble.notConnected.connecting')}
           </ThemeText>
         )}
       </View>
@@ -51,7 +51,7 @@ const BleNotConnectedUI = ({
         <>
           {/* Scan button */}
           <PrimaryButton
-            title={t("ble.notConnected.scanButton")}
+            title={t('ble.notConnected.scanButton')}
             onPress={onScan}
           />
 
@@ -68,7 +68,7 @@ const BleNotConnectedUI = ({
                   color={currentThemeColors.mainColor}
                 />
                 <ThemeText style={styles.emptyText}>
-                  {t("ble.notConnected.emptyList")}
+                  {t('ble.notConnected.emptyList')}
                 </ThemeText>
               </View>
             }
@@ -84,7 +84,7 @@ const BleNotConnectedUI = ({
               >
                 <View style={styles.itemLeftContainer}>
                   <ThemeText style={styles.itemName}>
-                    {item.name || t("ble.notConnected.unknownDevice")}
+                    {item.name || t('ble.notConnected.unknownDevice')}
                   </ThemeText>
                   <ThemeText style={styles.itemId} truncate>
                     {item.id}
@@ -112,19 +112,19 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   headerContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     gap: 10,
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   connectingMessage: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   emptyContainer: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   emptyText: {
     marginTop: 10,
@@ -133,15 +133,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     padding: 16,
     borderRadius: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   itemLeftContainer: {
-    width: "90%",
+    width: '90%',
   },
   itemName: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 16,
   },
   itemId: {

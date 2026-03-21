@@ -1,10 +1,10 @@
-import * as ExpoDevice from "expo-device";
-import { useCallback } from "react";
-import { Permission, PermissionsAndroid, Platform } from "react-native";
+import * as ExpoDevice from 'expo-device';
+import { useCallback } from 'react';
+import { Permission, PermissionsAndroid, Platform } from 'react-native';
 
 const useBlePermissions = () => {
   const requestBlePermissions = useCallback(async () => {
-    if (Platform.OS !== "android") return true;
+    if (Platform.OS !== 'android') return true;
 
     const permissions: Permission[] = [];
 

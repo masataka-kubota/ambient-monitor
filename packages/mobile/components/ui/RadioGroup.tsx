@@ -1,16 +1,16 @@
-import { Ionicons } from "@expo/vector-icons";
-import { memo, useCallback } from "react";
+import { Ionicons } from '@expo/vector-icons';
+import { memo, useCallback } from 'react';
 import {
   Pressable,
   StyleProp,
   StyleSheet,
   TextStyle,
   ViewStyle,
-} from "react-native";
+} from 'react-native';
 
-import ThemeText from "@/components/ui/ThemeText";
-import { useResolvedTheme } from "@/hooks/common";
-import { triggerLightHaptics } from "@/utils";
+import ThemeText from '@/components/ui/ThemeText';
+import { useResolvedTheme } from '@/hooks/common';
+import { triggerLightHaptics } from '@/utils';
 
 interface RadioGroupProps<T extends { id: number; name: string }> {
   data: T[];
@@ -18,7 +18,7 @@ interface RadioGroupProps<T extends { id: number; name: string }> {
   onPress: (id: number) => void;
   buttonStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  itemColor?: TextStyle["color"];
+  itemColor?: TextStyle['color'];
 }
 
 const RadioGroup = <T extends { id: number; name: string }>({
@@ -57,8 +57,8 @@ const RadioGroup = <T extends { id: number; name: string }>({
           <Ionicons
             name={
               item.id === selectedId
-                ? "radio-button-on-sharp"
-                : "radio-button-off-sharp"
+                ? 'radio-button-on-sharp'
+                : 'radio-button-off-sharp'
             }
             size={16}
             color={
@@ -75,9 +75,9 @@ const RadioGroup = <T extends { id: number; name: string }>({
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     borderBottomWidth: 1,
     padding: 15,
     marginVertical: 5,

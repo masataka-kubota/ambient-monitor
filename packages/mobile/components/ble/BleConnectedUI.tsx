@@ -1,11 +1,11 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { memo } from "react";
-import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
-import { Peripheral } from "react-native-ble-manager";
+import { MaterialIcons } from '@expo/vector-icons';
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import { Peripheral } from 'react-native-ble-manager';
 
-import { PrimaryButton, ThemeText } from "@/components/ui";
-import { useResolvedTheme } from "@/hooks/common";
+import { PrimaryButton, ThemeText } from '@/components/ui';
+import { useResolvedTheme } from '@/hooks/common';
 
 interface BleConnectedUIProps {
   connectedDevice: Peripheral;
@@ -30,15 +30,15 @@ const BleConnectedUI = ({
         />
 
         <ThemeText style={styles.title}>
-          {t("ble.connected.title", { deviceName: connectedDevice.name })}
+          {t('ble.connected.title', { deviceName: connectedDevice.name })}
         </ThemeText>
 
-        <ThemeText>{t("ble.connected.description")}</ThemeText>
+        <ThemeText>{t('ble.connected.description')}</ThemeText>
       </View>
 
       {/* Disconnect button */}
       <PrimaryButton
-        title={t("ble.connected.disconnectButton")}
+        title={t('ble.connected.disconnectButton')}
         onPress={() => onDisconnect(connectedDevice.id)}
         backgroundColor={currentThemeColors.error}
       />
@@ -53,12 +53,12 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   headerContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     gap: 10,
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

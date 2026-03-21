@@ -1,10 +1,10 @@
-import { memo } from "react";
-import { useTranslation } from "react-i18next";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Dimensions, StyleSheet, View } from 'react-native';
 
-import IconLabel from "@/components/measurements/IconLabel";
-import { LiveMeasurementSkeleton } from "@/components/skelton";
-import { CShapeGauge, ThemeText } from "@/components/ui";
+import IconLabel from '@/components/measurements/IconLabel';
+import { LiveMeasurementSkeleton } from '@/components/skelton';
+import { CShapeGauge, ThemeText } from '@/components/ui';
 import {
   HUMIDITY_GRADIENTS,
   HUMIDITY_THRESHOLDS,
@@ -12,11 +12,11 @@ import {
   PRESSURE_THRESHOLDS,
   TEMPERATURE_GRADIENTS,
   TEMPERATURE_THRESHOLDS,
-} from "@/constants";
-import { useLiveMeasurement } from "@/hooks/measurements";
-import { formatToLocalTime } from "@/utils";
+} from '@/constants';
+import { useLiveMeasurement } from '@/hooks/measurements';
+import { formatToLocalTime } from '@/utils';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const bigRadius = width * 0.27;
 const smallRadius = width * 0.17;
 
@@ -35,7 +35,7 @@ const HistoryMeasurementView = () => {
 
   // format date
   const locatedDate = new Date(formatToLocalTime(m.createdAt));
-  const formattedDate = t("common.date.format.mdehm", { date: locatedDate });
+  const formattedDate = t('common.date.format.mdehm', { date: locatedDate });
 
   return (
     <View style={styles.wrapper}>
@@ -45,7 +45,7 @@ const HistoryMeasurementView = () => {
           value={m.temperature}
           unit="°C"
           decimalPlaces={1}
-          label={t("common.measurement.temperature")}
+          label={t('common.measurement.temperature')}
           iconName="thermometer"
           radius={bigRadius}
           strokeWidth={bigRadius * 0.2}
@@ -61,7 +61,7 @@ const HistoryMeasurementView = () => {
           <CShapeGauge
             value={m.humidity}
             unit="%"
-            label={t("common.measurement.humidity")}
+            label={t('common.measurement.humidity')}
             iconName="drop"
             radius={smallRadius}
             strokeWidth={smallRadius * 0.2}
@@ -74,7 +74,7 @@ const HistoryMeasurementView = () => {
           <CShapeGauge
             value={m.pressure}
             unit="hPa"
-            label={t("common.measurement.pressure")}
+            label={t('common.measurement.pressure')}
             iconName="gauge"
             radius={smallRadius}
             strokeWidth={smallRadius * 0.2}
@@ -89,14 +89,14 @@ const HistoryMeasurementView = () => {
         {/* time */}
         <IconLabel
           iconName="schedule"
-          text={t("live.lastUpdate", { date: formattedDate })}
+          text={t('live.lastUpdate', { date: formattedDate })}
         />
 
         {/* source */}
         <IconLabel
-          iconName={source === "ble" ? "bluetooth" : "cloud"}
+          iconName={source === 'ble' ? 'bluetooth' : 'cloud'}
           text={
-            source === "ble" ? t("live.source.ble") : t("live.source.cloud")
+            source === 'ble' ? t('live.source.ble') : t('live.source.cloud')
           }
         />
       </View>
@@ -107,22 +107,22 @@ const HistoryMeasurementView = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   chartContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   noteContainer: {
     marginVertical: 20,
     gap: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
 

@@ -1,6 +1,6 @@
-import { Entypo } from "@expo/vector-icons";
+import { Entypo } from '@expo/vector-icons';
 
-import { MeasurementKey } from "@/types/measurementTypes";
+import { MeasurementKey } from '@/types/measurementTypes';
 
 export interface MeasurementTabItem {
   key: MeasurementKey;

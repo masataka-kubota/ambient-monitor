@@ -1,23 +1,23 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { useAtomValue } from "jotai";
-import { memo } from "react";
-import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { MaterialIcons } from '@expo/vector-icons';
+import { useAtomValue } from 'jotai';
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
 
-import { wifiStatusAtom } from "@/atoms";
-import { ThemeText } from "@/components/ui";
-import { useResolvedTheme } from "@/hooks/common";
-import { WifiStatusCode } from "@/types";
+import { wifiStatusAtom } from '@/atoms';
+import { ThemeText } from '@/components/ui';
+import { useResolvedTheme } from '@/hooks/common';
+import { WifiStatusCode } from '@/types';
 
 const WIFI_STATUS_UI: Record<
   WifiStatusCode,
   { icon: keyof typeof MaterialIcons.glyphMap }
 > = {
-  not_configured: { icon: "wifi-off" },
-  configured: { icon: "settings" },
-  connecting: { icon: "autorenew" },
-  connected: { icon: "wifi" },
-  failed: { icon: "error-outline" },
+  not_configured: { icon: 'wifi-off' },
+  configured: { icon: 'settings' },
+  connecting: { icon: 'autorenew' },
+  connected: { icon: 'wifi' },
+  failed: { icon: 'error-outline' },
 };
 
 const BleWifiStatus = () => {
@@ -33,7 +33,7 @@ const BleWifiStatus = () => {
           size={48}
           color={currentThemeColors.mainColor}
         />
-        <ThemeText>{t("wifi.status.none")}</ThemeText>
+        <ThemeText>{t('wifi.status.none')}</ThemeText>
       </View>
     );
   }
@@ -50,7 +50,7 @@ const BleWifiStatus = () => {
       />
       <ThemeText>
         {t(statusKey)}
-        {wifiStatus.ssid ? ` (${wifiStatus.ssid})` : ""}
+        {wifiStatus.ssid ? ` (${wifiStatus.ssid})` : ''}
       </ThemeText>
     </View>
   );
@@ -58,7 +58,7 @@ const BleWifiStatus = () => {
 
 const styles = StyleSheet.create({
   statusContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     gap: 8,
     marginVertical: 20,
   },

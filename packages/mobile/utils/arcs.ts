@@ -1,4 +1,4 @@
-import { END_ANGLE, START_ANGLE } from "@/constants";
+import { END_ANGLE, START_ANGLE } from '@/constants';
 
 export const describeArc = (r: number, center: number) => {
   const polarToCartesian = (angleDeg: number) => {

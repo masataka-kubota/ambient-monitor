@@ -1,5 +1,5 @@
-import { LanguageCode } from "@/types/languageTypes";
-import { ThemeMode } from "@/types/themeTypes";
+import { LanguageCode } from '@/types/languageTypes';
+import { ThemeMode } from '@/types/themeTypes';
 
 export interface RadioGroupOptions {
   id: number;

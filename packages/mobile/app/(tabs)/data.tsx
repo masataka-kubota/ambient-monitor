@@ -1,8 +1,8 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
-import { KeyboardAvoidingScrollableView } from "@/components/layouts";
-import { DataMeasurementsView } from "@/components/measurements";
-import { Heading } from "@/components/ui";
+import { KeyboardAvoidingScrollableView } from '@/components/layouts';
+import { DataMeasurementsView } from '@/components/measurements';
+import { Heading } from '@/components/ui';
 
 const Data = () => {
   const { t } = useTranslation();
@@ -10,7 +10,7 @@ const Data = () => {
   return (
     <KeyboardAvoidingScrollableView>
       <Heading iconLib="Entypo" iconName="line-graph" align="center">
-        {t("data.title")}
+        {t('data.title')}
       </Heading>
       <DataMeasurementsView />
     </KeyboardAvoidingScrollableView>

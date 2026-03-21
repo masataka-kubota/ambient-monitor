@@ -1,8 +1,8 @@
-import { memo } from "react";
-import { StyleSheet, View } from "react-native";
+import { memo } from 'react';
+import { StyleSheet, View } from 'react-native';
 
-import CShapeGaugeSkeleton from "@/components/skelton/CShapeGaugeSkeleton";
-import SkeletonItem from "@/components/skelton/SkeletonItem";
+import CShapeGaugeSkeleton from '@/components/skelton/CShapeGaugeSkeleton';
+import SkeletonItem from '@/components/skelton/SkeletonItem';
 
 interface LiveMeasurementSkeletonProps {
   bigRadius: number;
@@ -50,17 +50,17 @@ const LiveMeasurementSkeleton = ({
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   chartContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   timeWrapper: {
     marginTop: 20,
