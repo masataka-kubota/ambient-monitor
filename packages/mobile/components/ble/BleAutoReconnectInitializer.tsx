@@ -1,6 +1,6 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import { useBleAutoReconnect, useBleConnect } from "@/hooks/ble";
+import { useBleAutoReconnect, useBleConnect } from '@/hooks/ble';
 
 const BleAutoReconnectInitializer = () => {
   const { autoConnectToDevice } = useBleConnect();

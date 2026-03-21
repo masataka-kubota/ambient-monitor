@@ -1,2 +1,2 @@
-export * from "./dateFormatter";
-export * from "./initI18n";
+export * from './dateFormatter';
+export * from './initI18n';

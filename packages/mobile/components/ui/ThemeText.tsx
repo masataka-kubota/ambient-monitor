@@ -1,7 +1,7 @@
-import { memo } from "react";
-import { StyleSheet, Text, TextProps } from "react-native";
+import { memo } from 'react';
+import { StyleSheet, Text, TextProps } from 'react-native';
 
-import { useResolvedTheme } from "@/hooks/common";
+import { useResolvedTheme } from '@/hooks/common';
 
 interface ThemeTextProps extends TextProps {
   children: React.ReactNode;
@@ -25,7 +25,7 @@ const ThemeText = ({
         style,
       ]}
       numberOfLines={truncate ? 1 : undefined}
-      ellipsizeMode={truncate ? "tail" : undefined}
+      ellipsizeMode={truncate ? 'tail' : undefined}
       {...props}
     >
       {children}

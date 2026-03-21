@@ -1,5 +1,5 @@
-import { SUPPORTED_LANGUAGES } from "@/constants";
-import { LanguageCode } from "@/types";
+import { SUPPORTED_LANGUAGES } from '@/constants';
+import { LanguageCode } from '@/types';
 
 export const isSupportedLanguageCode = (
   value: string | null,

@@ -1,4 +1,4 @@
-import { MEASUREMENT_KEYS, MEASUREMENT_RANGES } from "@/constants";
+import { MEASUREMENT_KEYS, MEASUREMENT_RANGES } from '@/constants';
 
 export type MeasurementKey = (typeof MEASUREMENT_KEYS)[number];
 
@@ -20,4 +20,4 @@ export interface BleMeasurement {
   receivedAt: number;
 }
 
-export type BleDataAvailability = "unknown" | "usable" | "unusable";
+export type BleDataAvailability = 'unknown' | 'usable' | 'unusable';

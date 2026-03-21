@@ -1,8 +1,8 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
-import { KeyboardAvoidingScrollableView } from "@/components/layouts";
-import { LiveMeasurementView } from "@/components/measurements";
-import { Heading } from "@/components/ui";
+import { KeyboardAvoidingScrollableView } from '@/components/layouts';
+import { LiveMeasurementView } from '@/components/measurements';
+import { Heading } from '@/components/ui';
 
 const Index = () => {
   const { t } = useTranslation();
@@ -10,7 +10,7 @@ const Index = () => {
   return (
     <KeyboardAvoidingScrollableView>
       <Heading iconLib="Entypo" iconName="flash" align="center">
-        {t("live.title")}
+        {t('live.title')}
       </Heading>
       <LiveMeasurementView />
     </KeyboardAvoidingScrollableView>

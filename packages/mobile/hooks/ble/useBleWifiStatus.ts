@@ -1,19 +1,19 @@
-import { useAtomValue, useSetAtom } from "jotai";
-import { useCallback } from "react";
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useCallback } from 'react';
 
-import { connectedDeviceAtom, wifiStatusAtom } from "@/atoms";
+import { connectedDeviceAtom, wifiStatusAtom } from '@/atoms';
 import {
   BLE_SERVICE_UUID,
   STATUS_MAP,
   WIFI_STATUS_CHAR_UUID,
-} from "@/constants/ble";
-import { bleManager } from "@/lib";
-import { WifiStatus } from "@/types";
+} from '@/constants/ble';
+import { bleManager } from '@/lib';
+import { WifiStatus } from '@/types';
 
 const parse = (data: number[]): WifiStatus => {
   const buf = Buffer.from(data);
-  const status = STATUS_MAP[buf.readUInt8(0)] ?? "not_configured";
-  const ssid = buf.toString("utf8", 1);
+  const status = STATUS_MAP[buf.readUInt8(0)] ?? 'not_configured';
+  const ssid = buf.toString('utf8', 1);
   return { status, ssid };
 };
 
@@ -34,7 +34,7 @@ const useBleWifiStatus = () => {
       setWifiStatus(status);
       return status;
     } catch (e) {
-      console.error("Failed to read WiFi status", e);
+      console.error('Failed to read WiFi status', e);
       setWifiStatus(null);
       return null;
     }

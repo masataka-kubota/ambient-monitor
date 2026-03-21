@@ -1,17 +1,17 @@
-import { Entypo } from "@expo/vector-icons";
-import { memo, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { Entypo } from '@expo/vector-icons';
+import { memo, useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 import Animated, {
   useAnimatedProps,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
-import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
+} from 'react-native-reanimated';
+import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 
-import ThemeText from "@/components/ui/ThemeText";
-import { END_ANGLE, START_ANGLE } from "@/constants";
-import { useResolvedTheme } from "@/hooks/common";
-import { describeArc } from "@/utils";
+import ThemeText from '@/components/ui/ThemeText';
+import { END_ANGLE, START_ANGLE } from '@/constants';
+import { useResolvedTheme } from '@/hooks/common';
+import { describeArc } from '@/utils';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -27,7 +27,7 @@ const getGradientForValue = (
   thresholds: number[],
 ) => {
   if (gradients.length !== thresholds.length) {
-    console.warn("gradientColors and thresholds count mismatch");
+    console.warn('gradientColors and thresholds count mismatch');
   }
 
   for (let i = 0; i < thresholds.length; i++) {
@@ -51,7 +51,7 @@ interface CShapeGaugeProps {
 
 const CShapeGauge = ({
   value,
-  unit = "",
+  unit = '',
   decimalPlaces = 0,
   label,
   iconName,
@@ -148,15 +148,15 @@ const CShapeGauge = ({
 
 const styles = StyleSheet.create({
   wrapper: {
-    alignItems: "center",
+    alignItems: 'center',
     margin: 5,
   },
   centered: {
-    position: "absolute",
-    alignItems: "center",
+    position: 'absolute',
+    alignItems: 'center',
   },
   value: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 30,
     lineHeight: 30,
   },
@@ -165,13 +165,13 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     bottom: 0,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   labelIcon: {
     marginRight: 3,
   },
   label: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

@@ -1,16 +1,16 @@
-import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { memo, useState } from "react";
-import { LayoutChangeEvent, StyleSheet, View } from "react-native";
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { memo, useState } from 'react';
+import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import TabBarItem from "@/components/navigation/TabBarItem";
-import { useResolvedTheme } from "@/hooks/common";
-import { triggerLightHaptics } from "@/utils";
+import TabBarItem from '@/components/navigation/TabBarItem';
+import { useResolvedTheme } from '@/hooks/common';
+import { triggerLightHaptics } from '@/utils';
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const { currentThemeColors } = useResolvedTheme();
@@ -62,7 +62,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
-          typeof options.tabBarLabel === "string"
+          typeof options.tabBarLabel === 'string'
             ? options.tabBarLabel
             : (options.title ?? route.name);
 
@@ -80,7 +80,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           triggerLightHaptics();
 
           const event = navigation.emit({
-            type: "tabPress",
+            type: 'tabPress',
             target: route.key,
             canPreventDefault: true,
           });
@@ -92,7 +92,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 
         const onLongPress = () => {
           navigation.emit({
-            type: "tabLongPress",
+            type: 'tabLongPress',
             target: route.key,
           });
         };
@@ -125,23 +125,23 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 
 const styles = StyleSheet.create({
   tabbar: {
-    position: "absolute",
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "center",
-    width: "60%",
+    position: 'absolute',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    width: '60%',
     maxWidth: 400,
-    marginHorizontal: "auto",
+    marginHorizontal: 'auto',
     paddingVertical: 10,
     borderRadius: 40,
-    borderCurve: "continuous",
+    borderCurve: 'continuous',
     shadowOffset: { width: 0, height: 5 },
     shadowRadius: 3,
     shadowOpacity: 0.2,
     elevation: 2,
   },
   indicator: {
-    position: "absolute",
+    position: 'absolute',
     borderRadius: 30,
     marginHorizontal: 10,
   },

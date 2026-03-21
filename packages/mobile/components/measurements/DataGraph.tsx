@@ -1,25 +1,25 @@
-import { memo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { memo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Dimensions, StyleSheet, View } from 'react-native';
 
-import MeasurementLineChart from "@/components/measurements/MeasurementLineChart";
-import { DataGraphSkeleton } from "@/components/skelton";
-import { IconTabs, ThemeText } from "@/components/ui";
-import { MEASUREMENT_SETTINGS } from "@/constants";
-import { useResolvedTheme } from "@/hooks/common";
-import { useMeasurements } from "@/hooks/measurements";
-import { MeasurementKey, MeasurementRange, MeasurementTabItem } from "@/types";
-import { getChartData } from "@/utils/measurements";
+import MeasurementLineChart from '@/components/measurements/MeasurementLineChart';
+import { DataGraphSkeleton } from '@/components/skelton';
+import { IconTabs, ThemeText } from '@/components/ui';
+import { MEASUREMENT_SETTINGS } from '@/constants';
+import { useResolvedTheme } from '@/hooks/common';
+import { useMeasurements } from '@/hooks/measurements';
+import { MeasurementKey, MeasurementRange, MeasurementTabItem } from '@/types';
+import { getChartData } from '@/utils/measurements';
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 
 const WIDTH = width - 100;
 const HEIGHT = height * 0.4;
 
 export const PERIOD_MINUTES_MAP: Record<MeasurementRange, number> = {
-  "1d": 30, // 30 minutes
-  "7d": 240, // 4 hour
-  "30d": 720, // 12 hour
+  '1d': 30, // 30 minutes
+  '7d': 240, // 4 hour
+  '30d': 720, // 12 hour
 };
 
 interface DataGraphProps {
@@ -30,25 +30,25 @@ const DataGraph = ({ period }: DataGraphProps) => {
   const { t } = useTranslation();
   const { currentThemeColors } = useResolvedTheme();
 
-  const [selectedKey, setSelectedKey] = useState<MeasurementKey>("temperature");
+  const [selectedKey, setSelectedKey] = useState<MeasurementKey>('temperature');
 
   const { data, isLoading } = useMeasurements(period);
 
   const tabs: MeasurementTabItem[] = [
     {
-      key: "temperature",
-      label: t("common.measurement.temperature"),
-      iconName: "thermometer",
+      key: 'temperature',
+      label: t('common.measurement.temperature'),
+      iconName: 'thermometer',
     },
     {
-      key: "humidity",
-      label: t("common.measurement.humidity"),
-      iconName: "drop",
+      key: 'humidity',
+      label: t('common.measurement.humidity'),
+      iconName: 'drop',
     },
     {
-      key: "pressure",
-      label: t("common.measurement.pressure"),
-      iconName: "gauge",
+      key: 'pressure',
+      label: t('common.measurement.pressure'),
+      iconName: 'gauge',
     },
   ];
 

@@ -1,8 +1,8 @@
-import { useAtomValue } from "jotai";
-import { useEffect } from "react";
+import { useAtomValue } from 'jotai';
+import { useEffect } from 'react';
 
-import { connectedDeviceIdAtom } from "@/atoms";
-import { bleManager } from "@/lib";
+import { connectedDeviceIdAtom } from '@/atoms';
+import { bleManager } from '@/lib';
 
 const useBleAutoReconnect = (
   autoConnectToDevice: (deviceId: string) => Promise<void>,
@@ -14,7 +14,7 @@ const useBleAutoReconnect = (
 
     const subscription = bleManager.onDidUpdateState(
       async ({ state }: { state: string }) => {
-        if (state === "on") {
+        if (state === 'on') {
           await autoConnectToDevice(connectedDeviceId);
         }
       },

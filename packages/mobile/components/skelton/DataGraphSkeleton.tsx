@@ -1,9 +1,9 @@
-import { memo } from "react";
-import { StyleSheet, View } from "react-native";
-import { LineChart } from "react-native-gifted-charts";
+import { memo } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { LineChart } from 'react-native-gifted-charts';
 
-import SkeletonItem from "@/components/skelton/SkeletonItem";
-import { useResolvedTheme } from "@/hooks/common";
+import SkeletonItem from '@/components/skelton/SkeletonItem';
+import { useResolvedTheme } from '@/hooks/common';
 
 const PADDING_HORIZONTAL = 20;
 const GAP = 5;
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tabsSkeletonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginBottom: 30,
     paddingVertical: 8,
     gap: GAP,

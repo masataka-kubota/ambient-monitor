@@ -1,26 +1,26 @@
-import { Ionicons } from "@expo/vector-icons";
-import { memo, useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Ionicons } from '@expo/vector-icons';
+import { memo, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Pressable,
   StyleSheet,
   TextInput,
   TextInputProps,
   View,
-} from "react-native";
+} from 'react-native';
 
-import ThemeText from "@/components/ui/ThemeText";
-import { useResolvedTheme } from "@/hooks/common";
+import ThemeText from '@/components/ui/ThemeText';
+import { useResolvedTheme } from '@/hooks/common';
 
 interface PrimaryTextInputProps extends TextInputProps {
   isRequired?: boolean;
   label?: string;
   labelDescription?: string;
-  placeholder?: TextInputProps["placeholder"];
-  value?: TextInputProps["value"];
-  secureTextEntry?: TextInputProps["secureTextEntry"];
-  inputMode?: TextInputProps["inputMode"];
-  onChangeText?: TextInputProps["onChangeText"];
+  placeholder?: TextInputProps['placeholder'];
+  value?: TextInputProps['value'];
+  secureTextEntry?: TextInputProps['secureTextEntry'];
+  inputMode?: TextInputProps['inputMode'];
+  onChangeText?: TextInputProps['onChangeText'];
   errorMessage?: string;
 }
 
@@ -31,7 +31,7 @@ const PrimaryTextInput = ({
   placeholder,
   value,
   secureTextEntry = false,
-  inputMode = "text",
+  inputMode = 'text',
   onChangeText,
   errorMessage,
 }: PrimaryTextInputProps) => {
@@ -54,7 +54,7 @@ const PrimaryTextInput = ({
           onPress={togglePasswordVisibility}
         >
           <Ionicons
-            name={passwordVisible ? "eye-off" : "eye"}
+            name={passwordVisible ? 'eye-off' : 'eye'}
             size={25}
             color={currentThemeColors.lightColor}
           />
@@ -72,7 +72,7 @@ const PrimaryTextInput = ({
 
           {isRequired && (
             <ThemeText style={styles.required}>
-              {t("common.form.required")}
+              {t('common.form.required')}
             </ThemeText>
           )}
         </View>
@@ -86,7 +86,7 @@ const PrimaryTextInput = ({
       <View>
         <TextInput
           placeholder={placeholder}
-          value={value ?? ""}
+          value={value ?? ''}
           inputMode={inputMode}
           secureTextEntry={secureTextEntry && !passwordVisible}
           style={[
@@ -119,19 +119,19 @@ const PrimaryTextInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
   },
   input: {
     fontSize: 16,
-    width: "100%",
-    height: "auto",
+    width: '100%',
+    height: 'auto',
     marginBottom: 20,
     padding: 15,
     borderRadius: 10,
     outlineWidth: 0,
   },
   visibilityToggle: {
-    position: "absolute",
+    position: 'absolute',
     right: 10,
     top: 12,
   },
@@ -146,16 +146,16 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   labelContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   label: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   required: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginLeft: 8,
     opacity: 0.7,
   },

@@ -1,21 +1,21 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback } from 'react';
 import {
   Pressable,
   StyleProp,
   StyleSheet,
   Text,
   ViewStyle,
-} from "react-native";
+} from 'react-native';
 
-import { useResolvedTheme } from "@/hooks/common";
-import { triggerLightHaptics } from "@/utils";
+import { useResolvedTheme } from '@/hooks/common';
+import { triggerLightHaptics } from '@/utils';
 
 interface PrimaryButtonProps {
   title: string;
   onPress: () => void;
   disabled?: boolean;
   isPending?: boolean;
-  backgroundColor?: ViewStyle["backgroundColor"];
+  backgroundColor?: ViewStyle['backgroundColor'];
   style?: StyleProp<ViewStyle>;
 }
 
@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
     marginVertical: 10,
-    alignSelf: "center",
-    minWidth: "70%",
+    alignSelf: 'center',
+    minWidth: '70%',
     // shadow
     shadowOffset: {
       width: 0,
@@ -84,9 +84,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   buttonText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   disabledButton: {
     opacity: 0.3,

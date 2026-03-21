@@ -1,12 +1,12 @@
-import { memo, useState } from "react";
-import { View } from "react-native";
+import { memo, useState } from 'react';
+import { View } from 'react-native';
 
-import DataGraph from "@/components/measurements/DataGraph";
-import PeriodTabs from "@/components/measurements/PeriodTabs";
-import { MeasurementRange } from "@/types";
+import DataGraph from '@/components/measurements/DataGraph';
+import PeriodTabs from '@/components/measurements/PeriodTabs';
+import { MeasurementRange } from '@/types';
 
 const DataMeasurementsView = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState<MeasurementRange>("1d");
+  const [selectedPeriod, setSelectedPeriod] = useState<MeasurementRange>('1d');
 
   return (
     <View>

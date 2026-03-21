@@ -1,6 +1,6 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect } from 'react';
 
-import { useBleWifiStatus } from "@/hooks/ble";
+import { useBleWifiStatus } from '@/hooks/ble';
 
 const WifiWifiStatusSync = () => {
   const { fetchWifiStatus } = useBleWifiStatus();

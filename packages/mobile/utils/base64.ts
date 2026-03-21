@@ -1,7 +1,7 @@
 export const base64 = {
   encode: (str: string): string => {
     const utf8Bytes = new TextEncoder().encode(str);
-    let binary = "";
+    let binary = '';
     utf8Bytes.forEach((b) => (binary += String.fromCharCode(b)));
     return btoa(binary);
   },

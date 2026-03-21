@@ -1,19 +1,19 @@
-import { useAtomValue } from "jotai";
-import { useTranslation } from "react-i18next";
+import { useAtomValue } from 'jotai';
+import { useTranslation } from 'react-i18next';
 
 import {
   connectedDeviceAtom,
   connectedDeviceIdAtom,
   scannedDevicesAtom,
-} from "@/atoms";
+} from '@/atoms';
 import {
   BleConnectedUI,
   BleNotConnectedUI,
   BleReconnectUI,
-} from "@/components/ble";
-import { KeyboardAvoidingScrollableView } from "@/components/layouts";
-import { HeaderNavigation } from "@/components/navigation";
-import { useBleConnect, useBlePermissions, useBleScan } from "@/hooks/ble";
+} from '@/components/ble';
+import { KeyboardAvoidingScrollableView } from '@/components/layouts';
+import { HeaderNavigation } from '@/components/navigation';
+import { useBleConnect, useBlePermissions, useBleScan } from '@/hooks/ble';
 
 const BleSettings = () => {
   const { requestBlePermissions } = useBlePermissions();
@@ -32,7 +32,7 @@ const BleSettings = () => {
 
   return (
     <>
-      <HeaderNavigation title={t("ble.title")} />
+      <HeaderNavigation title={t('ble.title')} />
       <KeyboardAvoidingScrollableView hasHeader={true}>
         {connectedDevice ? (
           <BleConnectedUI

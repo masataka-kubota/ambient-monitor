@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
+import { useQuery } from '@tanstack/react-query';
+import { useAtomValue } from 'jotai';
 
-import { bleDataAvailabilityAtom, selectedDeviceIdAtom } from "@/atoms";
-import { apiClient } from "@/lib";
+import { bleDataAvailabilityAtom, selectedDeviceIdAtom } from '@/atoms';
+import { apiClient } from '@/lib';
 
 const useCloudLiveMeasurement = () => {
   const selectedDeviceId = useAtomValue(selectedDeviceIdAtom);
@@ -16,17 +16,17 @@ const useCloudLiveMeasurement = () => {
     const data = await res.json();
 
     if (!data.success) {
-      throw new Error("Failed to fetch measurements");
+      throw new Error('Failed to fetch measurements');
     }
 
     return data.data; // Return the latest measurement
   };
 
   const { data, isLoading } = useQuery({
-    queryKey: ["liveMeasurement", selectedDeviceId],
+    queryKey: ['liveMeasurement', selectedDeviceId],
     queryFn: onFetchMeasurements,
     refetchInterval: 5 * 60 * 1000,
-    enabled: bleDataAvailability === "unusable",
+    enabled: bleDataAvailability === 'unusable',
   });
 
   return { data, isLoading };

@@ -1,11 +1,11 @@
-import { memo, useEffect } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { memo, useEffect } from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 interface TabBarItemProps {
   onPress: () => void;
@@ -67,13 +67,13 @@ const TabBarItem = ({
 
 const styles = StyleSheet.create({
   tabbarItem: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     flex: 1,
   },
   tabbarText: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

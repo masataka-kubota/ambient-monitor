@@ -1,16 +1,16 @@
-import { useAtomValue } from "jotai";
-import { useColorScheme } from "react-native";
+import { useAtomValue } from 'jotai';
+import { useColorScheme } from 'react-native';
 
-import { themeModeAtom } from "@/atoms";
-import { APP_THEME_COLORS } from "@/constants";
+import { themeModeAtom } from '@/atoms';
+import { APP_THEME_COLORS } from '@/constants';
 
 const useResolvedTheme = () => {
-  const system = useColorScheme() ?? "light";
+  const system = useColorScheme() ?? 'light';
   const mode = useAtomValue(themeModeAtom);
 
-  const finalScheme = mode === "system" ? system : mode;
+  const finalScheme = mode === 'system' ? system : mode;
 
-  const isDarkMode = finalScheme === "dark";
+  const isDarkMode = finalScheme === 'dark';
 
   const currentThemeColors = APP_THEME_COLORS[finalScheme];
 

@@ -1,9 +1,9 @@
-import { useAtom } from "jotai";
-import { memo, useCallback } from "react";
+import { useAtom } from 'jotai';
+import { memo, useCallback } from 'react';
 
-import { themeModeAtom } from "@/atoms";
-import { RadioGroup } from "@/components/ui";
-import { useThemeOptions } from "@/hooks/settings";
+import { themeModeAtom } from '@/atoms';
+import { RadioGroup } from '@/components/ui';
+import { useThemeOptions } from '@/hooks/settings';
 
 const ThemeSetting = () => {
   const [themeMode, setThemeMode] = useAtom(themeModeAtom);

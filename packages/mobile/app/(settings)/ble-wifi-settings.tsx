@@ -1,15 +1,15 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
-import { BleWifiForm, BleWifiStatus } from "@/components/ble";
-import { KeyboardAvoidingScrollableView } from "@/components/layouts";
-import { HeaderNavigation } from "@/components/navigation";
+import { BleWifiForm, BleWifiStatus } from '@/components/ble';
+import { KeyboardAvoidingScrollableView } from '@/components/layouts';
+import { HeaderNavigation } from '@/components/navigation';
 
 const BleWifiSettings = () => {
   const { t } = useTranslation();
 
   return (
     <>
-      <HeaderNavigation title={t("wifi.title")} />
+      <HeaderNavigation title={t('wifi.title')} />
       <KeyboardAvoidingScrollableView hasHeader={true}>
         {/* Status */}
         <BleWifiStatus />

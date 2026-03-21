@@ -1,15 +1,15 @@
-import { useSetAtom } from "jotai";
-import { useCallback, useState } from "react";
-import { Platform } from "react-native";
-import { Peripheral } from "react-native-ble-manager";
+import { useSetAtom } from 'jotai';
+import { useCallback, useState } from 'react';
+import { Platform } from 'react-native';
+import { Peripheral } from 'react-native-ble-manager';
 
 import {
   connectedDeviceAtom,
   connectedDeviceIdAtom,
   scannedDevicesAtom,
-} from "@/atoms";
-import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from "@/constants/ble";
-import { bleManager } from "@/lib";
+} from '@/atoms';
+import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';
+import { bleManager } from '@/lib';
 
 export const getDeviceData = async (
   deviceId: string,
@@ -24,7 +24,7 @@ const getBleErrorMessage = (error: unknown): string =>
   String((error as any)?.message ?? (error as any)?.error ?? error);
 
 const isExpectedBleError = (error: unknown): boolean =>
-  getBleErrorMessage(error).toLowerCase().includes("disconnect");
+  getBleErrorMessage(error).toLowerCase().includes('disconnect');
 
 const useBleConnect = () => {
   const setConnectedIdDevice = useSetAtom(connectedDeviceIdAtom);
@@ -36,7 +36,7 @@ const useBleConnect = () => {
     async (deviceId: string) => {
       await bleManager.connect(deviceId);
       await bleManager.retrieveServices(deviceId);
-      if (Platform.OS === "android") await bleManager.requestMTU(deviceId, 100);
+      if (Platform.OS === 'android') await bleManager.requestMTU(deviceId, 100);
       const deviceData = await getDeviceData(deviceId);
       setConnectedDevice(deviceData);
     },
@@ -52,7 +52,7 @@ const useBleConnect = () => {
         setConnectedIdDevice(deviceId);
         setScannedDevices((prev) => prev.filter((d) => d.id !== deviceId));
       } catch (error) {
-        console.error("Connection failed:", error);
+        console.error('Connection failed:', error);
       } finally {
         setIsConnecting(false);
       }
@@ -73,14 +73,14 @@ const useBleConnect = () => {
           // is already connected from another phone. This is an expected case.
           if (__DEV__) {
             console.info(
-              "[BLE] expected reconnect failure is dev:",
+              '[BLE] expected reconnect failure is dev:',
               getBleErrorMessage(error),
             );
           }
           return;
         }
 
-        console.error("[BLE] auto reconnect failed:", error);
+        console.error('[BLE] auto reconnect failed:', error);
       }
     },
     [performBleConnect],

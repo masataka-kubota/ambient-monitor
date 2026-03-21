@@ -1,9 +1,9 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { memo } from "react";
-import { StyleSheet, View } from "react-native";
+import { MaterialIcons } from '@expo/vector-icons';
+import { memo } from 'react';
+import { StyleSheet, View } from 'react-native';
 
-import { ThemeText } from "@/components/ui";
-import { useResolvedTheme } from "@/hooks/common";
+import { ThemeText } from '@/components/ui';
+import { useResolvedTheme } from '@/hooks/common';
 
 interface IconLabelProps {
   iconName: keyof typeof MaterialIcons.glyphMap;
@@ -28,8 +28,8 @@ const IconLabel = ({ iconName, text, color }: IconLabelProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
     marginRight: 6,

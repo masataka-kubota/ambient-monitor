@@ -1,17 +1,17 @@
-import { memo } from "react";
+import { memo } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   View,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   KeyboardState,
   useAnimatedKeyboard,
   useAnimatedStyle,
-} from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const HEADER_HEIGHT = 50;
 
@@ -89,16 +89,16 @@ const KeyboardAvoidingScrollableView = ({
 const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   scrollView: {
     flex: 1,
-    width: "100%",
+    width: '100%',
   },
   scrollContent: {
     flexGrow: 1,
-    minHeight: "101%",
+    minHeight: '101%',
   },
   container: {
     flex: 1,

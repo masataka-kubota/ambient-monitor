@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack } from 'expo-router';
 
 const SettingsLayout = () => {
   return <Stack screenOptions={{ headerShown: false }} />;

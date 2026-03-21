@@ -1,10 +1,10 @@
-import { useAtom } from "jotai";
-import { memo, useCallback } from "react";
-import { useTranslation } from "react-i18next";
+import { useAtom } from 'jotai';
+import { memo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { languageAtom } from "@/atoms";
-import { RadioGroup } from "@/components/ui";
-import { LANGUAGE_CODE_OPTIONS } from "@/constants";
+import { languageAtom } from '@/atoms';
+import { RadioGroup } from '@/components/ui';
+import { LANGUAGE_CODE_OPTIONS } from '@/constants';
 
 const LangSetting = () => {
   const { i18n } = useTranslation();
