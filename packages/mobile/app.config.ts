@@ -26,7 +26,6 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/icons/icon.png',
   scheme: 'dev.ambientmonitor',
   userInterfaceStyle: 'automatic',
-  newArchEnabled: true,
 
   ios: {
     supportsTablet: true,
@@ -45,7 +44,6 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
       monochromeImage: './assets/icons/adaptive-icon-monochrome.png',
     },
     package: getUniqueIdentifier(),
-    edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
     softwareKeyboardLayoutMode: 'pan',
   },
@@ -58,6 +56,8 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     'expo-router',
     'expo-localization',
+    'expo-font',
+    'expo-web-browser',
     [
       'expo-splash-screen',
       {
