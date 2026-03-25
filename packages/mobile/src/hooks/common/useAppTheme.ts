@@ -8,10 +8,9 @@ const useAppTheme = () => {
   const systemScheme = useColorScheme();
   const userMode = useAtomValue(themeModeAtom);
 
-  // `useColorScheme` can return 'light', 'dark', or 'unspecified' (if the system color scheme is unavailable).
-  // If system color scheme is unavailable (e.g., on web), default to 'light'.
-  const resolvedSystemScheme =
-    systemScheme === 'unspecified' ? 'light' : systemScheme;
+  // `useColorScheme` can return 'light', 'dark', 'unspecified', or null/undefined.
+  // Treat anything other than 'dark' as 'light' to be defensive.
+  const resolvedSystemScheme = systemScheme === 'dark' ? 'dark' : 'light';
 
   const activeScheme = userMode === 'system' ? resolvedSystemScheme : userMode;
   const activeThemeColors = APP_THEME_COLORS[activeScheme];
