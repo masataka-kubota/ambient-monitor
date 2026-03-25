@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { triggerLightHaptics } from '@/utils';
 
 interface RadioGroupProps<T extends { id: number; name: string }> {
@@ -28,7 +28,7 @@ const RadioGroup = <T extends { id: number; name: string }>({
   buttonStyle,
   textStyle,
 }: RadioGroupProps<T>) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const handlePress = useCallback(
     (id: number) => {
@@ -45,7 +45,7 @@ const RadioGroup = <T extends { id: number; name: string }>({
           key={item.id}
           style={[
             styles.button,
-            { borderBottomColor: currentThemeColors.lightColor },
+            { borderBottomColor: activeThemeColors.lightColor },
             buttonStyle,
           ]}
           onPress={() => handlePress(item.id)}
@@ -63,8 +63,8 @@ const RadioGroup = <T extends { id: number; name: string }>({
             size={16}
             color={
               item.id === selectedId
-                ? currentThemeColors.mainColor
-                : currentThemeColors.mediumColor
+                ? activeThemeColors.mainColor
+                : activeThemeColors.mediumColor
             }
           />
         </Pressable>

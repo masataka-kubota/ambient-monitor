@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { Peripheral } from 'react-native-ble-manager';
 
 import { PrimaryButton, ThemeText } from '@/components/ui';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 interface BleConnectedUIProps {
   connectedDevice: Peripheral;
@@ -16,7 +16,7 @@ const BleConnectedUI = ({
   connectedDevice,
   onDisconnect,
 }: BleConnectedUIProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
   const { t } = useTranslation();
 
   return (
@@ -26,7 +26,7 @@ const BleConnectedUI = ({
         <MaterialIcons
           name="bluetooth-connected"
           size={48}
-          color={currentThemeColors.mainColor}
+          color={activeThemeColors.mainColor}
         />
 
         <ThemeText style={styles.title}>
@@ -40,7 +40,7 @@ const BleConnectedUI = ({
       <PrimaryButton
         title={t('ble.connected.disconnectButton')}
         onPress={() => onDisconnect(connectedDevice.id)}
-        backgroundColor={currentThemeColors.error}
+        backgroundColor={activeThemeColors.error}
       />
     </View>
   );

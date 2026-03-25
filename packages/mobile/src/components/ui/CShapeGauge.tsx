@@ -10,7 +10,7 @@ import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 
 import ThemeText from '@/components/ui/ThemeText';
 import { END_ANGLE, START_ANGLE } from '@/constants';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { describeArc } from '@/utils';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -60,7 +60,7 @@ const CShapeGauge = ({
   gradientColors,
   thresholds,
 }: CShapeGaugeProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const progress = useSharedValue(0);
 
@@ -130,7 +130,7 @@ const CShapeGauge = ({
         <Entypo
           name={iconName}
           size={labelFontSize * 1.3}
-          color={currentThemeColors.mainColor}
+          color={activeThemeColors.mainColor}
           style={styles.labelIcon}
         />
         <ThemeText

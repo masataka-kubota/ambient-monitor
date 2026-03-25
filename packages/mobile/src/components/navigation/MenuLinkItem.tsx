@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { triggerLightHaptics } from '@/utils';
 
 interface MenuLinkProps {
@@ -52,7 +52,7 @@ const MenuLinkItem = ({
   href,
   onPress,
 }: CombinedMenuLinkItemProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const handlePress = useCallback(
     (event: GestureResponderEvent | React.MouseEvent<HTMLAnchorElement>) => {
@@ -65,10 +65,7 @@ const MenuLinkItem = ({
   const content = (
     <>
       <ThemeText
-        style={[
-          textStyle,
-          { color: itemColor ?? currentThemeColors.mainColor },
-        ]}
+        style={[textStyle, { color: itemColor ?? activeThemeColors.mainColor }]}
         truncate
       >
         {title}
@@ -84,7 +81,7 @@ const MenuLinkItem = ({
         <MaterialIcons
           name={iconName}
           size={16}
-          color={currentThemeColors.mainColor}
+          color={activeThemeColors.mainColor}
         />
       </View>
     </>

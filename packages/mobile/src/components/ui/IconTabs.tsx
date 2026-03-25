@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { triggerLightHaptics } from '@/utils';
 
 const _paddingHorizontal = 20;
@@ -28,7 +28,7 @@ const IconTabs = <T extends string>({
   onTabPress,
 }: IconTabsProps<T>) => {
   const { width } = useWindowDimensions();
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const tabWidth = (width - _space) / tabs.length;
 
@@ -51,7 +51,7 @@ const IconTabs = <T extends string>({
               styles.tabButton,
               focused && {
                 borderBottomWidth: 0.5,
-                borderBottomColor: currentThemeColors.mainColor,
+                borderBottomColor: activeThemeColors.mainColor,
               },
               { width: tabWidth },
             ]}
@@ -62,14 +62,14 @@ const IconTabs = <T extends string>({
               size={30}
               color={
                 focused
-                  ? currentThemeColors.mainColor
-                  : currentThemeColors.lightColor
+                  ? activeThemeColors.mainColor
+                  : activeThemeColors.lightColor
               }
             />
             <ThemeText
               style={[
                 { fontSize: 12 },
-                !focused && { color: currentThemeColors.lightColor },
+                !focused && { color: activeThemeColors.lightColor },
               ]}
             >
               {tab.label}

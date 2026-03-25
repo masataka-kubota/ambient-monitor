@@ -1,14 +1,14 @@
 import { Children, memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 interface MenuLinkGroupProps {
   children: React.ReactNode;
 }
 
 const MenuLinkGroup = ({ children }: MenuLinkGroupProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const items = Children.toArray(children);
 
@@ -16,7 +16,7 @@ const MenuLinkGroup = ({ children }: MenuLinkGroupProps) => {
     <View
       style={[
         styles.groupContainer,
-        { borderColor: currentThemeColors.lightColor },
+        { borderColor: activeThemeColors.lightColor },
       ]}
     >
       {items.map((child, index) => {
@@ -27,7 +27,7 @@ const MenuLinkGroup = ({ children }: MenuLinkGroupProps) => {
             style={
               !isLast && {
                 borderBottomWidth: 1,
-                borderColor: currentThemeColors.lightColor,
+                borderColor: activeThemeColors.lightColor,
               }
             }
           >

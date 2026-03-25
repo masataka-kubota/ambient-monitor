@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 
 import SkeletonItem from '@/components/skelton/SkeletonItem';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 const PADDING_HORIZONTAL = 20;
 const GAP = 5;
@@ -23,7 +23,7 @@ const DataGraphSkeleton = ({
   tabWidth,
   tabLength,
 }: DataGraphSkeletonProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   return (
     <View>
@@ -60,12 +60,12 @@ const DataGraphSkeleton = ({
           noOfSections={6}
           showVerticalLines={false}
           thickness={3}
-          color={currentThemeColors.lightColor}
-          dataPointsColor={currentThemeColors.lightColor}
-          yAxisTextStyle={{ color: currentThemeColors.lightColor }}
-          rulesColor={currentThemeColors.lightColor}
-          yAxisColor={currentThemeColors.lightColor}
-          xAxisColor={currentThemeColors.lightColor}
+          color={activeThemeColors.lightColor}
+          dataPointsColor={activeThemeColors.lightColor}
+          yAxisTextStyle={{ color: activeThemeColors.lightColor }}
+          rulesColor={activeThemeColors.lightColor}
+          yAxisColor={activeThemeColors.lightColor}
+          xAxisColor={activeThemeColors.lightColor}
           xAxisLabelsHeight={20}
         />
       </View>

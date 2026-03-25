@@ -7,13 +7,13 @@ import { Alert, Keyboard, StyleSheet, View } from 'react-native';
 import { wifiStatusAtom } from '@/atoms';
 import { PrimaryButton, PrimaryTextInput } from '@/components/ui';
 import { useBleWifiActions } from '@/hooks/ble';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { WifiFormValues } from '@/types';
 
 const BleWifiForm = () => {
   const wifiStatus = useAtomValue(wifiStatusAtom);
   const { initializeWifiConfig, updateWifiConfig } = useBleWifiActions();
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
   const { t } = useTranslation();
 
   const defaultWifiFormValues: WifiFormValues = {
@@ -119,7 +119,7 @@ const BleWifiForm = () => {
         <PrimaryButton
           title={t('wifi.form.initialize')}
           onPress={handleInitialize}
-          backgroundColor={currentThemeColors.error}
+          backgroundColor={activeThemeColors.error}
         />
       )}
     </View>

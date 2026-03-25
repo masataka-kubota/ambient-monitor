@@ -2,7 +2,7 @@ import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet, TextProps, View, ViewStyle } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 const ICON_LIBS = {
   Entypo,
@@ -30,7 +30,7 @@ const Heading = <T extends IconLib = 'Entypo'>({
   style,
   ...props
 }: HeadingProps<T>) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const safeIconLib: IconLib = iconLib ?? 'Entypo';
   const Icon = ICON_LIBS[safeIconLib];
@@ -46,7 +46,7 @@ const Heading = <T extends IconLib = 'Entypo'>({
         <Icon
           name={iconName as IconName<IconLib>}
           size={fontSize * 1.5}
-          color={currentThemeColors.mainColor}
+          color={activeThemeColors.mainColor}
           style={{ marginRight: fontSize * 0.5 }}
         />
       )}

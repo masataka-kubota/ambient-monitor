@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 interface PrimaryTextInputProps extends TextInputProps {
   isRequired?: boolean;
@@ -35,7 +35,7 @@ const PrimaryTextInput = ({
   onChangeText,
   errorMessage,
 }: PrimaryTextInputProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
   const { t } = useTranslation();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -56,7 +56,7 @@ const PrimaryTextInput = ({
           <Ionicons
             name={passwordVisible ? 'eye-off' : 'eye'}
             size={25}
-            color={currentThemeColors.lightColor}
+            color={activeThemeColors.lightColor}
           />
         </Pressable>
       )}
@@ -92,15 +92,15 @@ const PrimaryTextInput = ({
           style={[
             styles.input,
             {
-              color: currentThemeColors.mainColor,
-              backgroundColor: currentThemeColors.secondaryBackground,
+              color: activeThemeColors.mainColor,
+              backgroundColor: activeThemeColors.secondaryBackground,
             },
             hasError && {
               borderWidth: 0.5,
-              borderColor: currentThemeColors.error,
+              borderColor: activeThemeColors.error,
             },
           ]}
-          placeholderTextColor={currentThemeColors.lightColor}
+          placeholderTextColor={activeThemeColors.lightColor}
           onChangeText={onChangeText}
         />
 
@@ -108,7 +108,7 @@ const PrimaryTextInput = ({
       </View>
       {hasError && (
         <ThemeText
-          style={[styles.errorMessage, { color: currentThemeColors.error }]}
+          style={[styles.errorMessage, { color: activeThemeColors.error }]}
         >
           {errorMessage}
         </ThemeText>

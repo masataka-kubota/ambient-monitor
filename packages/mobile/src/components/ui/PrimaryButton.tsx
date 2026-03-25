@@ -7,7 +7,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { triggerLightHaptics } from '@/utils';
 
 interface PrimaryButtonProps {
@@ -27,7 +27,7 @@ const PrimaryButton = ({
   backgroundColor,
   style,
 }: PrimaryButtonProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const handlePress = useCallback(() => {
     triggerLightHaptics();
@@ -36,7 +36,7 @@ const PrimaryButton = ({
 
   const buttonColor = backgroundColor
     ? backgroundColor
-    : currentThemeColors.tint;
+    : activeThemeColors.tint;
 
   return (
     <Pressable
@@ -46,7 +46,7 @@ const PrimaryButton = ({
         (disabled || isPending) && styles.disabledButton,
         {
           backgroundColor: buttonColor,
-          shadowColor: currentThemeColors.shadow,
+          shadowColor: activeThemeColors.shadow,
         },
         style,
       ]}
@@ -56,7 +56,7 @@ const PrimaryButton = ({
         style={[
           styles.buttonText,
           {
-            color: currentThemeColors.onTint,
+            color: activeThemeColors.onTint,
           },
         ]}
       >

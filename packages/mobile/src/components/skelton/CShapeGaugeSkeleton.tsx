@@ -4,7 +4,7 @@ import Animated from 'react-native-reanimated';
 import Svg, { Path } from 'react-native-svg';
 
 import SkeletonItem from '@/components/skelton/SkeletonItem';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { useSkeletonAnimation } from '@/hooks/ui';
 import { describeArc } from '@/utils';
 
@@ -17,7 +17,7 @@ const CShapeGaugeSkeleton = ({
   radius,
   strokeWidth,
 }: CShapeGaugeSkeletonProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
   const { skeltonAnimatedStyle } = useSkeletonAnimation();
 
   const size = radius * 2 + strokeWidth * 2;
@@ -31,7 +31,7 @@ const CShapeGaugeSkeleton = ({
         <Svg width={size} height={size}>
           <Path
             d={path}
-            stroke={currentThemeColors.secondaryBackground}
+            stroke={activeThemeColors.secondaryBackground}
             strokeWidth={strokeWidth}
             fill="none"
             strokeLinecap="round"

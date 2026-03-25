@@ -6,7 +6,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { wifiStatusAtom } from '@/atoms';
 import { ThemeText } from '@/components/ui';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { WifiStatusCode } from '@/types';
 
 const WIFI_STATUS_UI: Record<
@@ -22,7 +22,7 @@ const WIFI_STATUS_UI: Record<
 
 const BleWifiStatus = () => {
   const wifiStatus = useAtomValue(wifiStatusAtom);
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
   const { t } = useTranslation();
 
   if (!wifiStatus) {
@@ -31,7 +31,7 @@ const BleWifiStatus = () => {
         <MaterialIcons
           name="help-outline"
           size={48}
-          color={currentThemeColors.mainColor}
+          color={activeThemeColors.mainColor}
         />
         <ThemeText>{t('wifi.status.none')}</ThemeText>
       </View>
@@ -46,7 +46,7 @@ const BleWifiStatus = () => {
       <MaterialIcons
         name={iconName}
         size={48}
-        color={currentThemeColors.mainColor}
+        color={activeThemeColors.mainColor}
       />
       <ThemeText>
         {t(statusKey)}

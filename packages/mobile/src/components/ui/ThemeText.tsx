@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { StyleSheet, Text, TextProps } from 'react-native';
 
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 interface ThemeTextProps extends TextProps {
   children: React.ReactNode;
@@ -14,13 +14,13 @@ const ThemeText = ({
   style,
   ...props
 }: ThemeTextProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   return (
     <Text
       style={[
         styles.text,
-        { color: currentThemeColors.mainColor },
+        { color: activeThemeColors.mainColor },
         truncate && { flexShrink: 1 },
         style,
       ]}

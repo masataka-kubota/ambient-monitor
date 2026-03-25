@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { PrimaryButton, ThemeText } from '@/components/ui';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 interface BleReconnectUIProps {
   forgetDevice: () => void;
 }
 
 const BleReconnectUI = ({ forgetDevice }: BleReconnectUIProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -23,7 +23,7 @@ const BleReconnectUI = ({ forgetDevice }: BleReconnectUIProps) => {
         <MaterialIcons
           name="sync-problem"
           size={48}
-          color={currentThemeColors.mainColor}
+          color={activeThemeColors.mainColor}
         />
 
         <ThemeText style={styles.title}>{t('ble.reconnect.title')}</ThemeText>
@@ -43,7 +43,7 @@ const BleReconnectUI = ({ forgetDevice }: BleReconnectUIProps) => {
       <PrimaryButton
         title={t('ble.reconnect.forgetButton')}
         onPress={forgetDevice}
-        backgroundColor={currentThemeColors.error}
+        backgroundColor={activeThemeColors.error}
         style={styles.forgetButton}
       />
     </View>

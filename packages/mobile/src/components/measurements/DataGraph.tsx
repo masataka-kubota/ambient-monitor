@@ -6,7 +6,7 @@ import MeasurementLineChart from '@/components/measurements/MeasurementLineChart
 import { DataGraphSkeleton } from '@/components/skelton';
 import { IconTabs, ThemeText } from '@/components/ui';
 import { MEASUREMENT_SETTINGS } from '@/constants';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { useMeasurements } from '@/hooks/measurements';
 import { MeasurementKey, MeasurementRange, MeasurementTabItem } from '@/types';
 import { getChartData } from '@/utils/measurements';
@@ -28,7 +28,7 @@ interface DataGraphProps {
 
 const DataGraph = ({ period }: DataGraphProps) => {
   const { t } = useTranslation();
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const [selectedKey, setSelectedKey] = useState<MeasurementKey>('temperature');
 
@@ -68,7 +68,7 @@ const DataGraph = ({ period }: DataGraphProps) => {
   const chartData = getChartData({
     data,
     key: selectedKey,
-    textColor: currentThemeColors.lightColor,
+    textColor: activeThemeColors.lightColor,
   });
 
   return (

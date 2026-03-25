@@ -9,11 +9,11 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import TabBarItem from '@/components/navigation/TabBarItem';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { triggerLightHaptics } from '@/utils';
 
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
   const { bottom } = useSafeAreaInsets();
 
   const [dimension, setDimension] = useState({ width: 0, height: 0 });
@@ -42,8 +42,8 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         styles.tabbar,
         {
           bottom: bottom + 10,
-          backgroundColor: currentThemeColors.navBackground,
-          shadowColor: currentThemeColors.shadow,
+          backgroundColor: activeThemeColors.navBackground,
+          shadowColor: activeThemeColors.shadow,
         },
       ]}
     >
@@ -53,7 +53,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           styles.indicator,
           animatedStyle,
           {
-            backgroundColor: currentThemeColors.tint,
+            backgroundColor: activeThemeColors.tint,
             height: dimension.height - 15,
             width: buttonWidth - 20,
           },
@@ -69,8 +69,8 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
         const isFocused = state.index === index;
 
         const baseColor = isFocused
-          ? currentThemeColors.onTint
-          : currentThemeColors.mediumColor;
+          ? activeThemeColors.onTint
+          : activeThemeColors.mediumColor;
 
         const onPress = () => {
           tabPositionX.value = withSpring(index * buttonWidth, {

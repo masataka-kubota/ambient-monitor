@@ -3,7 +3,7 @@ import { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ThemeText } from '@/components/ui';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 interface IconLabelProps {
   iconName: keyof typeof MaterialIcons.glyphMap;
@@ -12,9 +12,9 @@ interface IconLabelProps {
 }
 
 const IconLabel = ({ iconName, text, color }: IconLabelProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
-  const baseColor = color || currentThemeColors.mediumColor;
+  const baseColor = color || activeThemeColors.mediumColor;
 
   return (
     <View style={styles.container}>

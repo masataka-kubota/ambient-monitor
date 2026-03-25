@@ -10,7 +10,7 @@ import { BleAutoReconnectInitializer } from '@/components/ble';
 import WifiWifiStatusSync from '@/components/ble/WifiWifiStatusSync';
 import { AppProviders } from '@/components/layouts';
 import { APP_THEME_SCHEME } from '@/constants';
-import { useI18nInitializer, useResolvedTheme } from '@/hooks/common';
+import { useAppTheme, useI18nInitializer } from '@/hooks/common';
 import { initBLE } from '@/lib';
 
 global.Buffer = Buffer;
@@ -19,7 +19,7 @@ global.Buffer = Buffer;
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  const { isDarkMode } = useResolvedTheme();
+  const { isDarkMode } = useAppTheme();
   const { isI18nReady } = useI18nInitializer();
 
   useEffect(() => {

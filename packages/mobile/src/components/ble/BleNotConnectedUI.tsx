@@ -5,7 +5,7 @@ import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Peripheral } from 'react-native-ble-manager';
 
 import { PrimaryButton, ThemeText } from '@/components/ui';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 interface BleNotConnectedUIProps {
   scannedDevices: Peripheral[];
@@ -20,7 +20,7 @@ const BleNotConnectedUI = ({
   onConnect,
   isConnecting = false,
 }: BleNotConnectedUIProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
   const { t } = useTranslation();
 
   return (
@@ -34,7 +34,7 @@ const BleNotConnectedUI = ({
               : 'bluetooth-disabled'
           }
           size={48}
-          color={currentThemeColors.mainColor}
+          color={activeThemeColors.mainColor}
         />
         <ThemeText style={styles.title}>
           {t('ble.notConnected.title')}
@@ -65,7 +65,7 @@ const BleNotConnectedUI = ({
                 <MaterialIcons
                   name="devices-other"
                   size={40}
-                  color={currentThemeColors.mainColor}
+                  color={activeThemeColors.mainColor}
                 />
                 <ThemeText style={styles.emptyText}>
                   {t('ble.notConnected.emptyList')}
@@ -78,7 +78,7 @@ const BleNotConnectedUI = ({
                 style={[
                   styles.itemContainer,
                   {
-                    backgroundColor: currentThemeColors.secondaryBackground,
+                    backgroundColor: activeThemeColors.secondaryBackground,
                   },
                 ]}
               >
@@ -94,7 +94,7 @@ const BleNotConnectedUI = ({
                 <MaterialIcons
                   name="chevron-right"
                   size={24}
-                  color={currentThemeColors.mainColor}
+                  color={activeThemeColors.mainColor}
                 />
               </Pressable>
             )}

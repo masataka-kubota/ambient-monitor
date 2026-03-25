@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemeText } from '@/components/ui';
 import { MEASUREMENT_RANGES } from '@/constants';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { MeasurementRange } from '@/types';
 import { triggerLightHaptics } from '@/utils';
 
@@ -15,7 +15,7 @@ interface PeriodTabsProps {
 
 const PeriodTabs = ({ selectedPeriod, onSelectPeriod }: PeriodTabsProps) => {
   const { t } = useTranslation();
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const handlePress = useCallback(
     (p: MeasurementRange) => {
@@ -36,7 +36,7 @@ const PeriodTabs = ({ selectedPeriod, onSelectPeriod }: PeriodTabsProps) => {
             style={[
               style.tabButton,
               focused && {
-                backgroundColor: currentThemeColors.mainColor,
+                backgroundColor: activeThemeColors.mainColor,
               },
             ]}
           >
@@ -44,8 +44,8 @@ const PeriodTabs = ({ selectedPeriod, onSelectPeriod }: PeriodTabsProps) => {
               style={{
                 fontWeight: focused ? 'bold' : 'normal',
                 color: focused
-                  ? currentThemeColors.mainBackground
-                  : currentThemeColors.mediumColor,
+                  ? activeThemeColors.mainBackground
+                  : activeThemeColors.mediumColor,
               }}
             >
               {t(`data.period.${p}`)}

@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { LineChart, lineDataItem } from 'react-native-gifted-charts';
 
 import { ThemeText } from '@/components/ui';
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 import { MeasurementSetting } from '@/types';
 
 interface LineChartDataPoint {
@@ -24,7 +24,7 @@ const MeasurementLineChart = ({
   width,
   height,
 }: MeasurementLineChartProps) => {
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   return (
     <View style={styles.chartContainer}>
@@ -49,15 +49,15 @@ const MeasurementLineChart = ({
         noOfSections={6}
         showVerticalLines={false}
         thickness={3}
-        color={currentThemeColors.tint}
-        dataPointsColor={currentThemeColors.tint}
-        yAxisTextStyle={{ color: currentThemeColors.lightColor }}
-        rulesColor={currentThemeColors.lightColor}
-        yAxisColor={currentThemeColors.lightColor}
-        xAxisColor={currentThemeColors.lightColor}
+        color={activeThemeColors.tint}
+        dataPointsColor={activeThemeColors.tint}
+        yAxisTextStyle={{ color: activeThemeColors.lightColor }}
+        rulesColor={activeThemeColors.lightColor}
+        yAxisColor={activeThemeColors.lightColor}
+        xAxisColor={activeThemeColors.lightColor}
         xAxisLabelsHeight={20}
         pointerConfig={{
-          pointerColor: currentThemeColors.mainColor,
+          pointerColor: activeThemeColors.mainColor,
           showPointerStrip: false,
           pointerLabelWidth: 60,
           pointerLabelHeight: 50,
@@ -74,13 +74,13 @@ const MeasurementLineChart = ({
               <View
                 style={[
                   styles.pointerLabelContainer,
-                  { backgroundColor: currentThemeColors.mainColor },
+                  { backgroundColor: activeThemeColors.mainColor },
                 ]}
               >
                 <ThemeText
                   style={[
                     styles.pointerLabelText,
-                    { color: currentThemeColors.mainBackground },
+                    { color: activeThemeColors.mainBackground },
                   ]}
                 >
                   {`${value}${setting.unit}`}

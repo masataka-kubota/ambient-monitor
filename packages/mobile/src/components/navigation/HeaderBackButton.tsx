@@ -3,11 +3,11 @@ import { router, useRouter } from 'expo-router';
 import React, { memo, useCallback } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 
-import { useResolvedTheme } from '@/hooks/common';
+import { useAppTheme } from '@/hooks/common';
 
 const HeaderBackButton = () => {
   const { canGoBack } = useRouter();
-  const { currentThemeColors } = useResolvedTheme();
+  const { activeThemeColors } = useAppTheme();
 
   const hasHistory = canGoBack();
 
@@ -25,15 +25,15 @@ const HeaderBackButton = () => {
       style={[
         styles.button,
         {
-          backgroundColor: currentThemeColors.mainColor,
-          shadowColor: currentThemeColors.shadow,
+          backgroundColor: activeThemeColors.mainColor,
+          shadowColor: activeThemeColors.shadow,
         },
       ]}
     >
       <Ionicons
         name={hasHistory ? 'arrow-back' : 'close-outline'}
         size={24}
-        color={currentThemeColors.mainBackground}
+        color={activeThemeColors.mainBackground}
       />
     </Pressable>
   );
