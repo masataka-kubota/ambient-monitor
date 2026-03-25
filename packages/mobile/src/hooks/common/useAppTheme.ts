@@ -5,13 +5,15 @@ import { themeModeAtom } from '@/atoms';
 import { APP_THEME_COLORS } from '@/constants';
 
 const useAppTheme = () => {
-  const system = useColorScheme() ?? 'light';
-  const mode = useAtomValue(themeModeAtom);
+  const systemScheme = useColorScheme();
+  const userMode = useAtomValue(themeModeAtom);
 
+  // `useColorScheme` can return 'light', 'dark', or 'unspecified' (if the system color scheme is unavailable).
   // If system color scheme is unavailable (e.g., on web), default to 'light'.
-  const resolvedScheme = system === 'unspecified' ? 'light' : system;
+  const resolvedSystemScheme =
+    systemScheme === 'unspecified' ? 'light' : systemScheme;
 
-  const activeScheme = mode === 'system' ? resolvedScheme : mode;
+  const activeScheme = userMode === 'system' ? resolvedSystemScheme : userMode;
   const activeThemeColors = APP_THEME_COLORS[activeScheme];
 
   const isDarkMode = activeScheme === 'dark';
