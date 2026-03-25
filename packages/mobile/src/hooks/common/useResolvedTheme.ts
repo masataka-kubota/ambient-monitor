@@ -8,11 +8,13 @@ const useResolvedTheme = () => {
   const system = useColorScheme() ?? 'light';
   const mode = useAtomValue(themeModeAtom);
 
-  const finalScheme = mode === 'system' ? system : mode;
+  // If system color scheme is unavailable (e.g., on web), default to 'light'.
+  const resolvedScheme = system === 'unspecified' ? 'light' : system;
+
+  const finalScheme = mode === 'system' ? resolvedScheme : mode;
+  const currentThemeColors = APP_THEME_COLORS[finalScheme];
 
   const isDarkMode = finalScheme === 'dark';
-
-  const currentThemeColors = APP_THEME_COLORS[finalScheme];
 
   return { finalScheme, isDarkMode, currentThemeColors };
 };
