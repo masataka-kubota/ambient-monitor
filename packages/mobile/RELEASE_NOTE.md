@@ -1,6 +1,6 @@
 # These release notes are for developers, not for the store.
 
-## [v0.9.4] - 2026-3-26
+## [v0.9.4] - 2026-03-26
 
 #### en
 
