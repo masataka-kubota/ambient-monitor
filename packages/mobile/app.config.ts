@@ -1,83 +1,83 @@
-import { ConfigContext, ExpoConfig } from "expo/config";
+import { ConfigContext, ExpoConfig } from 'expo/config';
 
-import pkg from "./package.json";
+import pkg from './package.json';
 
-const IS_DEV = process.env.APP_VARIANT === "development";
-const IS_PREVIEW = process.env.APP_VARIANT === "preview";
+const IS_DEV = process.env.APP_VARIANT === 'development';
+const IS_PREVIEW = process.env.APP_VARIANT === 'preview';
 
 const getUniqueIdentifier = () => {
-  if (IS_DEV) return "dev.ambientmonitor.dev";
-  if (IS_PREVIEW) return "dev.ambientmonitor.preview";
-  return "dev.ambientmonitor";
+  if (IS_DEV) return 'dev.ambientmonitor.dev';
+  if (IS_PREVIEW) return 'dev.ambientmonitor.preview';
+  return 'dev.ambientmonitor';
 };
 
 const getAppName = () => {
-  if (IS_DEV) return "Ambient Monitor (Dev)";
-  if (IS_PREVIEW) return "Ambient Monitor (Preview)";
-  return "Ambient Monitor";
+  if (IS_DEV) return 'Ambient Monitor (Dev)';
+  if (IS_PREVIEW) return 'Ambient Monitor (Preview)';
+  return 'Ambient Monitor';
 };
 
 const config = ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: getAppName(),
-  slug: "ambient-monitor",
+  slug: 'ambient-monitor',
   version: pkg.version,
-  orientation: "portrait",
-  icon: "./assets/icons/icon.png",
-  scheme: "dev.ambientmonitor",
-  userInterfaceStyle: "automatic",
-  newArchEnabled: true,
+  orientation: 'portrait',
+  icon: './assets/icons/icon.png',
+  scheme: 'dev.ambientmonitor',
+  userInterfaceStyle: 'automatic',
 
   ios: {
     supportsTablet: true,
     bundleIdentifier: getUniqueIdentifier(),
     icon: {
-      light: "./assets/icons/ios-icon-light.png",
-      dark: "./assets/icons/ios-icon-dark.png",
-      tinted: "./assets/icons/ios-icon-tinted.png",
+      light: './assets/icons/ios-icon-light.png',
+      dark: './assets/icons/ios-icon-dark.png',
+      tinted: './assets/icons/ios-icon-tinted.png',
     },
   },
 
   android: {
     adaptiveIcon: {
-      backgroundColor: "#f5f5f5",
-      foregroundImage: "./assets/icons/adaptive-icon.png",
-      monochromeImage: "./assets/icons/adaptive-icon-monochrome.png",
+      backgroundColor: '#f5f5f5',
+      foregroundImage: './assets/icons/adaptive-icon.png',
+      monochromeImage: './assets/icons/adaptive-icon-monochrome.png',
     },
     package: getUniqueIdentifier(),
-    edgeToEdgeEnabled: true,
     predictiveBackGestureEnabled: false,
-    softwareKeyboardLayoutMode: "pan",
+    softwareKeyboardLayoutMode: 'pan',
   },
 
   web: {
-    output: "static",
-    favicon: "./assets/icons/favicon.png",
+    output: 'static',
+    favicon: './assets/icons/favicon.png',
   },
 
   plugins: [
-    "expo-router",
-    "expo-localization",
+    'expo-router',
+    'expo-localization',
+    'expo-font',
+    'expo-web-browser',
     [
-      "expo-splash-screen",
+      'expo-splash-screen',
       {
-        image: "./assets/icons/splash-icon-light.png",
+        image: './assets/icons/splash-icon-light.png',
         imageWidth: 200,
-        resizeMode: "contain",
-        backgroundColor: "#f5f5f5",
+        resizeMode: 'contain',
+        backgroundColor: '#f5f5f5',
         dark: {
-          image: "./assets/icons/splash-icon-dark.png",
-          backgroundColor: "#2f2f2f",
+          image: './assets/icons/splash-icon-dark.png',
+          backgroundColor: '#2f2f2f',
         },
       },
     ],
     [
-      "react-native-ble-manager",
+      'react-native-ble-manager',
       {
         neverForLocation: true,
         isBleRequired: true,
         bluetoothAlwaysPermission:
-          "Allow $(getAppName()) to connect to bluetooth devices",
+          'Allow $(getAppName()) to connect to bluetooth devices',
       },
     ],
   ],
@@ -89,7 +89,7 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
 
   extra: {
     eas: {
-      projectId: "63d51112-694b-4f62-9e80-5cf42bc2dbc4",
+      projectId: '63d51112-694b-4f62-9e80-5cf42bc2dbc4',
     },
   },
 });
