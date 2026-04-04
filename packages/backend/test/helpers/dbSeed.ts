@@ -45,7 +45,9 @@ export const insertSeedMeasurements = async () => {
     .bind(TEST_DEVICE.externalId)
     .first<{ id: number }>()
 
-  if (!device) throw new Error('TEST_DEVICE not found — call insertSeedDevice first')
+  if (!device) {
+    throw new Error('TEST_DEVICE not found — call insertSeedDevice first')
+  }
 
   const now = new Date()
   for (const m of SEED_MEASUREMENTS) {
