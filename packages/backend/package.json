@@ -12,7 +12,7 @@
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage && open coverage/index.html",
     "db:generate": "drizzle-kit generate",
     "db:migration:local": "wrangler d1 migrations apply ambient-monitor --local",
     "db:migration:remote": "wrangler d1 migrations apply ambient-monitor --remote",

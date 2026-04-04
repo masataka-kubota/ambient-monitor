@@ -1,5 +1,6 @@
 import { applyD1Migrations, env } from 'cloudflare:test'
-import { resetDatabase, seedAll } from 'test/helpers'
+
+import { resetDatabase, seedAll } from '@/test/helpers'
 
 // Apply migrations and set up test environment once per test file
 await applyD1Migrations(env.DB, env.TEST_MIGRATIONS)

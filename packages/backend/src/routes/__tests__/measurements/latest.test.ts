@@ -1,10 +1,10 @@
 import type { z } from '@hono/zod-openapi'
 import { env } from 'cloudflare:test'
 import { testClient } from 'hono/testing'
-import { SEED_MEASUREMENTS, TEST_DEVICE } from 'test/constants'
 
 import app from '@/index'
 import type { MeasurementLatestResponseSchema, NotFoundErrorSchema } from '@/schemas'
+import { SEED_MEASUREMENTS, TEST_DEVICE } from '@/test/constants'
 
 describe('GET /measurements/latest', () => {
   const client = testClient(app, env)
@@ -60,7 +60,9 @@ describe('GET /measurements/latest', () => {
       .bind(TEST_DEVICE.externalId)
       .first<{ id: number }>()
 
-    if (!device) throw new Error('Test device not found')
+    if (!device) {
+      throw new Error('Test device not found')
+    }
 
     // Remove measurements
     await env.DB.prepare(`DELETE FROM measurements WHERE device_id = ?`).bind(device.id).run()

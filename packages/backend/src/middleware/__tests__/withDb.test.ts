@@ -2,12 +2,12 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { env } from 'cloudflare:test'
 import { eq } from 'drizzle-orm'
 import { testClient } from 'hono/testing'
-import { TEST_DEVICE } from 'test/constants'
 import { describe, it, expect } from 'vitest'
 
 import { devices } from '@/db/schema'
-import { withDb } from '@/middleware/'
+import { withDb } from '@/middleware/withDb'
 import { InternalServerErrorSchema, SuccessResponseSchema } from '@/schemas'
+import { TEST_DEVICE } from '@/test/constants'
 import type { Env } from '@/types'
 
 describe('withDb middleware', () => {

@@ -8,6 +8,7 @@ export default defineWorkersConfig(async () => {
   return {
     resolve: {
       alias: {
+        '@/test': path.resolve(__dirname, 'test'),
         '@': path.resolve(__dirname, 'src'),
       },
     },
@@ -34,6 +35,8 @@ export default defineWorkersConfig(async () => {
           '**/*.config**.ts',
           '**/drizzle/**',
           '**/migrations/**',
+          '**/src/db/schema.ts',
+          '**/test/**',
         ],
       },
     },
