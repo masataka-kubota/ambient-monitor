@@ -1,5 +1,6 @@
 import { env } from 'cloudflare:test'
-import { SEED_MEASUREMENTS, TEST_DEVICE } from 'test/constants'
+
+import { SEED_MEASUREMENTS, TEST_DEVICE } from '@/test/constants'
 
 /**
  * Completely reset database tables for tests.

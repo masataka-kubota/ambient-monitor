@@ -3,7 +3,6 @@ import type { z } from '@hono/zod-openapi'
 import { env } from 'cloudflare:test'
 import { sign } from 'hono/jwt'
 import { testClient } from 'hono/testing'
-import { TEST_DEVICE } from 'test/constants'
 import { describe, it, expect } from 'vitest'
 
 import { withDb } from '@/middleware'
@@ -13,6 +12,7 @@ import {
   SuccessResponseSchema,
   UnauthorizedErrorSchema,
 } from '@/schemas'
+import { TEST_DEVICE } from '@/test/constants'
 import type { Env } from '@/types'
 
 describe('jwtHmacAuth middleware', () => {
