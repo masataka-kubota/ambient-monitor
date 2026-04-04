@@ -5,8 +5,8 @@ import { sign } from 'hono/jwt'
 import { testClient } from 'hono/testing'
 import { describe, it, expect } from 'vitest'
 
-import { withDb } from '@/middleware'
 import { jwtHmacAuth } from '@/middleware/jwtHmacAuth'
+import { withDb } from '@/middleware/withDb'
 import {
   MeasurementCreateHeadersSchema,
   SuccessResponseSchema,
