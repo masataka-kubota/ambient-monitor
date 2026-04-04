@@ -36,6 +36,7 @@ export default defineWorkersConfig(async () => {
           '**/drizzle/**',
           '**/migrations/**',
           '**/src/db/schema.ts',
+          '**/test/**',
         ],
       },
     },
