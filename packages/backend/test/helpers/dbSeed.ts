@@ -1,5 +1,6 @@
 import { env } from 'cloudflare:test'
-import { SEED_MEASUREMENTS, TEST_DEVICE } from 'test/constants'
+
+import { SEED_MEASUREMENTS, TEST_DEVICE } from '@/test/constants'
 
 /**
  * Completely reset database tables for tests.
@@ -45,7 +46,9 @@ export const insertSeedMeasurements = async () => {
     .bind(TEST_DEVICE.externalId)
     .first<{ id: number }>()
 
-  if (!device) throw new Error('TEST_DEVICE not found — call insertSeedDevice first')
+  if (!device) {
+    throw new Error('TEST_DEVICE not found — call insertSeedDevice first')
+  }
 
   const now = new Date()
   for (const m of SEED_MEASUREMENTS) {

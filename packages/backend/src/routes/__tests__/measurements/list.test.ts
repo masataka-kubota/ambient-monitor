@@ -1,7 +1,6 @@
 import type { z } from '@hono/zod-openapi'
 import { env } from 'cloudflare:test'
 import { testClient } from 'hono/testing'
-import { TEST_DEVICE } from 'test/constants'
 
 import { PERIOD_INTERVAL_MINUTES } from '@/constants'
 import app from '@/index'
@@ -10,6 +9,7 @@ import type {
   NotFoundErrorSchema,
   ValidationErrorSchema,
 } from '@/schemas'
+import { TEST_DEVICE } from '@/test/constants'
 
 describe('GET /measurements', () => {
   const client = testClient(app, env)

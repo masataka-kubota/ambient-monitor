@@ -2,10 +2,10 @@ import type { z } from '@hono/zod-openapi'
 import { env } from 'cloudflare:test'
 import { sign } from 'hono/jwt'
 import { testClient } from 'hono/testing'
-import { TEST_DEVICE } from 'test/constants'
 
 import app from '@/index'
 import type { MeasurementCreateHeadersSchema, ValidationErrorSchema } from '@/schemas'
+import { TEST_DEVICE } from '@/test/constants'
 
 describe('POST /measurements', () => {
   // Create the test client from the app instance
