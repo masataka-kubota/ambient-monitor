@@ -40,7 +40,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📦 Install dependencies
-        run: bun install
+        run: bun install --filter mobile
 
       - name: 🚀 Build Android
         if: contains(github.event.pull_request.labels.*.name, 'eas-build-android:production')

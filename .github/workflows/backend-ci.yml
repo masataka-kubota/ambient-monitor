@@ -18,7 +18,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies (root/workspace)
-        run: bun install
+        run: bun install --filter backend
 
       - name: Generate Cloudflare types
         run: bun run --filter backend cf-typegen
