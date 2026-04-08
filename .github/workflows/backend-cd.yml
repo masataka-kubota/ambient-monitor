@@ -18,10 +18,10 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies (root/workspace)
-        run: bun install
+        run: bun install --filter backend
 
       - name: Apply D1 migrations
-        run: bun --cwd packages/backend db:migration:remote
+        run: bun run --filter backend db:migration:remote
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
