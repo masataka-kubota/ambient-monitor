@@ -12,13 +12,13 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
       - name: Install dependencies (root/workspace)
-        run: bun install --filter backend
+        run: bun install --filter backend --frozen-lockfile
 
       - name: Generate Cloudflare types
         run: bun run --filter backend cf-typegen
