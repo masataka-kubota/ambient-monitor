@@ -1,9 +1,12 @@
-name: EAS Production Build Notification
+name: Mobile EAS Build Notification
 
 on:
   pull_request:
     types: [opened, synchronize, labeled, unlabeled]
-    branches: ["main"]
+    branches: ["main", "staging"]
+    paths:
+      - "packages/mobile/**"
+      - ".github/workflows/mobile-eas-build-notification.yml"
 
 jobs:
   manage-comments:
@@ -12,10 +15,11 @@ jobs:
       pull-requests: write
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
-      - name: Manage PR comment
-        uses: actions/github-script@v8
+      - name: 🤖 Manage PR comment
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -25,8 +29,8 @@ jobs:
             const currentLabels = pr.labels.map(l => l.name);
 
             const BOT_MARKER = "### 🤖 EAS Build notification";
-            const ANDROID_LABEL = "eas-build-android:production";
-            const IOS_LABEL = "eas-build-ios:production";
+            const ANDROID_LABEL = "eas-build-android";
+            const IOS_LABEL = "eas-build-ios";
 
             // Find current bot comment
             const comments = await github.rest.issues.listComments({
@@ -43,8 +47,11 @@ jobs:
 
             const hasAndroidLabel = currentLabels.includes(ANDROID_LABEL);
             const hasIosLabel = currentLabels.includes(IOS_LABEL);
+            const easProfile = pr.base.ref === "main" ? "production" : "preview";
 
-            message += "This PR is marked for an EAS Production Build:\n\n";
+            message += "This PR is marked for an EAS Build on merge:\n\n";
+            message += `- Base branch: \`${pr.base.ref}\`\n`;
+            message += `- EAS profile on merge: \`${easProfile}\`\n\n`;
             message += `- ${hasAndroidLabel ? "✅" : "⬜"} **Android build will be triggered after merge** 🚀\n(triggered by label: \`${ANDROID_LABEL}\`)\n`;
             message += `- ${hasIosLabel ? "✅" : "⬜"} **iOS build will be triggered after merge** 🚀\n(triggered by label: \`${IOS_LABEL}\`)\n`;
 
