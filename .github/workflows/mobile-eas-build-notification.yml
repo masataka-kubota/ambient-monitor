@@ -1,12 +1,12 @@
-name: EAS Production Build Notification
+name: Mobile EAS Build Notification
 
 on:
   pull_request:
     types: [opened, synchronize, labeled, unlabeled]
-    branches: ["main"]
+    branches: ["main", "staging"]
     paths:
       - "packages/mobile/**"
-      - ".github/workflows/eas-production-build-notification.yml"
+      - ".github/workflows/mobile-eas-build-notification.yml"
 
 jobs:
   manage-comments:
@@ -28,8 +28,8 @@ jobs:
             const currentLabels = pr.labels.map(l => l.name);
 
             const BOT_MARKER = "### 🤖 EAS Build notification";
-            const ANDROID_LABEL = "eas-build-android:production";
-            const IOS_LABEL = "eas-build-ios:production";
+            const ANDROID_LABEL = "eas-build-android";
+            const IOS_LABEL = "eas-build-ios";
 
             // Find current bot comment
             const comments = await github.rest.issues.listComments({
@@ -46,8 +46,11 @@ jobs:
 
             const hasAndroidLabel = currentLabels.includes(ANDROID_LABEL);
             const hasIosLabel = currentLabels.includes(IOS_LABEL);
+            const easProfile = pr.base.ref === "main" ? "production" : "preview";
 
-            message += "This PR is marked for an EAS Production Build:\n\n";
+            message += "This PR is marked for an EAS Build on merge:\n\n";
+            message += `- Base branch: \`${pr.base.ref}\`\n`;
+            message += `- EAS profile on merge: \`${easProfile}\`\n\n`;
             message += `- ${hasAndroidLabel ? "✅" : "⬜"} **Android build will be triggered after merge** 🚀\n(triggered by label: \`${ANDROID_LABEL}\`)\n`;
             message += `- ${hasIosLabel ? "✅" : "⬜"} **iOS build will be triggered after merge** 🚀\n(triggered by label: \`${IOS_LABEL}\`)\n`;
 
