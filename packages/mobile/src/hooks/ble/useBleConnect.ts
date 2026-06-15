@@ -3,17 +3,11 @@ import { useCallback, useState } from 'react';
 import { Platform } from 'react-native';
 import { Peripheral } from 'react-native-ble-manager';
 
-import {
-  connectedDeviceAtom,
-  connectedDeviceIdAtom,
-  scannedDevicesAtom,
-} from '@/atoms';
+import { connectedDeviceAtom, connectedDeviceIdAtom, scannedDevicesAtom } from '@/atoms';
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';
 import { bleManager } from '@/lib';
 
-export const getDeviceData = async (
-  deviceId: string,
-): Promise<Peripheral | null> => {
+export const getDeviceData = async (deviceId: string): Promise<Peripheral | null> => {
   if (!deviceId) return null;
 
   const peripherals = await bleManager.getDiscoveredPeripherals();
@@ -72,10 +66,7 @@ const useBleConnect = () => {
           // Android often throws "Device disconnected" when the device
           // is already connected from another phone. This is an expected case.
           if (__DEV__) {
-            console.info(
-              '[BLE] expected reconnect failure is dev:',
-              getBleErrorMessage(error),
-            );
+            console.info('[BLE] expected reconnect failure is dev:', getBleErrorMessage(error));
           }
           return;
         }
@@ -89,11 +80,7 @@ const useBleConnect = () => {
   const disconnectDevice = useCallback(
     async (deviceId: string) => {
       try {
-        await bleManager.stopNotification(
-          deviceId,
-          BLE_SERVICE_UUID,
-          MEASUREMENT_CHAR_UUID,
-        );
+        await bleManager.stopNotification(deviceId, BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID);
         await bleManager.disconnect(deviceId);
         setConnectedIdDevice(null);
         setConnectedDevice(null);

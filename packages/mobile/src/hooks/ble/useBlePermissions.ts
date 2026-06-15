@@ -24,9 +24,7 @@ const useBlePermissions = () => {
     }
 
     const granted = await PermissionsAndroid.requestMultiple(permissions);
-    return Object.values(granted).every(
-      (result) => result === PermissionsAndroid.RESULTS.GRANTED,
-    );
+    return Object.values(granted).every((result) => result === PermissionsAndroid.RESULTS.GRANTED);
   }, []);
 
   return { requestBlePermissions };

@@ -1,16 +1,8 @@
 import { useAtomValue } from 'jotai';
 import { useTranslation } from 'react-i18next';
 
-import {
-  connectedDeviceAtom,
-  connectedDeviceIdAtom,
-  scannedDevicesAtom,
-} from '@/atoms';
-import {
-  BleConnectedUI,
-  BleNotConnectedUI,
-  BleReconnectUI,
-} from '@/components/ble';
+import { connectedDeviceAtom, connectedDeviceIdAtom, scannedDevicesAtom } from '@/atoms';
+import { BleConnectedUI, BleNotConnectedUI, BleReconnectUI } from '@/components/ble';
 import { KeyboardAvoidingScrollableView } from '@/components/layouts';
 import { HeaderNavigation } from '@/components/navigation';
 import { useBleConnect, useBlePermissions, useBleScan } from '@/hooks/ble';
@@ -18,8 +10,7 @@ import { useBleConnect, useBlePermissions, useBleScan } from '@/hooks/ble';
 const BleSettings = () => {
   const { requestBlePermissions } = useBlePermissions();
   const { scanForPeripherals } = useBleScan();
-  const { connectToDevice, disconnectDevice, forgetDevice, isConnecting } =
-    useBleConnect();
+  const { connectToDevice, disconnectDevice, forgetDevice, isConnecting } = useBleConnect();
   const connectedDevice = useAtomValue(connectedDeviceAtom);
   const connectedDeviceId = useAtomValue(connectedDeviceIdAtom);
   const scannedDevices = useAtomValue(scannedDevicesAtom);
@@ -35,10 +26,7 @@ const BleSettings = () => {
       <HeaderNavigation title={t('ble.title')} />
       <KeyboardAvoidingScrollableView hasHeader={true}>
         {connectedDevice ? (
-          <BleConnectedUI
-            connectedDevice={connectedDevice}
-            onDisconnect={disconnectDevice}
-          />
+          <BleConnectedUI connectedDevice={connectedDevice} onDisconnect={disconnectDevice} />
         ) : connectedDeviceId ? (
           <BleReconnectUI forgetDevice={forgetDevice} />
         ) : (

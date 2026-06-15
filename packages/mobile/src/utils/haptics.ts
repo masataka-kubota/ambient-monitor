@@ -6,8 +6,6 @@ export const triggerLightHaptics = () => {
   if (Platform.OS === 'ios') {
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   } else if (Platform.OS === 'android') {
-    void Haptics.performAndroidHapticsAsync(
-      Haptics.AndroidHaptics.Keyboard_Press,
-    );
+    void Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Keyboard_Press);
   }
 };

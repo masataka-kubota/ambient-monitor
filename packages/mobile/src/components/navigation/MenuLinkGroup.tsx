@@ -13,12 +13,7 @@ const MenuLinkGroup = ({ children }: MenuLinkGroupProps) => {
   const items = Children.toArray(children);
 
   return (
-    <View
-      style={[
-        styles.groupContainer,
-        { borderColor: activeThemeColors.lightColor },
-      ]}
-    >
+    <View style={[styles.groupContainer, { borderColor: activeThemeColors.lightColor }]}>
       {items.map((child, index) => {
         const isLast = index === items.length - 1;
         return (

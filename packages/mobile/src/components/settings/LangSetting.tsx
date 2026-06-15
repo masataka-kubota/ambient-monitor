@@ -10,8 +10,7 @@ const LangSetting = () => {
   const { i18n } = useTranslation();
   const [themeMode, setThemeMode] = useAtom(languageAtom);
 
-  const selectedId =
-    LANGUAGE_CODE_OPTIONS.find((opt) => opt.value === themeMode)?.id ?? 1;
+  const selectedId = LANGUAGE_CODE_OPTIONS.find((opt) => opt.value === themeMode)?.id ?? 1;
 
   const handlePress = useCallback(
     async (id: number) => {
@@ -24,13 +23,7 @@ const LangSetting = () => {
     [i18n, setThemeMode],
   );
 
-  return (
-    <RadioGroup
-      data={LANGUAGE_CODE_OPTIONS}
-      selectedId={selectedId}
-      onPress={handlePress}
-    />
-  );
+  return <RadioGroup data={LANGUAGE_CODE_OPTIONS} selectedId={selectedId} onPress={handlePress} />;
 };
 
 export default memo(LangSetting);

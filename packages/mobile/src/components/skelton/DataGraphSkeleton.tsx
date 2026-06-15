@@ -17,12 +17,7 @@ interface DataGraphSkeletonProps {
   tabLength: number;
 }
 
-const DataGraphSkeleton = ({
-  width,
-  height,
-  tabWidth,
-  tabLength,
-}: DataGraphSkeletonProps) => {
+const DataGraphSkeleton = ({ width, height, tabWidth, tabLength }: DataGraphSkeletonProps) => {
   const { activeThemeColors } = useAppTheme();
 
   return (

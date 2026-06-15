@@ -9,10 +9,7 @@ import { ThemeText } from '@/components/ui';
 import { useAppTheme } from '@/hooks/common';
 import { WifiStatusCode } from '@/types';
 
-const WIFI_STATUS_UI: Record<
-  WifiStatusCode,
-  { icon: keyof typeof MaterialIcons.glyphMap }
-> = {
+const WIFI_STATUS_UI: Record<WifiStatusCode, { icon: keyof typeof MaterialIcons.glyphMap }> = {
   not_configured: { icon: 'wifi-off' },
   configured: { icon: 'settings' },
   connecting: { icon: 'autorenew' },
@@ -28,11 +25,7 @@ const BleWifiStatus = () => {
   if (!wifiStatus) {
     return (
       <View style={styles.statusContainer}>
-        <MaterialIcons
-          name="help-outline"
-          size={48}
-          color={activeThemeColors.mainColor}
-        />
+        <MaterialIcons name="help-outline" size={48} color={activeThemeColors.mainColor} />
         <ThemeText>{t('wifi.status.none')}</ThemeText>
       </View>
     );
@@ -43,11 +36,7 @@ const BleWifiStatus = () => {
 
   return (
     <View style={styles.statusContainer}>
-      <MaterialIcons
-        name={iconName}
-        size={48}
-        color={activeThemeColors.mainColor}
-      />
+      <MaterialIcons name={iconName} size={48} color={activeThemeColors.mainColor} />
       <ThemeText>
         {t(statusKey)}
         {wifiStatus.ssid ? ` (${wifiStatus.ssid})` : ''}

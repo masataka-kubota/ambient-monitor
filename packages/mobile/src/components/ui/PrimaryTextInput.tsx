@@ -1,13 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Pressable,
-  StyleSheet,
-  TextInput,
-  TextInputProps,
-  View,
-} from 'react-native';
+import { Pressable, StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
 import { useAppTheme } from '@/hooks/common';
@@ -49,10 +43,7 @@ const PrimaryTextInput = ({
   const SecureTextEntryToggle = (
     <>
       {secureTextEntry && (
-        <Pressable
-          style={styles.visibilityToggle}
-          onPress={togglePasswordVisibility}
-        >
+        <Pressable style={styles.visibilityToggle} onPress={togglePasswordVisibility}>
           <Ionicons
             name={passwordVisible ? 'eye-off' : 'eye'}
             size={25}
@@ -70,16 +61,10 @@ const PrimaryTextInput = ({
         <View style={styles.labelContainer}>
           {label && <ThemeText style={styles.label}>{label}</ThemeText>}
 
-          {isRequired && (
-            <ThemeText style={styles.required}>
-              {t('common.form.required')}
-            </ThemeText>
-          )}
+          {isRequired && <ThemeText style={styles.required}>{t('common.form.required')}</ThemeText>}
         </View>
 
-        {labelDescription && (
-          <ThemeText style={styles.description}>{labelDescription}</ThemeText>
-        )}
+        {labelDescription && <ThemeText style={styles.description}>{labelDescription}</ThemeText>}
       </View>
 
       {/* input */}
@@ -107,9 +92,7 @@ const PrimaryTextInput = ({
         {SecureTextEntryToggle}
       </View>
       {hasError && (
-        <ThemeText
-          style={[styles.errorMessage, { color: activeThemeColors.error }]}
-        >
+        <ThemeText style={[styles.errorMessage, { color: activeThemeColors.error }]}>
           {errorMessage}
         </ThemeText>
       )}

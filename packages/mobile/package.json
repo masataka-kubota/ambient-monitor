@@ -1,7 +1,8 @@
 {
   "name": "mobile",
-  "main": "expo-router/entry",
   "version": "0.9.4",
+  "private": true,
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start --go",
     "dev": "APP_VARIANT=development bunx expo start",
@@ -67,6 +68,5 @@
     "oxlint": "^1.68.0",
     "oxlint-config-universe": "^0.0.3",
     "typescript": "~5.9.3"
-  },
-  "private": true
+  }
 }

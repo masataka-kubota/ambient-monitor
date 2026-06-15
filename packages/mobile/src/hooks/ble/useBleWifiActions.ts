@@ -15,12 +15,7 @@ const buildWifiConfigPayload = (values: WifiFormValues): Uint8Array => {
   const buffer = Buffer.alloc(WIFI_SSID_MAX_LEN + WIFI_PASSWORD_MAX_LEN);
 
   buffer.write(values.ssid ?? '', 0, WIFI_SSID_MAX_LEN, 'utf8');
-  buffer.write(
-    values.password ?? '',
-    WIFI_SSID_MAX_LEN,
-    WIFI_PASSWORD_MAX_LEN,
-    'utf8',
-  );
+  buffer.write(values.password ?? '', WIFI_SSID_MAX_LEN, WIFI_PASSWORD_MAX_LEN, 'utf8');
 
   return buffer;
 };

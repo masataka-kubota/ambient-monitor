@@ -7,20 +7,13 @@ import { TabBar } from '@/components/navigation';
 const TabLayout = () => {
   const { t } = useTranslation();
   return (
-    <Tabs
-      screenOptions={{ headerShown: false }}
-      tabBar={(props) => <TabBar {...props} />}
-    >
+    <Tabs screenOptions={{ headerShown: false }} tabBar={(props) => <TabBar {...props} />}>
       <Tabs.Screen
         name="index"
         options={{
           tabBarLabel: t('navigation.tabBarLabel.live'),
           tabBarIcon: ({ color, size, focused }) => (
-            <Entypo
-              size={size * 1.2}
-              name={focused ? 'thermometer' : 'flash'}
-              color={color}
-            />
+            <Entypo size={size * 1.2} name={focused ? 'thermometer' : 'flash'} color={color} />
           ),
         }}
       />
@@ -29,11 +22,7 @@ const TabLayout = () => {
         options={{
           tabBarLabel: t('navigation.tabBarLabel.history'),
           tabBarIcon: ({ color, size, focused }) => (
-            <Entypo
-              size={size * 1.2}
-              name={focused ? 'database' : 'line-graph'}
-              color={color}
-            />
+            <Entypo size={size * 1.2} name={focused ? 'database' : 'line-graph'} color={color} />
           ),
         }}
       />
@@ -42,11 +31,7 @@ const TabLayout = () => {
         options={{
           tabBarLabel: t('navigation.tabBarLabel.settings'),
           tabBarIcon: ({ color, size, focused }) => (
-            <Entypo
-              size={size * 1.2}
-              name={focused ? 'tools' : 'cog'}
-              color={color}
-            />
+            <Entypo size={size * 1.2} name={focused ? 'tools' : 'cog'} color={color} />
           ),
         }}
       />

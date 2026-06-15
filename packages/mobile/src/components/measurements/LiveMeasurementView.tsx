@@ -24,13 +24,7 @@ const HistoryMeasurementView = () => {
   const { data: m, isLoading, source } = useLiveMeasurement();
   const { t } = useTranslation();
 
-  if (isLoading)
-    return (
-      <LiveMeasurementSkeleton
-        bigRadius={bigRadius}
-        smallRadius={smallRadius}
-      />
-    );
+  if (isLoading) return <LiveMeasurementSkeleton bigRadius={bigRadius} smallRadius={smallRadius} />;
   if (!m) return <ThemeText>No measurement</ThemeText>;
 
   // format date
@@ -87,17 +81,12 @@ const HistoryMeasurementView = () => {
       {/* Note */}
       <View style={styles.noteContainer}>
         {/* time */}
-        <IconLabel
-          iconName="schedule"
-          text={t('live.lastUpdate', { date: formattedDate })}
-        />
+        <IconLabel iconName="schedule" text={t('live.lastUpdate', { date: formattedDate })} />
 
         {/* source */}
         <IconLabel
           iconName={source === 'ble' ? 'bluetooth' : 'cloud'}
-          text={
-            source === 'ble' ? t('live.source.ble') : t('live.source.cloud')
-          }
+          text={source === 'ble' ? t('live.source.ble') : t('live.source.cloud')}
         />
       </View>
     </View>

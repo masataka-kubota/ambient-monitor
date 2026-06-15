@@ -21,12 +21,5 @@ export default defineConfig({
     'jest/no-identical-title': 'error',
     'jest/valid-expect': 'error',
   },
-  ignorePatterns: [
-    'android/**',
-    'ios/**',
-    '.expo/**',
-    'coverage/**',
-    'node_modules/**',
-    'dist/**',
-  ],
+  ignorePatterns: ['android/**', 'ios/**', '.expo/**', 'coverage/**', 'node_modules/**', 'dist/**'],
 });

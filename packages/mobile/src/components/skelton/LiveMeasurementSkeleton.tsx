@@ -9,10 +9,7 @@ interface LiveMeasurementSkeletonProps {
   smallRadius: number;
 }
 
-const LiveMeasurementSkeleton = ({
-  bigRadius,
-  smallRadius,
-}: LiveMeasurementSkeletonProps) => {
+const LiveMeasurementSkeleton = ({ bigRadius, smallRadius }: LiveMeasurementSkeletonProps) => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.chartContainer}>
@@ -20,14 +17,8 @@ const LiveMeasurementSkeleton = ({
       </View>
 
       <View style={[styles.chartContainer, styles.row]}>
-        <CShapeGaugeSkeleton
-          radius={smallRadius}
-          strokeWidth={smallRadius * 0.2}
-        />
-        <CShapeGaugeSkeleton
-          radius={smallRadius}
-          strokeWidth={smallRadius * 0.2}
-        />
+        <CShapeGaugeSkeleton radius={smallRadius} strokeWidth={smallRadius * 0.2} />
+        <CShapeGaugeSkeleton radius={smallRadius} strokeWidth={smallRadius * 0.2} />
       </View>
 
       <SkeletonItem
@@ -37,12 +28,7 @@ const LiveMeasurementSkeleton = ({
         style={styles.timeWrapper}
       />
 
-      <SkeletonItem
-        width={bigRadius}
-        height={16}
-        borderRadius={8}
-        style={styles.sourceWrapper}
-      />
+      <SkeletonItem width={bigRadius} height={16} borderRadius={8} style={styles.sourceWrapper} />
     </View>
   );
 };

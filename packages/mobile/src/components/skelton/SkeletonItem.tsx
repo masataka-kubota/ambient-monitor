@@ -23,8 +23,7 @@ const SkeletonItem = ({
   const { activeThemeColors } = useAppTheme();
   const { skeltonAnimatedStyle } = useSkeletonAnimation();
 
-  const defaultBackgroundColor =
-    backgroundColor ?? activeThemeColors.secondaryBackground;
+  const defaultBackgroundColor = backgroundColor ?? activeThemeColors.secondaryBackground;
 
   return (
     <Animated.View

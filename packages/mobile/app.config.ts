@@ -76,8 +76,7 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
       {
         neverForLocation: true,
         isBleRequired: true,
-        bluetoothAlwaysPermission:
-          'Allow $(getAppName()) to connect to bluetooth devices',
+        bluetoothAlwaysPermission: 'Allow $(getAppName()) to connect to bluetooth devices',
       },
     ],
   ],

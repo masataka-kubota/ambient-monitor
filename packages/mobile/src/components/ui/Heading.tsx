@@ -36,12 +36,7 @@ const Heading = <T extends IconLib = 'Entypo'>({
   const Icon = ICON_LIBS[safeIconLib];
 
   return (
-    <View
-      style={[
-        styles.headingContainer,
-        { marginTop: mt, justifyContent: align },
-      ]}
-    >
+    <View style={[styles.headingContainer, { marginTop: mt, justifyContent: align }]}>
       {iconName && (
         <Icon
           name={iconName as IconName<IconLib>}
@@ -51,11 +46,7 @@ const Heading = <T extends IconLib = 'Entypo'>({
         />
       )}
       <ThemeText
-        style={[
-          styles.heading,
-          { fontSize, lineHeight: fontSize * 1.5 },
-          style,
-        ]}
+        style={[styles.heading, { fontSize, lineHeight: fontSize * 1.5 }, style]}
         {...props}
       >
         {props.children}

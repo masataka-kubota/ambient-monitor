@@ -18,9 +18,7 @@ export const dateFormatter: FormatFunction = (
 ): string => {
   if (value instanceof Date || typeof value === 'string') {
     const date = typeof value === 'string' ? parseISO(value) : value;
-    const languageCode = isSupportedLanguageCode(lng)
-      ? lng
-      : INITIAL_LANGUAGE_CODE;
+    const languageCode = isSupportedLanguageCode(lng) ? lng : INITIAL_LANGUAGE_CODE;
     const locale: Locale = localeMap[languageCode];
 
     return formatDate(date, format, { locale });

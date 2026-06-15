@@ -1,11 +1,5 @@
 import { memo } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import Animated, {
   KeyboardState,
   useAnimatedKeyboard,
@@ -28,9 +22,7 @@ const KeyboardAvoidingScrollableView = ({
   const insets = useSafeAreaInsets();
 
   const basePaddingTop = insets.top + 20;
-  const paddingTop = hasHeader
-    ? basePaddingTop + HEADER_HEIGHT
-    : basePaddingTop;
+  const paddingTop = hasHeader ? basePaddingTop + HEADER_HEIGHT : basePaddingTop;
   const paddingBottom = insets.bottom + 120; // 100 is the height of the TabBar
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -42,18 +34,13 @@ const KeyboardAvoidingScrollableView = ({
 
   const content = Platform.select({
     ios: (
-      <KeyboardAvoidingView
-        behavior="padding"
-        style={styles.keyboardAvoidingView}
-      >
+      <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoidingView}>
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={[styles.scrollContent]}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={[styles.container, { paddingTop, paddingBottom }]}>
-            {children}
-          </View>
+          <View style={[styles.container, { paddingTop, paddingBottom }]}>{children}</View>
         </ScrollView>
       </KeyboardAvoidingView>
     ),
@@ -63,9 +50,7 @@ const KeyboardAvoidingScrollableView = ({
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        <Animated.View
-          style={[styles.container, animatedStyle, { paddingTop }]}
-        >
+        <Animated.View style={[styles.container, animatedStyle, { paddingTop }]}>
           {children}
         </Animated.View>
       </ScrollView>

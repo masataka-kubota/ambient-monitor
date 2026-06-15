@@ -22,11 +22,7 @@ interface IconTabsProps<T extends string> {
   onTabPress: (key: T) => void;
 }
 
-const IconTabs = <T extends string>({
-  tabs,
-  selectedKey,
-  onTabPress,
-}: IconTabsProps<T>) => {
+const IconTabs = <T extends string>({ tabs, selectedKey, onTabPress }: IconTabsProps<T>) => {
   const { width } = useWindowDimensions();
   const { activeThemeColors } = useAppTheme();
 
@@ -60,17 +56,10 @@ const IconTabs = <T extends string>({
             <Entypo
               name={tab.iconName}
               size={30}
-              color={
-                focused
-                  ? activeThemeColors.mainColor
-                  : activeThemeColors.lightColor
-              }
+              color={focused ? activeThemeColors.mainColor : activeThemeColors.lightColor}
             />
             <ThemeText
-              style={[
-                { fontSize: 12 },
-                !focused && { color: activeThemeColors.lightColor },
-              ]}
+              style={[{ fontSize: 12 }, !focused && { color: activeThemeColors.lightColor }]}
             >
               {tab.label}
             </ThemeText>
