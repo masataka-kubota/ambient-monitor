@@ -8,7 +8,10 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
     "type-check": "tsc --noEmit",
     "postinstall": "bun run --filter backend build:types"
   },
@@ -60,11 +63,9 @@
     "@tanstack/eslint-plugin-query": "^5.95.2",
     "@types/node": "^25.5.0",
     "@types/react": "~19.2.10",
-    "eslint": "^9.39.4",
-    "eslint-config-expo": "~55.0.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
-    "prettier": "^3.8.1",
+    "oxfmt": "^0.53.0",
+    "oxlint": "^1.68.0",
+    "oxlint-config-universe": "^0.0.3",
     "typescript": "~5.9.3"
   },
   "private": true
