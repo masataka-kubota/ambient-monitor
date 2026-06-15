@@ -60,8 +60,12 @@ const MeasurementLineChart = ({ data, setting, width, height }: MeasurementLineC
           activatePointersOnLongPress: true,
           activatePointersInstantlyOnTouch: false,
           pointerLabelComponent: (dataPoints: LineChartDataPoint[] | undefined) => {
-            if (!dataPoints) return null;
-            if (!dataPoints[0].value) return null;
+            if (!dataPoints) {
+              return null;
+            }
+            if (!dataPoints[0].value) {
+              return null;
+            }
             const value = dataPoints[0].value.toFixed(setting.decimals);
             return (
               <View

@@ -25,7 +25,9 @@ const useBleWifiActions = () => {
   const { fetchWifiStatus } = useBleWifiStatus();
 
   const initializeWifiConfig = useCallback(async () => {
-    if (!connectedDevice) return null;
+    if (!connectedDevice) {
+      return null;
+    }
 
     try {
       const payload = buildWifiConfigPayload({ ssid: '', password: '' });
@@ -48,7 +50,9 @@ const useBleWifiActions = () => {
 
   const updateWifiConfig = useCallback(
     async (values: WifiFormValues) => {
-      if (!connectedDevice) return null;
+      if (!connectedDevice) {
+        return null;
+      }
 
       const payload = buildWifiConfigPayload(values);
 

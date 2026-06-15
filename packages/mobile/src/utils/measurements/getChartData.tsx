@@ -12,7 +12,9 @@ interface getChartDataProps {
 }
 
 export const getChartData = ({ data, key, textColor }: getChartDataProps) => {
-  if (!data) return [];
+  if (!data) {
+    return [];
+  }
 
   const toLabel = (date: string) => {
     const formatted = formatToLocalTime(date, 'MM/dd HH:mm');

@@ -8,7 +8,9 @@ import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';
 import { bleManager } from '@/lib';
 
 export const getDeviceData = async (deviceId: string): Promise<Peripheral | null> => {
-  if (!deviceId) return null;
+  if (!deviceId) {
+    return null;
+  }
 
   const peripherals = await bleManager.getDiscoveredPeripherals();
   return peripherals.find((p) => p.id === deviceId) ?? null;
@@ -30,7 +32,9 @@ const useBleConnect = () => {
     async (deviceId: string) => {
       await bleManager.connect(deviceId);
       await bleManager.retrieveServices(deviceId);
-      if (Platform.OS === 'android') await bleManager.requestMTU(deviceId, 100);
+      if (Platform.OS === 'android') {
+        await bleManager.requestMTU(deviceId, 100);
+      }
       const deviceData = await getDeviceData(deviceId);
       setConnectedDevice(deviceData);
     },

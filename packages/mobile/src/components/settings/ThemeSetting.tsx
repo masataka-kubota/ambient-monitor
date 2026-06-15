@@ -14,7 +14,9 @@ const ThemeSetting = () => {
   const handlePress = useCallback(
     (id: number) => {
       const selected = themeOptions.find((opt) => opt.id === id);
-      if (selected) setThemeMode(selected.value);
+      if (selected) {
+        setThemeMode(selected.value);
+      }
     },
     [setThemeMode, themeOptions],
   );

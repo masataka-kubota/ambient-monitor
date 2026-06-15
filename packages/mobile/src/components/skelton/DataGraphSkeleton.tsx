@@ -19,15 +19,18 @@ interface DataGraphSkeletonProps {
 
 const DataGraphSkeleton = ({ width, height, tabWidth, tabLength }: DataGraphSkeletonProps) => {
   const { activeThemeColors } = useAppTheme();
+  const tabSkeletonItems = Array.from({ length: tabLength }, (_, index) => ({
+    id: `tab-skeleton-${index + 1}`,
+  }));
 
   return (
     <View>
       <View style={styles.container}>
         {/* Tabs Skeleton */}
         <View style={styles.tabsSkeletonContainer}>
-          {Array.from({ length: tabLength }).map((_, index) => (
+          {tabSkeletonItems.map((item) => (
             <SkeletonItem
-              key={index}
+              key={item.id}
               width={tabWidth / tabLength - SPACE}
               height={65}
               borderRadius={10}

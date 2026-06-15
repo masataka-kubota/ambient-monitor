@@ -18,7 +18,9 @@ const useBleWifiStatus = () => {
   const setWifiStatus = useSetAtom(wifiStatusAtom);
 
   const fetchWifiStatus = useCallback(async () => {
-    if (!connectedDevice) return null;
+    if (!connectedDevice) {
+      return null;
+    }
 
     try {
       const data = await bleManager.read(

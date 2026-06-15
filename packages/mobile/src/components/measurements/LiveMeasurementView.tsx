@@ -24,8 +24,12 @@ const HistoryMeasurementView = () => {
   const { data: m, isLoading, source } = useLiveMeasurement();
   const { t } = useTranslation();
 
-  if (isLoading) return <LiveMeasurementSkeleton bigRadius={bigRadius} smallRadius={smallRadius} />;
-  if (!m) return <ThemeText>No measurement</ThemeText>;
+  if (isLoading) {
+    return <LiveMeasurementSkeleton bigRadius={bigRadius} smallRadius={smallRadius} />;
+  }
+  if (!m) {
+    return <ThemeText>No measurement</ThemeText>;
+  }
 
   // format date
   const locatedDate = new Date(formatToLocalTime(m.createdAt));

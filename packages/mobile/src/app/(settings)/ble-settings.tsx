@@ -18,13 +18,15 @@ const BleSettings = () => {
 
   const handleScan = async () => {
     const isPermissionsGranted = await requestBlePermissions();
-    if (isPermissionsGranted) scanForPeripherals();
+    if (isPermissionsGranted) {
+      scanForPeripherals();
+    }
   };
 
   return (
     <>
       <HeaderNavigation title={t('ble.title')} />
-      <KeyboardAvoidingScrollableView hasHeader={true}>
+      <KeyboardAvoidingScrollableView hasHeader>
         {connectedDevice ? (
           <BleConnectedUI connectedDevice={connectedDevice} onDisconnect={disconnectDevice} />
         ) : connectedDeviceId ? (

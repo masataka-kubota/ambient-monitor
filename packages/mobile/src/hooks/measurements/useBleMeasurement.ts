@@ -50,7 +50,9 @@ const useBleMeasurement = () => {
   );
 
   const startMonitoring = useCallback(async () => {
-    if (!connectedDevice) return;
+    if (!connectedDevice) {
+      return;
+    }
 
     setIsLoading(true);
     try {

@@ -1,4 +1,4 @@
-import { Children, memo } from 'react';
+import { Children, isValidElement, memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { useAppTheme } from '@/hooks/common';
@@ -10,15 +10,18 @@ interface MenuLinkGroupProps {
 const MenuLinkGroup = ({ children }: MenuLinkGroupProps) => {
   const { activeThemeColors } = useAppTheme();
 
-  const items = Children.toArray(children);
+  const items = Children.toArray(children).filter((child): child is React.ReactElement =>
+    isValidElement(child),
+  );
 
   return (
     <View style={[styles.groupContainer, { borderColor: activeThemeColors.lightColor }]}>
       {items.map((child, index) => {
         const isLast = index === items.length - 1;
+
         return (
           <View
-            key={index}
+            key={child.key}
             style={
               !isLast && {
                 borderBottomWidth: 1,

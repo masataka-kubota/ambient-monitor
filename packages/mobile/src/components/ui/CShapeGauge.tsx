@@ -23,7 +23,9 @@ const getGradientForValue = (value: number, gradients: Gradient[], thresholds: n
   }
 
   for (let i = 0; i < thresholds.length; i++) {
-    if (value < thresholds[i]) return gradients[i];
+    if (value < thresholds[i]) {
+      return gradients[i];
+    }
   }
 
   return gradients[gradients.length - 1];

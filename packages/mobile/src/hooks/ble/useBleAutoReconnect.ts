@@ -8,7 +8,9 @@ const useBleAutoReconnect = (autoConnectToDevice: (deviceId: string) => Promise<
   const connectedDeviceId = useAtomValue(connectedDeviceIdAtom);
 
   useEffect(() => {
-    if (!connectedDeviceId) return;
+    if (!connectedDeviceId) {
+      return;
+    }
 
     const subscription = bleManager.onDidUpdateState(async ({ state }: { state: string }) => {
       if (state === 'on') {
