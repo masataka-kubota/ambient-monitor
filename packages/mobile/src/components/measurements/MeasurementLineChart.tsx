@@ -18,12 +18,7 @@ interface MeasurementLineChartProps {
   height: number;
 }
 
-const MeasurementLineChart = ({
-  data,
-  setting,
-  width,
-  height,
-}: MeasurementLineChartProps) => {
+const MeasurementLineChart = ({ data, setting, width, height }: MeasurementLineChartProps) => {
   const { activeThemeColors } = useAppTheme();
 
   return (
@@ -64,11 +59,13 @@ const MeasurementLineChart = ({
           autoAdjustPointerLabelPosition: true,
           activatePointersOnLongPress: true,
           activatePointersInstantlyOnTouch: false,
-          pointerLabelComponent: (
-            dataPoints: LineChartDataPoint[] | undefined,
-          ) => {
-            if (!dataPoints) return null;
-            if (!dataPoints[0].value) return null;
+          pointerLabelComponent: (dataPoints: LineChartDataPoint[] | undefined) => {
+            if (!dataPoints) {
+              return null;
+            }
+            if (!dataPoints[0].value) {
+              return null;
+            }
             const value = dataPoints[0].value.toFixed(setting.decimals);
             return (
               <View
@@ -78,10 +75,7 @@ const MeasurementLineChart = ({
                 ]}
               >
                 <ThemeText
-                  style={[
-                    styles.pointerLabelText,
-                    { color: activeThemeColors.mainBackground },
-                  ]}
+                  style={[styles.pointerLabelText, { color: activeThemeColors.mainBackground }]}
                 >
                   {`${value}${setting.unit}`}
                 </ThemeText>

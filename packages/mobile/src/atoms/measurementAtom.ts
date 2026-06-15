@@ -10,11 +10,14 @@ export const bleDataAvailabilityAtom = atom<BleDataAvailability>((get) => {
   const connectedDevice = get(connectedDeviceAtom);
   const bleMeasurementData = get(bleMeasurementAtom);
 
-  if (!connectedDevice) return 'unusable';
-  if (!bleMeasurementData) return 'unknown';
+  if (!connectedDevice) {
+    return 'unusable';
+  }
+  if (!bleMeasurementData) {
+    return 'unknown';
+  }
 
-  return Date.now() - bleMeasurementData.receivedAt <
-    BLE_MEASUREMENT_STALE_THRESHOLD_MS
+  return Date.now() - bleMeasurementData.receivedAt < BLE_MEASUREMENT_STALE_THRESHOLD_MS
     ? 'usable'
     : 'unusable';
 });

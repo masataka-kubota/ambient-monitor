@@ -10,10 +10,7 @@ const DataMeasurementsView = () => {
 
   return (
     <View>
-      <PeriodTabs
-        selectedPeriod={selectedPeriod}
-        onSelectPeriod={setSelectedPeriod}
-      />
+      <PeriodTabs selectedPeriod={selectedPeriod} onSelectPeriod={setSelectedPeriod} />
       <DataGraph period={selectedPeriod} />
     </View>
   );

@@ -12,10 +12,7 @@ interface BleConnectedUIProps {
   onDisconnect: (deviceId: string) => Promise<void>;
 }
 
-const BleConnectedUI = ({
-  connectedDevice,
-  onDisconnect,
-}: BleConnectedUIProps) => {
+const BleConnectedUI = ({ connectedDevice, onDisconnect }: BleConnectedUIProps) => {
   const { activeThemeColors } = useAppTheme();
   const { t } = useTranslation();
 
@@ -23,11 +20,7 @@ const BleConnectedUI = ({
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.headerContainer}>
-        <MaterialIcons
-          name="bluetooth-connected"
-          size={48}
-          color={activeThemeColors.mainColor}
-        />
+        <MaterialIcons name="bluetooth-connected" size={48} color={activeThemeColors.mainColor} />
 
         <ThemeText style={styles.title}>
           {t('ble.connected.title', { deviceName: connectedDevice.name })}

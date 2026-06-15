@@ -4,7 +4,9 @@ import { Permission, PermissionsAndroid, Platform } from 'react-native';
 
 const useBlePermissions = () => {
   const requestBlePermissions = useCallback(async () => {
-    if (Platform.OS !== 'android') return true;
+    if (Platform.OS !== 'android') {
+      return true;
+    }
 
     const permissions: Permission[] = [];
 
@@ -24,9 +26,7 @@ const useBlePermissions = () => {
     }
 
     const granted = await PermissionsAndroid.requestMultiple(permissions);
-    return Object.values(granted).every(
-      (result) => result === PermissionsAndroid.RESULTS.GRANTED,
-    );
+    return Object.values(granted).every((result) => result === PermissionsAndroid.RESULTS.GRANTED);
   }, []);
 
   return { requestBlePermissions };

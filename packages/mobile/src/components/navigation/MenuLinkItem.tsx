@@ -37,9 +37,7 @@ interface MenuLinkWithOnPressProps extends MenuLinkProps {
   buttonStyle?: StyleProp<ViewStyle>;
 }
 
-type CombinedMenuLinkItemProps =
-  | MenuLinkWithHrefProps
-  | MenuLinkWithOnPressProps;
+type CombinedMenuLinkItemProps = MenuLinkWithHrefProps | MenuLinkWithOnPressProps;
 
 const MenuLinkItem = ({
   title,
@@ -64,10 +62,7 @@ const MenuLinkItem = ({
 
   const content = (
     <>
-      <ThemeText
-        style={[textStyle, { color: itemColor ?? activeThemeColors.mainColor }]}
-        truncate
-      >
+      <ThemeText style={[textStyle, { color: itemColor ?? activeThemeColors.mainColor }]} truncate>
         {title}
       </ThemeText>
 
@@ -78,11 +73,7 @@ const MenuLinkItem = ({
             {infoText}
           </ThemeText>
         )}
-        <MaterialIcons
-          name={iconName}
-          size={16}
-          color={activeThemeColors.mainColor}
-        />
+        <MaterialIcons name={iconName} size={16} color={activeThemeColors.mainColor} />
       </View>
     </>
   );

@@ -50,7 +50,9 @@ const useBleMeasurement = () => {
   );
 
   const startMonitoring = useCallback(async () => {
-    if (!connectedDevice) return;
+    if (!connectedDevice) {
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -89,11 +91,9 @@ const useBleMeasurement = () => {
     const subscription = bleManager.onDidUpdateValueForCharacteristic(
       (dates: DidUpdateValueForCharacteristicArgs) => {
         const isTargetDevice = dates.peripheral === connectedDevice.id;
-        const isTargetService =
-          dates.service.toLowerCase() === BLE_SERVICE_UUID.toLowerCase();
+        const isTargetService = dates.service.toLowerCase() === BLE_SERVICE_UUID.toLowerCase();
         const isTargetChar =
-          dates.characteristic.toLowerCase() ===
-          MEASUREMENT_CHAR_UUID.toLowerCase();
+          dates.characteristic.toLowerCase() === MEASUREMENT_CHAR_UUID.toLowerCase();
 
         if (isTargetDevice && isTargetService && isTargetChar) {
           updateBleMeasurement(dates.value);
@@ -104,12 +104,7 @@ const useBleMeasurement = () => {
     return () => {
       subscription.remove();
     };
-  }, [
-    connectedDevice,
-    updateBleMeasurement,
-    setBleMeasurement,
-    startMonitoring,
-  ]);
+  }, [connectedDevice, updateBleMeasurement, setBleMeasurement, startMonitoring]);
 
   return { data: bleMeasurement, isLoading };
 };

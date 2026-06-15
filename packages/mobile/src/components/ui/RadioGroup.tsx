@@ -1,12 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { memo, useCallback } from 'react';
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-  ViewStyle,
-} from 'react-native';
+import { Pressable, StyleProp, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
 import { useAppTheme } from '@/hooks/common';
@@ -43,11 +37,7 @@ const RadioGroup = <T extends { id: number; name: string }>({
       {data.map((item) => (
         <Pressable
           key={item.id}
-          style={[
-            styles.button,
-            { borderBottomColor: activeThemeColors.lightColor },
-            buttonStyle,
-          ]}
+          style={[styles.button, { borderBottomColor: activeThemeColors.lightColor }, buttonStyle]}
           onPress={() => handlePress(item.id)}
           disabled={item.id === selectedId}
         >
@@ -55,16 +45,10 @@ const RadioGroup = <T extends { id: number; name: string }>({
             {item.name}
           </ThemeText>
           <Ionicons
-            name={
-              item.id === selectedId
-                ? 'radio-button-on-sharp'
-                : 'radio-button-off-sharp'
-            }
+            name={item.id === selectedId ? 'radio-button-on-sharp' : 'radio-button-off-sharp'}
             size={16}
             color={
-              item.id === selectedId
-                ? activeThemeColors.mainColor
-                : activeThemeColors.mediumColor
+              item.id === selectedId ? activeThemeColors.mainColor : activeThemeColors.mediumColor
             }
           />
         </Pressable>

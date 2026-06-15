@@ -2,11 +2,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { useCallback } from 'react';
 
 import { connectedDeviceAtom, wifiStatusAtom } from '@/atoms';
-import {
-  BLE_SERVICE_UUID,
-  STATUS_MAP,
-  WIFI_STATUS_CHAR_UUID,
-} from '@/constants/ble';
+import { BLE_SERVICE_UUID, STATUS_MAP, WIFI_STATUS_CHAR_UUID } from '@/constants/ble';
 import { bleManager } from '@/lib';
 import { WifiStatus } from '@/types';
 
@@ -22,7 +18,9 @@ const useBleWifiStatus = () => {
   const setWifiStatus = useSetAtom(wifiStatusAtom);
 
   const fetchWifiStatus = useCallback(async () => {
-    if (!connectedDevice) return null;
+    if (!connectedDevice) {
+      return null;
+    }
 
     try {
       const data = await bleManager.read(

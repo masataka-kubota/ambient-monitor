@@ -5,9 +5,6 @@ import { LanguageCode } from '@/types';
 
 const storage = createJSONStorage<LanguageCode | null>(() => AsyncStorage);
 
-export const languageAtom = atomWithStorage<LanguageCode | null>(
-  'language-code',
-  null,
-  storage,
-  { getOnInit: true },
-);
+export const languageAtom = atomWithStorage<LanguageCode | null>('language-code', null, storage, {
+  getOnInit: true,
+});

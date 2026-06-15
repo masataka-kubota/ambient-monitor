@@ -15,12 +15,7 @@ const buildWifiConfigPayload = (values: WifiFormValues): Uint8Array => {
   const buffer = Buffer.alloc(WIFI_SSID_MAX_LEN + WIFI_PASSWORD_MAX_LEN);
 
   buffer.write(values.ssid ?? '', 0, WIFI_SSID_MAX_LEN, 'utf8');
-  buffer.write(
-    values.password ?? '',
-    WIFI_SSID_MAX_LEN,
-    WIFI_PASSWORD_MAX_LEN,
-    'utf8',
-  );
+  buffer.write(values.password ?? '', WIFI_SSID_MAX_LEN, WIFI_PASSWORD_MAX_LEN, 'utf8');
 
   return buffer;
 };
@@ -30,7 +25,9 @@ const useBleWifiActions = () => {
   const { fetchWifiStatus } = useBleWifiStatus();
 
   const initializeWifiConfig = useCallback(async () => {
-    if (!connectedDevice) return null;
+    if (!connectedDevice) {
+      return null;
+    }
 
     try {
       const payload = buildWifiConfigPayload({ ssid: '', password: '' });
@@ -53,7 +50,9 @@ const useBleWifiActions = () => {
 
   const updateWifiConfig = useCallback(
     async (values: WifiFormValues) => {
-      if (!connectedDevice) return null;
+      if (!connectedDevice) {
+        return null;
+      }
 
       const payload = buildWifiConfigPayload(values);
 

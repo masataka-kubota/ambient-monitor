@@ -54,16 +54,14 @@ const DataGraph = ({ period }: DataGraphProps) => {
 
   const setting = MEASUREMENT_SETTINGS[selectedKey];
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <DataGraphSkeleton
-        width={WIDTH}
-        height={HEIGHT}
-        tabWidth={width}
-        tabLength={tabs.length}
-      />
+      <DataGraphSkeleton width={WIDTH} height={HEIGHT} tabWidth={width} tabLength={tabs.length} />
     );
-  if (!data) return <ThemeText>No data</ThemeText>;
+  }
+  if (!data) {
+    return <ThemeText>No data</ThemeText>;
+  }
 
   const chartData = getChartData({
     data,
@@ -74,11 +72,7 @@ const DataGraph = ({ period }: DataGraphProps) => {
   return (
     <View style={styles.container}>
       {/* Tabs */}
-      <IconTabs
-        tabs={tabs}
-        selectedKey={selectedKey}
-        onTabPress={setSelectedKey}
-      />
+      <IconTabs tabs={tabs} selectedKey={selectedKey} onTabPress={setSelectedKey} />
       {/* Chart */}
       <MeasurementLineChart
         key={`${selectedKey}-${period}`}

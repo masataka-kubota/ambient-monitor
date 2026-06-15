@@ -8,12 +8,7 @@ interface ThemeTextProps extends TextProps {
   truncate?: boolean;
 }
 
-const ThemeText = ({
-  children,
-  truncate = false,
-  style,
-  ...props
-}: ThemeTextProps) => {
+const ThemeText = ({ children, truncate = false, style, ...props }: ThemeTextProps) => {
   const { activeThemeColors } = useAppTheme();
 
   return (

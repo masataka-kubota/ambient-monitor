@@ -10,19 +10,15 @@ const useBleScan = () => {
   const setScannedDevices = useSetAtom(scannedDevicesAtom);
 
   useEffect(() => {
-    const discoverSubscription = bleManager.onDiscoverPeripheral(
-      (peripheral: Peripheral) => {
-        const name = peripheral.name ?? peripheral.advertising?.localName ?? '';
+    const discoverSubscription = bleManager.onDiscoverPeripheral((peripheral: Peripheral) => {
+      const name = peripheral.name ?? peripheral.advertising?.localName ?? '';
 
-        if (name.startsWith(BLE_DEVICE_NAME)) {
-          setScannedDevices((prev) =>
-            prev.some((d) => d.id === peripheral.id)
-              ? prev
-              : [...prev, peripheral],
-          );
-        }
-      },
-    );
+      if (name.startsWith(BLE_DEVICE_NAME)) {
+        setScannedDevices((prev) =>
+          prev.some((d) => d.id === peripheral.id) ? prev : [...prev, peripheral],
+        );
+      }
+    });
 
     const stopSubscription = bleManager.onStopScan(() => {
       // console.log("Scan stopped");

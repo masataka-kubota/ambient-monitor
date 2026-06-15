@@ -10,7 +10,7 @@ const BleWifiSettings = () => {
   return (
     <>
       <HeaderNavigation title={t('wifi.title')} />
-      <KeyboardAvoidingScrollableView hasHeader={true}>
+      <KeyboardAvoidingScrollableView hasHeader>
         {/* Status */}
         <BleWifiStatus />
 

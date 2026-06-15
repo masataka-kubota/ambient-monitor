@@ -28,32 +28,21 @@ const BleNotConnectedUI = ({
       {/* Header */}
       <View style={styles.headerContainer}>
         <MaterialIcons
-          name={
-            scannedDevices.length > 0
-              ? 'bluetooth-searching'
-              : 'bluetooth-disabled'
-          }
+          name={scannedDevices.length > 0 ? 'bluetooth-searching' : 'bluetooth-disabled'}
           size={48}
           color={activeThemeColors.mainColor}
         />
-        <ThemeText style={styles.title}>
-          {t('ble.notConnected.title')}
-        </ThemeText>
+        <ThemeText style={styles.title}>{t('ble.notConnected.title')}</ThemeText>
         <ThemeText>{t('ble.notConnected.description')}</ThemeText>
         {isConnecting && (
-          <ThemeText style={styles.connectingMessage}>
-            {t('ble.notConnected.connecting')}
-          </ThemeText>
+          <ThemeText style={styles.connectingMessage}>{t('ble.notConnected.connecting')}</ThemeText>
         )}
       </View>
 
       {!isConnecting && (
         <>
           {/* Scan button */}
-          <PrimaryButton
-            title={t('ble.notConnected.scanButton')}
-            onPress={onScan}
-          />
+          <PrimaryButton title={t('ble.notConnected.scanButton')} onPress={onScan} />
 
           {/* Device list */}
           <FlatList
@@ -62,14 +51,8 @@ const BleNotConnectedUI = ({
             scrollEnabled={false}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <MaterialIcons
-                  name="devices-other"
-                  size={40}
-                  color={activeThemeColors.mainColor}
-                />
-                <ThemeText style={styles.emptyText}>
-                  {t('ble.notConnected.emptyList')}
-                </ThemeText>
+                <MaterialIcons name="devices-other" size={40} color={activeThemeColors.mainColor} />
+                <ThemeText style={styles.emptyText}>{t('ble.notConnected.emptyList')}</ThemeText>
               </View>
             }
             renderItem={({ item }) => (
@@ -91,11 +74,7 @@ const BleNotConnectedUI = ({
                   </ThemeText>
                 </View>
 
-                <MaterialIcons
-                  name="chevron-right"
-                  size={24}
-                  color={activeThemeColors.mainColor}
-                />
+                <MaterialIcons name="chevron-right" size={24} color={activeThemeColors.mainColor} />
               </Pressable>
             )}
           />
