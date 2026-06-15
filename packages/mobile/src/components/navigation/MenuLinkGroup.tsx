@@ -18,10 +18,11 @@ const MenuLinkGroup = ({ children }: MenuLinkGroupProps) => {
     <View style={[styles.groupContainer, { borderColor: activeThemeColors.lightColor }]}>
       {items.map((child, index) => {
         const isLast = index === items.length - 1;
+        const key = child.key ?? `menu-link-group-${index + 1}`;
 
         return (
           <View
-            key={child.key}
+            key={key}
             style={
               !isLast && {
                 borderBottomWidth: 1,
