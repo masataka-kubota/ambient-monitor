@@ -1,6 +1,7 @@
-import { DarkTheme, DefaultTheme, Theme } from '@react-navigation/native';
+import type { Theme } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 
-import { AppThemeColors } from '@/types';
+import type { AppThemeColors } from '@/types';
 
 // common
 const black = 'rgba(62, 62, 62, 1)'; // #3e3e3e)

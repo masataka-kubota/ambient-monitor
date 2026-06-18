@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import DataGraph from '@/components/measurements/DataGraph';
 import PeriodTabs from '@/components/measurements/PeriodTabs';
-import { MeasurementRange } from '@/types';
+import type { MeasurementRange } from '@/types';
 
 const DataMeasurementsView = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<MeasurementRange>('1d');

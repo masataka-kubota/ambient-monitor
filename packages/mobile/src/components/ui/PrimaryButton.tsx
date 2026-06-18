@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react';
-import { Pressable, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 
 import { useAppTheme } from '@/hooks/common';
 import { triggerLightHaptics } from '@/utils';

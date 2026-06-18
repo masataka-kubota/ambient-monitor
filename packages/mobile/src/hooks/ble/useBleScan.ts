@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai';
 import { useEffect } from 'react';
-import { Peripheral } from 'react-native-ble-manager';
+import type { Peripheral } from 'react-native-ble-manager';
 
 import { scannedDevicesAtom } from '@/atoms';
 import { BLE_DEVICE_NAME, BLE_SERVICE_UUID } from '@/constants/ble';

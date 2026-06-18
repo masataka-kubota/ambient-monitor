@@ -1,15 +1,9 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { Link, LinkProps } from 'expo-router';
+import type { LinkProps } from 'expo-router';
+import { Link } from 'expo-router';
 import { memo, useCallback } from 'react';
-import {
-  GestureResponderEvent,
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import type { GestureResponderEvent, StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
 import { useAppTheme } from '@/hooks/common';

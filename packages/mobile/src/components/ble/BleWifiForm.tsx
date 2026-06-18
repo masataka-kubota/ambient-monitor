@@ -8,7 +8,7 @@ import { wifiStatusAtom } from '@/atoms';
 import { PrimaryButton, PrimaryTextInput } from '@/components/ui';
 import { useBleWifiActions } from '@/hooks/ble';
 import { useAppTheme } from '@/hooks/common';
-import { WifiFormValues } from '@/types';
+import type { WifiFormValues } from '@/types';
 
 const BleWifiForm = () => {
   const wifiStatus = useAtomValue(wifiStatusAtom);

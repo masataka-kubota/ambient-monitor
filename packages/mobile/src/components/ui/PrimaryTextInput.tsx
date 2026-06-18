@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import type { TextInputProps } from 'react-native';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
 import { useAppTheme } from '@/hooks/common';

@@ -8,7 +8,7 @@ import { IconTabs, ThemeText } from '@/components/ui';
 import { MEASUREMENT_SETTINGS } from '@/constants';
 import { useAppTheme } from '@/hooks/common';
 import { useMeasurements } from '@/hooks/measurements';
-import { MeasurementKey, MeasurementRange, MeasurementTabItem } from '@/types';
+import type { MeasurementKey, MeasurementRange, MeasurementTabItem } from '@/types';
 import { getChartData } from '@/utils/measurements';
 
 const { width, height } = Dimensions.get('window');

@@ -1,5 +1,6 @@
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
-import { StyleSheet, TextProps, View, ViewStyle } from 'react-native';
+import type { TextProps, ViewStyle } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
 import { useAppTheme } from '@/hooks/common';
