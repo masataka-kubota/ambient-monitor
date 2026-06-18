@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "ignorePatterns": [
+    "worker-configuration.d.ts",
+    "drizzle/migrations/**",
+    "dist/**",
+    ".wrangler/**",
+    "coverage/**"
+  ],
+  "sortImports": {
+    "groups": [
+      ["builtin", "external"],
+      ["internal", "subpath"],
+      ["parent", "sibling", "index"],
+      "unknown"
+    ],
+    "ignoreCase": true
+  }
+}
