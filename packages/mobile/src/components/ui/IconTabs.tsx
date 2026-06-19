@@ -1,4 +1,5 @@
 import Entypo from '@react-native-vector-icons/entypo/static';
+import type { EntypoIconName } from '@react-native-vector-icons/entypo/static';
 import { useCallback } from 'react';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
@@ -13,7 +14,7 @@ const _space = (_paddingHorizontal + _gap) * 2;
 interface TabItem<T extends string> {
   key: T;
   label: string;
-  iconName: keyof typeof Entypo.glyphMap;
+  iconName: EntypoIconName;
 }
 
 interface IconTabsProps<T extends string> {

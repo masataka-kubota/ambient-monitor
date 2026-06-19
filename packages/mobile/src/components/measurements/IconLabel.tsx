@@ -1,4 +1,5 @@
 import MaterialIcons from '@react-native-vector-icons/material-icons/static';
+import type { MaterialIconsIconName } from '@react-native-vector-icons/material-icons/static';
 import { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -6,7 +7,7 @@ import { ThemeText } from '@/components/ui';
 import { useAppTheme } from '@/hooks/common';
 
 interface IconLabelProps {
-  iconName: keyof typeof MaterialIcons.glyphMap;
+  iconName: MaterialIconsIconName;
   text: string;
   color?: string;
 }

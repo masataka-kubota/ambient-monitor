@@ -1,4 +1,5 @@
 import MaterialIcons from '@react-native-vector-icons/material-icons/static';
+import type { MaterialIconsIconName } from '@react-native-vector-icons/material-icons/static';
 import type { LinkProps } from 'expo-router';
 import { Link } from 'expo-router';
 import { memo, useCallback } from 'react';
@@ -13,7 +14,7 @@ interface MenuLinkProps {
   title: string;
   textStyle?: StyleProp<TextStyle>;
   itemColor?: TextStyle['color'];
-  iconName?: keyof typeof MaterialIcons.glyphMap;
+  iconName?: MaterialIconsIconName;
   infoText?: string;
 }
 
