@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { StyleSheet, Text, TextProps } from 'react-native';
+import type { TextProps } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 import { useAppTheme } from '@/hooks/common';
 

@@ -7,7 +7,7 @@ import { StyleSheet, View } from 'react-native';
 import { wifiStatusAtom } from '@/atoms';
 import { ThemeText } from '@/components/ui';
 import { useAppTheme } from '@/hooks/common';
-import { WifiStatusCode } from '@/types';
+import type { WifiStatusCode } from '@/types';
 
 const WIFI_STATUS_UI: Record<WifiStatusCode, { icon: keyof typeof MaterialIcons.glyphMap }> = {
   not_configured: { icon: 'wifi-off' },

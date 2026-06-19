@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai';
 
 import { selectedDeviceIdAtom } from '@/atoms';
 import { apiClient } from '@/lib';
-import { MeasurementRange } from '@/types';
+import type { MeasurementRange } from '@/types';
 
 const useMeasurements = (range: MeasurementRange) => {
   const selectedDeviceId = useAtomValue(selectedDeviceIdAtom);

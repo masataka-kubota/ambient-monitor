@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
-import { Peripheral } from 'react-native-ble-manager';
+import type { Peripheral } from 'react-native-ble-manager';
 
 import { PrimaryButton, ThemeText } from '@/components/ui';
 import { useAppTheme } from '@/hooks/common';

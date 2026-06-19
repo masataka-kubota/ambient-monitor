@@ -8,6 +8,10 @@ export default defineConfig({
     'eslint/no-unused-vars': 'error',
     'eslint/curly': 'warn',
 
+    // TypeScript rules
+    'typescript/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+    'typescript/no-explicit-any': 'warn',
+
     // --- React rules ---
     'react/exhaustive-deps': 'error',
     'react/rules-of-hooks': 'error',

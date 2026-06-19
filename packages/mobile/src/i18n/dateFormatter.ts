@@ -1,9 +1,10 @@
-import { format as formatDate, Locale, parseISO } from 'date-fns';
+import type { Locale } from 'date-fns';
+import { format as formatDate, parseISO } from 'date-fns';
 import { enUS, ja } from 'date-fns/locale';
-import { FormatFunction } from 'i18next';
+import type { FormatFunction } from 'i18next';
 
 import { INITIAL_LANGUAGE_CODE } from '@/constants';
-import { LanguageCode } from '@/types';
+import type { LanguageCode } from '@/types';
 import { isSupportedLanguageCode } from '@/utils';
 
 const localeMap: Record<LanguageCode, Locale> = {

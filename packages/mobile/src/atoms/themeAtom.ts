@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
-import { ThemeMode } from '@/types';
+import type { ThemeMode } from '@/types';
 
 const storage = createJSONStorage<ThemeMode>(() => AsyncStorage);
 

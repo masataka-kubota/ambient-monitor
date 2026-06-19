@@ -1,10 +1,11 @@
 import { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { LineChart, lineDataItem } from 'react-native-gifted-charts';
+import type { lineDataItem } from 'react-native-gifted-charts';
+import { LineChart } from 'react-native-gifted-charts';
 
 import { ThemeText } from '@/components/ui';
 import { useAppTheme } from '@/hooks/common';
-import { MeasurementSetting } from '@/types';
+import type { MeasurementSetting } from '@/types';
 
 interface LineChartDataPoint {
   labelComponent?: React.ReactNode;

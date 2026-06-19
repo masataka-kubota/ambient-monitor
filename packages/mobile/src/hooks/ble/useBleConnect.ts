@@ -1,7 +1,7 @@
 import { useSetAtom } from 'jotai';
 import { useCallback, useState } from 'react';
 import { Platform } from 'react-native';
-import { Peripheral } from 'react-native-ble-manager';
+import type { Peripheral } from 'react-native-ble-manager';
 
 import { connectedDeviceAtom, connectedDeviceIdAtom, scannedDevicesAtom } from '@/atoms';
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useAppTheme } from '@/hooks/common';

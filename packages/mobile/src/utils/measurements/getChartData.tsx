@@ -1,8 +1,8 @@
-import { MeasurementListResponse } from 'backend';
+import type { MeasurementListResponse } from 'backend';
 import { View } from 'react-native';
 
 import { ThemeText } from '@/components/ui';
-import { MeasurementKey } from '@/types';
+import type { MeasurementKey } from '@/types';
 import { formatToLocalTime } from '@/utils/date';
 
 interface getChartDataProps {

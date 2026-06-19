@@ -5,7 +5,7 @@ import { connectedDeviceAtom } from '@/atoms';
 import { BLE_SERVICE_UUID, WIFI_CONFIG_CHAR_UUID } from '@/constants/ble';
 import useBleWifiStatus from '@/hooks/ble/useBleWifiStatus';
 import { bleManager } from '@/lib';
-import { WifiFormValues } from '@/types';
+import type { WifiFormValues } from '@/types';
 
 const WIFI_SSID_MAX_LEN = 32;
 const WIFI_PASSWORD_MAX_LEN = 64;
