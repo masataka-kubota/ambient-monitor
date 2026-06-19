@@ -9,17 +9,12 @@ import { StyleSheet, View } from 'react-native';
 import ThemeText from '@/components/ui/ThemeText';
 import { useAppTheme } from '@/hooks/common';
 
-const ICON_LIBS = {
-  Entypo,
-  MaterialIcons,
-} as const;
-
 interface IconNameMap {
   Entypo: EntypoIconName;
   MaterialIcons: MaterialIconsIconName;
 }
 
-type IconLib = keyof typeof ICON_LIBS;
+type IconLib = keyof IconNameMap;
 
 export type HeadingIconProp = {
   [K in IconLib]: { iconLib: K; iconName: IconNameMap[K] };
@@ -43,19 +38,22 @@ const Heading = ({
   const { activeThemeColors } = useAppTheme();
 
   const renderIcon = useCallback(() => {
-    if (icon == null) {
+    if (!icon) {
       return null;
     }
 
-    const Icon = ICON_LIBS[icon.iconLib];
-    return (
-      <Icon
-        name={icon.iconName as never}
-        size={fontSize * 1.5}
-        color={activeThemeColors.mainColor}
-        style={{ marginRight: fontSize * 0.5 }}
-      />
-    );
+    const iconProps = {
+      size: fontSize * 1.5,
+      color: activeThemeColors.mainColor,
+      style: { marginRight: fontSize * 0.5 },
+    };
+
+    switch (icon.iconLib) {
+      case 'Entypo':
+        return <Entypo name={icon.iconName} {...iconProps} />;
+      case 'MaterialIcons':
+        return <MaterialIcons name={icon.iconName} {...iconProps} />;
+    }
   }, [icon, fontSize, activeThemeColors]);
 
   return (
