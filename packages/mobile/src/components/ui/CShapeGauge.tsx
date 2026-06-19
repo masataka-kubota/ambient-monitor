@@ -1,4 +1,4 @@
-import { Entypo } from '@expo/vector-icons';
+import Entypo from '@react-native-vector-icons/entypo/static';
 import { memo, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedProps, useSharedValue, withTiming } from 'react-native-reanimated';

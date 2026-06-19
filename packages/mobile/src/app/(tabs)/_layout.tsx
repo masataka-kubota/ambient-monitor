@@ -1,4 +1,4 @@
-import { Entypo } from '@expo/vector-icons';
+import Entypo from '@react-native-vector-icons/entypo/static';
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 

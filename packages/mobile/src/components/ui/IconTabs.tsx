@@ -1,4 +1,4 @@
-import { Entypo } from '@expo/vector-icons';
+import Entypo from '@react-native-vector-icons/entypo/static';
 import { useCallback } from 'react';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 

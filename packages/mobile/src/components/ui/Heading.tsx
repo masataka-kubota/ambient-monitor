@@ -1,4 +1,5 @@
-import { Entypo, MaterialIcons } from '@expo/vector-icons';
+import Entypo from '@react-native-vector-icons/entypo/static';
+import MaterialIcons from '@react-native-vector-icons/material-icons/static';
 import type { TextProps, ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 

@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import MaterialIcons from '@react-native-vector-icons/material-icons/static';
 import type { LinkProps } from 'expo-router';
 import { Link } from 'expo-router';
 import { memo, useCallback } from 'react';
