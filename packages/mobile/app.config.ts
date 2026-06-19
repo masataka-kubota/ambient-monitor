@@ -87,6 +87,9 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
         bluetoothAlwaysPermission: 'Allow $(getAppName()) to connect to bluetooth devices',
       },
     ],
+    '@react-native-vector-icons/entypo',
+    '@react-native-vector-icons/material-icons',
+    '@react-native-vector-icons/ionicons',
   ],
 
   experiments: {

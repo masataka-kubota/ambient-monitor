@@ -1,4 +1,5 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import MaterialIcons from '@react-native-vector-icons/material-icons/static';
+import type { MaterialIconsIconName } from '@react-native-vector-icons/material-icons/static';
 import { useAtomValue } from 'jotai';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,7 @@ import { ThemeText } from '@/components/ui';
 import { useAppTheme } from '@/hooks/common';
 import type { WifiStatusCode } from '@/types';
 
-const WIFI_STATUS_UI: Record<WifiStatusCode, { icon: keyof typeof MaterialIcons.glyphMap }> = {
+const WIFI_STATUS_UI: Record<WifiStatusCode, { icon: MaterialIconsIconName }> = {
   not_configured: { icon: 'wifi-off' },
   configured: { icon: 'settings' },
   connecting: { icon: 'autorenew' },
