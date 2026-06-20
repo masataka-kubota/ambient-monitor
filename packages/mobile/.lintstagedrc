@@ -1,3 +1,4 @@
 {
-  "*.{js,jsx,ts,tsx,json,yaml,yml}": ["bunx oxfmt", "bunx oxlint --fix"]
+  "*.{js,jsx,ts,tsx}": "bunx oxlint --fix",
+  "*.{js,jsx,ts,tsx,json,yaml,yml}": "bunx oxfmt"
 }
