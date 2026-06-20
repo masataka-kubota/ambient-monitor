@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import MaterialIcons from '@react-native-vector-icons/material-icons/static';
 import { useRouter } from 'expo-router';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,24 +20,15 @@ const BleReconnectUI = ({ forgetDevice }: BleReconnectUIProps) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.headerContainer}>
-        <MaterialIcons
-          name="sync-problem"
-          size={48}
-          color={activeThemeColors.mainColor}
-        />
+        <MaterialIcons name="sync-problem" size={48} color={activeThemeColors.mainColor} />
 
         <ThemeText style={styles.title}>{t('ble.reconnect.title')}</ThemeText>
 
-        <ThemeText style={styles.description}>
-          {t('ble.reconnect.description')}
-        </ThemeText>
+        <ThemeText style={styles.description}>{t('ble.reconnect.description')}</ThemeText>
       </View>
 
       {/* Back button */}
-      <PrimaryButton
-        title={t('ble.reconnect.backButton')}
-        onPress={() => router.back()}
-      />
+      <PrimaryButton title={t('ble.reconnect.backButton')} onPress={() => router.back()} />
 
       {/* Forget button */}
       <PrimaryButton

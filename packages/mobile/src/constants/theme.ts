@@ -1,6 +1,7 @@
-import { DarkTheme, DefaultTheme, Theme } from '@react-navigation/native';
+import type { Theme } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 
-import { AppThemeColors } from '@/types';
+import type { AppThemeColors } from '@/types';
 
 // common
 const black = 'rgba(62, 62, 62, 1)'; // #3e3e3e)
@@ -57,8 +58,8 @@ export const APP_THEME_COLORS: AppThemeColors = {
     secondaryBackground: inputBackgroundLight,
     navBackground: navBackgroundLight,
     shadow: shadowLight,
-    tint: tint,
-    onTint: onTint,
+    tint,
+    onTint,
     link: blue,
     error: red,
   },
@@ -70,8 +71,8 @@ export const APP_THEME_COLORS: AppThemeColors = {
     secondaryBackground: inputBackgroundDark,
     navBackground: navBackgroundDark,
     shadow: shadowDark,
-    tint: tint,
-    onTint: onTint,
+    tint,
+    onTint,
     link: blue,
     error: red,
   },

@@ -1,4 +1,4 @@
-import { MEASUREMENT_KEYS, MEASUREMENT_RANGES } from '@/constants';
+import type { MEASUREMENT_KEYS, MEASUREMENT_RANGES } from '@/constants';
 
 export type MeasurementKey = (typeof MEASUREMENT_KEYS)[number];
 

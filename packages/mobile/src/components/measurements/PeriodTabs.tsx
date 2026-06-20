@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { ThemeText } from '@/components/ui';
 import { MEASUREMENT_RANGES } from '@/constants';
 import { useAppTheme } from '@/hooks/common';
-import { MeasurementRange } from '@/types';
+import type { MeasurementRange } from '@/types';
 import { triggerLightHaptics } from '@/utils';
 
 interface PeriodTabsProps {
@@ -43,9 +43,7 @@ const PeriodTabs = ({ selectedPeriod, onSelectPeriod }: PeriodTabsProps) => {
             <ThemeText
               style={{
                 fontWeight: focused ? 'bold' : 'normal',
-                color: focused
-                  ? activeThemeColors.mainBackground
-                  : activeThemeColors.mediumColor,
+                color: focused ? activeThemeColors.mainBackground : activeThemeColors.mediumColor,
               }}
             >
               {t(`data.period.${p}`)}

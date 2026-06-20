@@ -1,11 +1,8 @@
-import { Entypo } from '@expo/vector-icons';
+import Entypo from '@react-native-vector-icons/entypo/static';
+import type { EntypoIconName } from '@react-native-vector-icons/entypo/static';
 import { memo, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, {
-  useAnimatedProps,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedProps, useSharedValue, withTiming } from 'react-native-reanimated';
 import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 
 import ThemeText from '@/components/ui/ThemeText';
@@ -21,17 +18,15 @@ interface Gradient {
 }
 
 //  Returns the gradient color for the given value
-const getGradientForValue = (
-  value: number,
-  gradients: Gradient[],
-  thresholds: number[],
-) => {
+const getGradientForValue = (value: number, gradients: Gradient[], thresholds: number[]) => {
   if (gradients.length !== thresholds.length) {
     console.warn('gradientColors and thresholds count mismatch');
   }
 
   for (let i = 0; i < thresholds.length; i++) {
-    if (value < thresholds[i]) return gradients[i];
+    if (value < thresholds[i]) {
+      return gradients[i];
+    }
   }
 
   return gradients[gradients.length - 1];
@@ -42,7 +37,7 @@ interface CShapeGaugeProps {
   unit?: string;
   decimalPlaces?: number;
   label: string;
-  iconName: keyof typeof Entypo.glyphMap;
+  iconName: EntypoIconName;
   radius?: number;
   strokeWidth?: number;
   gradientColors: Gradient[];
@@ -105,21 +100,11 @@ const CShapeGauge = ({
 
       {/* Value */}
       <View style={[styles.centered, { top: center - valueFontSize / 2 }]}>
-        <ThemeText
-          style={[
-            styles.value,
-            { fontSize: valueFontSize, lineHeight: valueFontSize },
-          ]}
-        >
+        <ThemeText style={[styles.value, { fontSize: valueFontSize, lineHeight: valueFontSize }]}>
           {value.toFixed(decimalPlaces)}
         </ThemeText>
         {unit ? (
-          <ThemeText
-            style={[
-              styles.unit,
-              { fontSize: unitFontSize, lineHeight: unitFontSize },
-            ]}
-          >
+          <ThemeText style={[styles.unit, { fontSize: unitFontSize, lineHeight: unitFontSize }]}>
             {unit}
           </ThemeText>
         ) : null}
@@ -134,10 +119,7 @@ const CShapeGauge = ({
           style={styles.labelIcon}
         />
         <ThemeText
-          style={[
-            styles.label,
-            { fontSize: labelFontSize, lineHeight: labelFontSize * 1.3 },
-          ]}
+          style={[styles.label, { fontSize: labelFontSize, lineHeight: labelFontSize * 1.3 }]}
         >
           {label}
         </ThemeText>

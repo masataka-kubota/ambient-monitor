@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "jsPlugins": ["eslint-plugin-drizzle"],
+  "rules": {
+    // Drizzle rules
+    "drizzle/enforce-delete-with-where": "error",
+    "drizzle/enforce-update-with-where": "error",
+
+    // TypeScript rules
+    "typescript/consistent-type-imports": ["error", { "prefer": "type-imports" }],
+    "typescript/no-explicit-any": "warn"
+  }
+}

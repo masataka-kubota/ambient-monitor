@@ -1,4 +1,4 @@
-import { WifiStatusCode } from '@/types';
+import type { WifiStatusCode } from '@/types';
 
 export const BLE_DEVICE_NAME = 'ESP32-Monitor';
 

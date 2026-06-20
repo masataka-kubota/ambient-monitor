@@ -9,7 +9,7 @@ const Data = () => {
 
   return (
     <KeyboardAvoidingScrollableView>
-      <Heading iconLib="Entypo" iconName="line-graph" align="center">
+      <Heading icon={{ iconLib: 'Entypo', iconName: 'line-graph' }} align="center">
         {t('data.title')}
       </Heading>
       <DataMeasurementsView />

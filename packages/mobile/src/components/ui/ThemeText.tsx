@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { StyleSheet, Text, TextProps } from 'react-native';
+import type { TextProps } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 import { useAppTheme } from '@/hooks/common';
 
@@ -8,12 +9,7 @@ interface ThemeTextProps extends TextProps {
   truncate?: boolean;
 }
 
-const ThemeText = ({
-  children,
-  truncate = false,
-  style,
-  ...props
-}: ThemeTextProps) => {
+const ThemeText = ({ children, truncate = false, style, ...props }: ThemeTextProps) => {
   const { activeThemeColors } = useAppTheme();
 
   return (

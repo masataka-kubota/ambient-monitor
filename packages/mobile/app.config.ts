@@ -1,4 +1,4 @@
-import { ConfigContext, ExpoConfig } from 'expo/config';
+import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 import pkg from './package.json';
 
@@ -6,14 +6,22 @@ const IS_DEV = process.env.APP_VARIANT === 'development';
 const IS_PREVIEW = process.env.APP_VARIANT === 'preview';
 
 const getUniqueIdentifier = () => {
-  if (IS_DEV) return 'dev.ambientmonitor.dev';
-  if (IS_PREVIEW) return 'dev.ambientmonitor.preview';
+  if (IS_DEV) {
+    return 'dev.ambientmonitor.dev';
+  }
+  if (IS_PREVIEW) {
+    return 'dev.ambientmonitor.preview';
+  }
   return 'dev.ambientmonitor';
 };
 
 const getAppName = () => {
-  if (IS_DEV) return 'Ambient Monitor (Dev)';
-  if (IS_PREVIEW) return 'Ambient Monitor (Preview)';
+  if (IS_DEV) {
+    return 'Ambient Monitor (Dev)';
+  }
+  if (IS_PREVIEW) {
+    return 'Ambient Monitor (Preview)';
+  }
   return 'Ambient Monitor';
 };
 
@@ -76,10 +84,12 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
       {
         neverForLocation: true,
         isBleRequired: true,
-        bluetoothAlwaysPermission:
-          'Allow $(getAppName()) to connect to bluetooth devices',
+        bluetoothAlwaysPermission: 'Allow $(getAppName()) to connect to bluetooth devices',
       },
     ],
+    '@react-native-vector-icons/entypo',
+    '@react-native-vector-icons/material-icons',
+    '@react-native-vector-icons/ionicons',
   ],
 
   experiments: {

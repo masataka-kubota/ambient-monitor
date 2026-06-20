@@ -1,4 +1,4 @@
-import { env } from 'cloudflare:test'
+import { env } from 'cloudflare:workers'
 
 import { SEED_MEASUREMENTS, TEST_DEVICE } from '@/test/constants'
 

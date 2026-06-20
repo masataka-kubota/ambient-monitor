@@ -15,19 +15,19 @@ const Settings = () => {
   return (
     <KeyboardAvoidingScrollableView>
       {/* Theme */}
-      <Heading mt={20} iconLib="Entypo" iconName="adjust">
+      <Heading mt={20} icon={{ iconLib: 'Entypo', iconName: 'adjust' }}>
         {t('settings.title.theme')}
       </Heading>
       <ThemeSetting />
 
       {/* Language */}
-      <Heading mt={50} iconLib="Entypo" iconName="globe">
+      <Heading mt={50} icon={{ iconLib: 'Entypo', iconName: 'globe' }}>
         {t('settings.title.lang')}
       </Heading>
       <LangSetting />
 
       {/* Bluetooth */}
-      <Heading mt={50} iconLib="MaterialIcons" iconName="bluetooth">
+      <Heading mt={50} icon={{ iconLib: 'MaterialIcons', iconName: 'bluetooth' }}>
         {t('settings.title.ble')}
       </Heading>
       <MenuLinkGroup>

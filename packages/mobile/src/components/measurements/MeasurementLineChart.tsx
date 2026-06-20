@@ -1,10 +1,11 @@
 import { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { LineChart, lineDataItem } from 'react-native-gifted-charts';
+import type { lineDataItem } from 'react-native-gifted-charts';
+import { LineChart } from 'react-native-gifted-charts';
 
 import { ThemeText } from '@/components/ui';
 import { useAppTheme } from '@/hooks/common';
-import { MeasurementSetting } from '@/types';
+import type { MeasurementSetting } from '@/types';
 
 interface LineChartDataPoint {
   labelComponent?: React.ReactNode;
@@ -18,12 +19,7 @@ interface MeasurementLineChartProps {
   height: number;
 }
 
-const MeasurementLineChart = ({
-  data,
-  setting,
-  width,
-  height,
-}: MeasurementLineChartProps) => {
+const MeasurementLineChart = ({ data, setting, width, height }: MeasurementLineChartProps) => {
   const { activeThemeColors } = useAppTheme();
 
   return (
@@ -64,11 +60,13 @@ const MeasurementLineChart = ({
           autoAdjustPointerLabelPosition: true,
           activatePointersOnLongPress: true,
           activatePointersInstantlyOnTouch: false,
-          pointerLabelComponent: (
-            dataPoints: LineChartDataPoint[] | undefined,
-          ) => {
-            if (!dataPoints) return null;
-            if (!dataPoints[0].value) return null;
+          pointerLabelComponent: (dataPoints: LineChartDataPoint[] | undefined) => {
+            if (!dataPoints) {
+              return null;
+            }
+            if (!dataPoints[0].value) {
+              return null;
+            }
             const value = dataPoints[0].value.toFixed(setting.decimals);
             return (
               <View
@@ -78,10 +76,7 @@ const MeasurementLineChart = ({
                 ]}
               >
                 <ThemeText
-                  style={[
-                    styles.pointerLabelText,
-                    { color: activeThemeColors.mainBackground },
-                  ]}
+                  style={[styles.pointerLabelText, { color: activeThemeColors.mainBackground }]}
                 >
                   {`${value}${setting.unit}`}
                 </ThemeText>

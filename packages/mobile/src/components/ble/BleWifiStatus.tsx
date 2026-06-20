@@ -1,4 +1,5 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import MaterialIcons from '@react-native-vector-icons/material-icons/static';
+import type { MaterialIconsIconName } from '@react-native-vector-icons/material-icons/static';
 import { useAtomValue } from 'jotai';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,12 +8,9 @@ import { StyleSheet, View } from 'react-native';
 import { wifiStatusAtom } from '@/atoms';
 import { ThemeText } from '@/components/ui';
 import { useAppTheme } from '@/hooks/common';
-import { WifiStatusCode } from '@/types';
+import type { WifiStatusCode } from '@/types';
 
-const WIFI_STATUS_UI: Record<
-  WifiStatusCode,
-  { icon: keyof typeof MaterialIcons.glyphMap }
-> = {
+const WIFI_STATUS_UI: Record<WifiStatusCode, { icon: MaterialIconsIconName }> = {
   not_configured: { icon: 'wifi-off' },
   configured: { icon: 'settings' },
   connecting: { icon: 'autorenew' },
@@ -28,11 +26,7 @@ const BleWifiStatus = () => {
   if (!wifiStatus) {
     return (
       <View style={styles.statusContainer}>
-        <MaterialIcons
-          name="help-outline"
-          size={48}
-          color={activeThemeColors.mainColor}
-        />
+        <MaterialIcons name="help-outline" size={48} color={activeThemeColors.mainColor} />
         <ThemeText>{t('wifi.status.none')}</ThemeText>
       </View>
     );
@@ -43,11 +37,7 @@ const BleWifiStatus = () => {
 
   return (
     <View style={styles.statusContainer}>
-      <MaterialIcons
-        name={iconName}
-        size={48}
-        color={activeThemeColors.mainColor}
-      />
+      <MaterialIcons name={iconName} size={48} color={activeThemeColors.mainColor} />
       <ThemeText>
         {t(statusKey)}
         {wifiStatus.ssid ? ` (${wifiStatus.ssid})` : ''}

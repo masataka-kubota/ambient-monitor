@@ -8,7 +8,7 @@ import { wifiStatusAtom } from '@/atoms';
 import { PrimaryButton, PrimaryTextInput } from '@/components/ui';
 import { useBleWifiActions } from '@/hooks/ble';
 import { useAppTheme } from '@/hooks/common';
-import { WifiFormValues } from '@/types';
+import type { WifiFormValues } from '@/types';
 
 const BleWifiForm = () => {
   const wifiStatus = useAtomValue(wifiStatusAtom);
@@ -54,8 +54,7 @@ const BleWifiForm = () => {
       <form.Field
         name="ssid"
         validators={{
-          onChange: ({ value }) =>
-            value.trim().length === 0 ? 'SSID is required' : undefined,
+          onChange: ({ value }) => (value.trim().length === 0 ? 'SSID is required' : undefined),
         }}
       >
         {(field) => (
@@ -74,8 +73,7 @@ const BleWifiForm = () => {
       <form.Field
         name="password"
         validators={{
-          onChange: ({ value }) =>
-            value.trim().length === 0 ? 'Password is required' : undefined,
+          onChange: ({ value }) => (value.trim().length === 0 ? 'Password is required' : undefined),
         }}
       >
         {(field) => (
@@ -96,20 +94,12 @@ const BleWifiForm = () => {
       </form.Field>
 
       {/* Save Button */}
-      <form.Subscribe
-        selector={(state) => [
-          state.canSubmit,
-          state.isSubmitting,
-          state.isDirty,
-        ]}
-      >
+      <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}>
         {([canSubmit, isSubmitting, isDirty]) => (
           <PrimaryButton
             title={isSubmitting ? t('wifi.form.saving') : t('wifi.form.save')}
             onPress={form.handleSubmit}
-            disabled={
-              wifiStatus?.status === 'connecting' || !canSubmit || !isDirty
-            }
+            disabled={wifiStatus?.status === 'connecting' || !canSubmit || !isDirty}
           />
         )}
       </form.Subscribe>

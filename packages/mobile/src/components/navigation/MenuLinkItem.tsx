@@ -1,15 +1,10 @@
-import { MaterialIcons } from '@expo/vector-icons';
-import { Link, LinkProps } from 'expo-router';
+import MaterialIcons from '@react-native-vector-icons/material-icons/static';
+import type { MaterialIconsIconName } from '@react-native-vector-icons/material-icons/static';
+import type { LinkProps } from 'expo-router';
+import { Link } from 'expo-router';
 import { memo, useCallback } from 'react';
-import {
-  GestureResponderEvent,
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import type { GestureResponderEvent, StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import ThemeText from '@/components/ui/ThemeText';
 import { useAppTheme } from '@/hooks/common';
@@ -19,7 +14,7 @@ interface MenuLinkProps {
   title: string;
   textStyle?: StyleProp<TextStyle>;
   itemColor?: TextStyle['color'];
-  iconName?: keyof typeof MaterialIcons.glyphMap;
+  iconName?: MaterialIconsIconName;
   infoText?: string;
 }
 
@@ -37,9 +32,7 @@ interface MenuLinkWithOnPressProps extends MenuLinkProps {
   buttonStyle?: StyleProp<ViewStyle>;
 }
 
-type CombinedMenuLinkItemProps =
-  | MenuLinkWithHrefProps
-  | MenuLinkWithOnPressProps;
+type CombinedMenuLinkItemProps = MenuLinkWithHrefProps | MenuLinkWithOnPressProps;
 
 const MenuLinkItem = ({
   title,
@@ -64,10 +57,7 @@ const MenuLinkItem = ({
 
   const content = (
     <>
-      <ThemeText
-        style={[textStyle, { color: itemColor ?? activeThemeColors.mainColor }]}
-        truncate
-      >
+      <ThemeText style={[textStyle, { color: itemColor ?? activeThemeColors.mainColor }]} truncate>
         {title}
       </ThemeText>
 
@@ -78,11 +68,7 @@ const MenuLinkItem = ({
             {infoText}
           </ThemeText>
         )}
-        <MaterialIcons
-          name={iconName}
-          size={16}
-          color={activeThemeColors.mainColor}
-        />
+        <MaterialIcons name={iconName} size={16} color={activeThemeColors.mainColor} />
       </View>
     </>
   );

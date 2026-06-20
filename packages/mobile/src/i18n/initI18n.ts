@@ -4,10 +4,12 @@ import { initReactI18next } from 'react-i18next';
 import { dateFormatter } from '@/i18n/dateFormatter';
 import en from '@/i18n/locales/en';
 import ja from '@/i18n/locales/ja';
-import { LanguageCode } from '@/types';
+import type { LanguageCode } from '@/types';
 
 export const initI18n = async (languageCode: LanguageCode) => {
-  if (i18next.isInitialized) return;
+  if (i18next.isInitialized) {
+    return;
+  }
 
   // eslint-disable-next-line import/no-named-as-default-member
   await i18next.use(initReactI18next).init({

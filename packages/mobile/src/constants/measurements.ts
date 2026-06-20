@@ -1,10 +1,6 @@
-import { MeasurementSettings } from '@/types';
+import type { MeasurementSettings } from '@/types';
 
-export const MEASUREMENT_KEYS = [
-  'temperature',
-  'humidity',
-  'pressure',
-] as const;
+export const MEASUREMENT_KEYS = ['temperature', 'humidity', 'pressure'] as const;
 
 export const MEASUREMENT_SETTINGS: MeasurementSettings = {
   temperature: { min: -5, max: 40, unit: '°C', decimals: 1 },

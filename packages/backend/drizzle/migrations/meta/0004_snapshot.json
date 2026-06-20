@@ -63,16 +63,12 @@
       "indexes": {
         "devices_external_id_unique": {
           "name": "devices_external_id_unique",
-          "columns": [
-            "external_id"
-          ],
+          "columns": ["external_id"],
           "isUnique": true
         },
         "idx_devices_external_id": {
           "name": "idx_devices_external_id",
-          "columns": [
-            "external_id"
-          ],
+          "columns": ["external_id"],
           "isUnique": false
         }
       },
@@ -131,16 +127,12 @@
       "indexes": {
         "idx_measurements_device_id": {
           "name": "idx_measurements_device_id",
-          "columns": [
-            "device_id"
-          ],
+          "columns": ["device_id"],
           "isUnique": false
         },
         "idx_measurements_created_at": {
           "name": "idx_measurements_created_at",
-          "columns": [
-            "created_at"
-          ],
+          "columns": ["created_at"],
           "isUnique": false
         }
       },
@@ -149,12 +141,8 @@
           "name": "measurements_device_id_devices_id_fk",
           "tableFrom": "measurements",
           "tableTo": "devices",
-          "columnsFrom": [
-            "device_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["device_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }

@@ -13,10 +13,7 @@ interface CShapeGaugeSkeletonProps {
   strokeWidth: number;
 }
 
-const CShapeGaugeSkeleton = ({
-  radius,
-  strokeWidth,
-}: CShapeGaugeSkeletonProps) => {
+const CShapeGaugeSkeleton = ({ radius, strokeWidth }: CShapeGaugeSkeletonProps) => {
   const { activeThemeColors } = useAppTheme();
   const { skeltonAnimatedStyle } = useSkeletonAnimation();
 

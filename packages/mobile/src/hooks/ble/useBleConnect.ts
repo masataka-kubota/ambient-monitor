@@ -1,27 +1,40 @@
 import { useSetAtom } from 'jotai';
 import { useCallback, useState } from 'react';
 import { Platform } from 'react-native';
-import { Peripheral } from 'react-native-ble-manager';
+import type { Peripheral } from 'react-native-ble-manager';
 
-import {
-  connectedDeviceAtom,
-  connectedDeviceIdAtom,
-  scannedDevicesAtom,
-} from '@/atoms';
+import { connectedDeviceAtom, connectedDeviceIdAtom, scannedDevicesAtom } from '@/atoms';
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';
 import { bleManager } from '@/lib';
 
-export const getDeviceData = async (
-  deviceId: string,
-): Promise<Peripheral | null> => {
-  if (!deviceId) return null;
+export const getDeviceData = async (deviceId: string): Promise<Peripheral | null> => {
+  if (!deviceId) {
+    return null;
+  }
 
   const peripherals = await bleManager.getDiscoveredPeripherals();
   return peripherals.find((p) => p.id === deviceId) ?? null;
 };
 
-const getBleErrorMessage = (error: unknown): string =>
-  String((error as any)?.message ?? (error as any)?.error ?? error);
+const getBleErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === 'object' && error !== null) {
+    const message = 'message' in error ? error.message : undefined;
+    if (typeof message === 'string') {
+      return message;
+    }
+
+    const nestedError = 'error' in error ? error.error : undefined;
+    if (typeof nestedError === 'string') {
+      return nestedError;
+    }
+  }
+
+  return String(error);
+};
 
 const isExpectedBleError = (error: unknown): boolean =>
   getBleErrorMessage(error).toLowerCase().includes('disconnect');
@@ -36,7 +49,9 @@ const useBleConnect = () => {
     async (deviceId: string) => {
       await bleManager.connect(deviceId);
       await bleManager.retrieveServices(deviceId);
-      if (Platform.OS === 'android') await bleManager.requestMTU(deviceId, 100);
+      if (Platform.OS === 'android') {
+        await bleManager.requestMTU(deviceId, 100);
+      }
       const deviceData = await getDeviceData(deviceId);
       setConnectedDevice(deviceData);
     },
@@ -72,10 +87,7 @@ const useBleConnect = () => {
           // Android often throws "Device disconnected" when the device
           // is already connected from another phone. This is an expected case.
           if (__DEV__) {
-            console.info(
-              '[BLE] expected reconnect failure is dev:',
-              getBleErrorMessage(error),
-            );
+            console.info('[BLE] expected reconnect failure is dev:', getBleErrorMessage(error));
           }
           return;
         }
@@ -89,11 +101,7 @@ const useBleConnect = () => {
   const disconnectDevice = useCallback(
     async (deviceId: string) => {
       try {
-        await bleManager.stopNotification(
-          deviceId,
-          BLE_SERVICE_UUID,
-          MEASUREMENT_CHAR_UUID,
-        );
+        await bleManager.stopNotification(deviceId, BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID);
         await bleManager.disconnect(deviceId);
         setConnectedIdDevice(null);
         setConnectedDevice(null);

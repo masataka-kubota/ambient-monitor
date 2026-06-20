@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { useAppTheme } from '@/hooks/common';
@@ -23,8 +23,7 @@ const SkeletonItem = ({
   const { activeThemeColors } = useAppTheme();
   const { skeltonAnimatedStyle } = useSkeletonAnimation();
 
-  const defaultBackgroundColor =
-    backgroundColor ?? activeThemeColors.secondaryBackground;
+  const defaultBackgroundColor = backgroundColor ?? activeThemeColors.secondaryBackground;
 
   return (
     <Animated.View

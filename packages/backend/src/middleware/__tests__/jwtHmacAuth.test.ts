@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi'
 import type { z } from '@hono/zod-openapi'
-import { env } from 'cloudflare:test'
+import { env } from 'cloudflare:workers'
 import { sign } from 'hono/jwt'
 import { testClient } from 'hono/testing'
 import { describe, it, expect } from 'vitest'

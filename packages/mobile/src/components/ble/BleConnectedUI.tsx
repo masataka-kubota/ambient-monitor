@@ -1,8 +1,8 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import MaterialIcons from '@react-native-vector-icons/material-icons/static';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
-import { Peripheral } from 'react-native-ble-manager';
+import type { Peripheral } from 'react-native-ble-manager';
 
 import { PrimaryButton, ThemeText } from '@/components/ui';
 import { useAppTheme } from '@/hooks/common';
@@ -12,10 +12,7 @@ interface BleConnectedUIProps {
   onDisconnect: (deviceId: string) => Promise<void>;
 }
 
-const BleConnectedUI = ({
-  connectedDevice,
-  onDisconnect,
-}: BleConnectedUIProps) => {
+const BleConnectedUI = ({ connectedDevice, onDisconnect }: BleConnectedUIProps) => {
   const { activeThemeColors } = useAppTheme();
   const { t } = useTranslation();
 
@@ -23,11 +20,7 @@ const BleConnectedUI = ({
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.headerContainer}>
-        <MaterialIcons
-          name="bluetooth-connected"
-          size={48}
-          color={activeThemeColors.mainColor}
-        />
+        <MaterialIcons name="bluetooth-connected" size={48} color={activeThemeColors.mainColor} />
 
         <ThemeText style={styles.title}>
           {t('ble.connected.title', { deviceName: connectedDevice.name })}

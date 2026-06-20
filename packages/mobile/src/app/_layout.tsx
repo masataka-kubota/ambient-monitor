@@ -1,6 +1,5 @@
-import { Buffer } from 'buffer';
-
 import { ThemeProvider } from '@react-navigation/native';
+import { Buffer } from 'buffer';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -43,11 +42,7 @@ const RootLayout = () => {
       <BleAutoReconnectInitializer />
       <WifiWifiStatusSync />
       <ThemeProvider
-        value={
-          isDarkMode
-            ? APP_THEME_SCHEME.darkTheme
-            : APP_THEME_SCHEME.defaultTheme
-        }
+        value={isDarkMode ? APP_THEME_SCHEME.darkTheme : APP_THEME_SCHEME.defaultTheme}
       >
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />

@@ -13,7 +13,9 @@
     "types": [
       "vitest/globals",
       "@cloudflare/vitest-pool-workers",
+      "@cloudflare/vitest-pool-workers/types",
       "./worker-configuration.d.ts",
+      "./test/env.d.ts",
       "node"
     ],
     "jsx": "react-jsx",

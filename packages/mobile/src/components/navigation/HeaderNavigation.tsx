@@ -10,10 +10,7 @@ interface HeaderNavigationProps {
   showBackButton?: boolean;
 }
 
-const HeaderNavigation = ({
-  title,
-  showBackButton = true,
-}: HeaderNavigationProps) => {
+const HeaderNavigation = ({ title, showBackButton = true }: HeaderNavigationProps) => {
   const insets = useSafeAreaInsets();
 
   return (

@@ -1,11 +1,8 @@
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { memo, useState } from 'react';
-import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import type { LayoutChangeEvent } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import TabBarItem from '@/components/navigation/TabBarItem';
@@ -68,9 +65,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 
         const isFocused = state.index === index;
 
-        const baseColor = isFocused
-          ? activeThemeColors.onTint
-          : activeThemeColors.mediumColor;
+        const baseColor = isFocused ? activeThemeColors.onTint : activeThemeColors.mediumColor;
 
         const onPress = () => {
           tabPositionX.value = withSpring(index * buttonWidth, {

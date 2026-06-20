@@ -9,7 +9,7 @@ const Index = () => {
 
   return (
     <KeyboardAvoidingScrollableView>
-      <Heading iconLib="Entypo" iconName="flash" align="center">
+      <Heading icon={{ iconLib: 'Entypo', iconName: 'flash' }} align="center">
         {t('live.title')}
       </Heading>
       <LiveMeasurementView />
