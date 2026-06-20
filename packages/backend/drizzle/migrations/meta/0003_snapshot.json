@@ -63,9 +63,7 @@
       "indexes": {
         "devices_external_id_unique": {
           "name": "devices_external_id_unique",
-          "columns": [
-            "external_id"
-          ],
+          "columns": ["external_id"],
           "isUnique": true
         }
       },
@@ -127,12 +125,8 @@
           "name": "measurements_device_id_devices_id_fk",
           "tableFrom": "measurements",
           "tableTo": "devices",
-          "columnsFrom": [
-            "device_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["device_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
