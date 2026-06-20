@@ -16,8 +16,25 @@ export const getDeviceData = async (deviceId: string): Promise<Peripheral | null
   return peripherals.find((p) => p.id === deviceId) ?? null;
 };
 
-const getBleErrorMessage = (error: unknown): string =>
-  String((error as any)?.message ?? (error as any)?.error ?? error);
+const getBleErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === 'object' && error !== null) {
+    const message = 'message' in error ? error.message : undefined;
+    if (typeof message === 'string') {
+      return message;
+    }
+
+    const nestedError = 'error' in error ? error.error : undefined;
+    if (typeof nestedError === 'string') {
+      return nestedError;
+    }
+  }
+
+  return String(error);
+};
 
 const isExpectedBleError = (error: unknown): boolean =>
   getBleErrorMessage(error).toLowerCase().includes('disconnect');
