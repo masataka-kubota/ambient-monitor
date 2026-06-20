@@ -5,13 +5,7 @@
   "semi": false,
   "singleQuote": true,
   "trailingComma": "es5",
-  "ignorePatterns": [
-    "worker-configuration.d.ts",
-    "drizzle/migrations/**",
-    "dist/**",
-    ".wrangler/**",
-    "coverage/**"
-  ],
+  "ignorePatterns": ["worker-configuration.d.ts", "dist/**", ".wrangler/**", "coverage/**"],
   "sortImports": {
     "groups": [
       ["builtin", "external"],

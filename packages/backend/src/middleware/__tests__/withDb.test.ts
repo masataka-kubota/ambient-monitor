@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { env } from 'cloudflare:test'
+import { env } from 'cloudflare:workers'
 import { eq } from 'drizzle-orm'
 import { testClient } from 'hono/testing'
 import { describe, it, expect } from 'vitest'

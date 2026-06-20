@@ -1,5 +1,5 @@
 import type { z } from '@hono/zod-openapi'
-import { env } from 'cloudflare:test'
+import { env } from 'cloudflare:workers'
 import { sign } from 'hono/jwt'
 import { testClient } from 'hono/testing'
 
