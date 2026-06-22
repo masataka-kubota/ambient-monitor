@@ -52,11 +52,6 @@ jobs:
       - name: 🛡️ Setup safe-chain
         uses: ./.github/actions/setup-safe-chain
 
-      - name: 🏗 Build backend types
-        run: |
-          bun install --filter backend --frozen-lockfile
-          bun run --filter backend build:types
-
       - name: 📦 Install dependencies
         run: bun install --filter mobile --frozen-lockfile
 
