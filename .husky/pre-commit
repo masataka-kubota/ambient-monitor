@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-. "$(dirname "$0")/common/functions.sh"
+. "$(dirname "$0")/lib/functions.sh"
 
 # Prohibit direct commits on the 'main' or 'develop' branches
 prohibit_protected_branch_commits
