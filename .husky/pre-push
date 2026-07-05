@@ -1,13 +1,14 @@
 #!/usr/bin/env sh
+set -e
 
 . "$(dirname "$0")/lib/functions.sh"
 
-current_branch=$(git symbolic-ref --short HEAD)
-base_branch=$(get_base_branch)
+current_branch="$(git symbolic-ref --short HEAD)"
+base_branch="$(get_base_branch)"
 repo_root="$(git rev-parse --show-toplevel)"
 
-# Only run on backend directory.
-if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^packages/backend/')" ]; then
+# Run checks only when there are changes relative to the base branch and only for the specific directories.
+if ! git diff --quiet "$base_branch" "$current_branch" --name-only | grep '^packages/backend/'; then
   cd "$repo_root/packages/backend"
   bun run cf-typegen
   bun run build:types
@@ -16,8 +17,8 @@ if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^packag
   bun run test
 fi
 
-# Only run on mobile directory.
-if [ -n "$(git diff "$base_branch" "$current_branch" --name-only | grep '^packages/mobile/')" ]; then
+# Run checks only when there are changes relative to the base branch and only for the specific directories.
+if ! git diff --quiet "$base_branch" "$current_branch" --name-only | grep '^packages/mobile/'; then
   cd "$repo_root/packages/mobile"
   bun run type-check
   bun run lint
