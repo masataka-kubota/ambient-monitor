@@ -8,7 +8,7 @@ base_branch="$(get_base_branch)"
 repo_root="$(git rev-parse --show-toplevel)"
 
 # Run checks only when there are changes relative to the base branch and only for the specific directories.
-if ! git diff --quiet "$base_branch" "$current_branch" --name-only | grep '^packages/backend/'; then
+if ! git diff --quiet "$base_branch" "$current_branch" -- packages/backend; then
   cd "$repo_root/packages/backend"
   bun run cf-typegen
   bun run build:types
@@ -18,7 +18,7 @@ if ! git diff --quiet "$base_branch" "$current_branch" --name-only | grep '^pack
 fi
 
 # Run checks only when there are changes relative to the base branch and only for the specific directories.
-if ! git diff --quiet "$base_branch" "$current_branch" --name-only | grep '^packages/mobile/'; then
+if ! git diff --quiet "$base_branch" "$current_branch" -- packages/mobile; then
   cd "$repo_root/packages/mobile"
   bun run type-check
   bun run lint
