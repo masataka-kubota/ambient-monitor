@@ -65,6 +65,6 @@
     "oxfmt": "^0.56.0",
     "oxlint": "^1.71.0",
     "oxlint-config-universe": "^0.0.3",
-    "typescript": "~6.0.3 "
+    "typescript": "~6.0.3"
   }
 }
