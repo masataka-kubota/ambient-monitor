@@ -27,10 +27,9 @@ const VARIANT_CONFIGS: Record<AppVariant, VariantConfig> = {
 /** Resolve the app configuration for the current environment variant. */
 export const getVariantConfig = (): VariantConfig => {
   const variant = process.env.APP_VARIANT;
-  if (variant && Object.prototype.hasOwnProperty.call(VARIANT_CONFIGS, variant)) {
-    return VARIANT_CONFIGS[variant as AppVariant];
-  }
-  return VARIANT_CONFIGS.production;
+  const isAppVariant = (v: string): v is AppVariant =>
+    Object.prototype.hasOwnProperty.call(VARIANT_CONFIGS, v);
+  return variant && isAppVariant(variant) ? VARIANT_CONFIGS[variant] : VARIANT_CONFIGS.production;
 };
 
 const variantConfig = getVariantConfig();
