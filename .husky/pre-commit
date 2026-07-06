@@ -1,13 +1,14 @@
 #!/usr/bin/env sh
+set -e
 
-. "$(dirname "$0")/common/functions.sh"
+. "$(dirname "$0")/lib/functions.sh"
 
 # Prohibit direct commits on the 'main' or 'develop' branches
 prohibit_protected_branch_commits
 
 # Move to repository root directory
 repo_root="$(git rev-parse --show-toplevel)"
-cd "$repo_root" || exit 1
+cd "$repo_root"
 
 # Run lint-staged
 bunx lint-staged
