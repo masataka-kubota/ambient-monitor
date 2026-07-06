@@ -2,42 +2,52 @@ import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 import pkg from './package.json';
 
-const IS_DEV = process.env.APP_VARIANT === 'development';
-const IS_PREVIEW = process.env.APP_VARIANT === 'preview';
+type AppVariant = 'development' | 'preview' | 'production';
 
-const getUniqueIdentifier = () => {
-  if (IS_DEV) {
-    return 'dev.ambientmonitor.dev';
-  }
-  if (IS_PREVIEW) {
-    return 'dev.ambientmonitor.preview';
-  }
-  return 'dev.ambientmonitor';
+interface VariantConfig {
+  appName: string;
+  bundleIdentifier: string;
+}
+
+const VARIANT_CONFIGS: Record<AppVariant, VariantConfig> = {
+  development: {
+    appName: '(Dev) Ambient Monitor',
+    bundleIdentifier: 'dev.ambientmonitor.dev',
+  },
+  preview: {
+    appName: '(Preview) Ambient Monitor',
+    bundleIdentifier: 'dev.ambientmonitor.preview',
+  },
+  production: {
+    appName: 'Ambient Monitor',
+    bundleIdentifier: 'dev.ambientmonitor',
+  },
 };
 
-const getAppName = () => {
-  if (IS_DEV) {
-    return 'Ambient Monitor (Dev)';
+/** Resolve the app configuration for the current environment variant. */
+export const getVariantConfig = (): VariantConfig => {
+  const variant = process.env.APP_VARIANT;
+  if (variant && Object.prototype.hasOwnProperty.call(VARIANT_CONFIGS, variant)) {
+    return VARIANT_CONFIGS[variant as AppVariant];
   }
-  if (IS_PREVIEW) {
-    return 'Ambient Monitor (Preview)';
-  }
-  return 'Ambient Monitor';
+  return VARIANT_CONFIGS.production;
 };
+
+const variantConfig = getVariantConfig();
 
 const config = ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: getAppName(),
+  name: variantConfig.appName,
   slug: 'ambient-monitor',
   version: pkg.version,
   orientation: 'portrait',
   icon: './assets/icons/icon.png',
-  scheme: 'dev.ambientmonitor',
+  scheme: 'ambientmonitor',
   userInterfaceStyle: 'automatic',
 
   ios: {
     supportsTablet: true,
-    bundleIdentifier: getUniqueIdentifier(),
+    bundleIdentifier: variantConfig.bundleIdentifier,
     icon: {
       light: './assets/icons/ios-icon-light.png',
       dark: './assets/icons/ios-icon-dark.png',
@@ -51,7 +61,7 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/icons/adaptive-icon.png',
       monochromeImage: './assets/icons/adaptive-icon-monochrome.png',
     },
-    package: getUniqueIdentifier(),
+    package: variantConfig.bundleIdentifier,
     predictiveBackGestureEnabled: false,
     softwareKeyboardLayoutMode: 'pan',
   },
@@ -84,19 +94,17 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
       {
         neverForLocation: true,
         isBleRequired: true,
-        bluetoothAlwaysPermission: 'Allow $(getAppName()) to connect to bluetooth devices',
+        bluetoothAlwaysPermission: `Allow ${variantConfig.appName} to connect to bluetooth devices`,
       },
     ],
     '@react-native-vector-icons/entypo',
     '@react-native-vector-icons/material-icons',
     '@react-native-vector-icons/ionicons',
   ],
-
   experiments: {
     typedRoutes: true,
     reactCompiler: true,
   },
-
   extra: {
     eas: {
       projectId: '63d51112-694b-4f62-9e80-5cf42bc2dbc4',
