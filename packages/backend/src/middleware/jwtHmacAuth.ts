@@ -1,9 +1,8 @@
 import type { z } from '@hono/zod-openapi'
-import { eq } from 'drizzle-orm'
 import type { Context, Next } from 'hono'
 import { verify } from 'hono/jwt'
 
-import { devices } from '@/db/schema'
+import { findDeviceByExternalId } from '@/db/findDeviceByExternalId'
 import type { UnauthorizedErrorSchema } from '@/schemas'
 import type { Env } from '@/types'
 
@@ -24,9 +23,7 @@ export const jwtHmacAuth = async (c: Context<Env>, next: Next) => {
 
   // Retrieve the device record from the database using the deviceId
   const db = c.var.db
-  const device = await db.query.devices.findFirst({
-    where: eq(devices.externalId, deviceId),
-  })
+  const device = await findDeviceByExternalId(db, deviceId)
   if (!device?.isActive) {
     const res: JwtErrorResponse = {
       success: false,
