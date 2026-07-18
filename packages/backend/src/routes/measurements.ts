@@ -17,7 +17,9 @@ const measurementsApp = new OpenAPIHono<Env>({
     const { 'X-Device-Id': deviceIdStr } = c.req.valid('header')
     const { temperature, humidity, pressure } = c.req.valid('json')
 
-    const device = await db.select().from(devices).where(eq(devices.externalId, deviceIdStr)).get()
+    const device = await db.query.devices.findFirst({
+      where: eq(devices.externalId, deviceIdStr),
+    })
 
     // Unreachable code: the JWT HMAC auth middleware ensures that a valid, active device exists.
     /* istanbul ignore next -- @preserve */
@@ -45,7 +47,9 @@ const measurementsApp = new OpenAPIHono<Env>({
       return c.json({ success: false, error: { message: 'Missing deviceId' } }, 404)
     }
 
-    const device = await db.select().from(devices).where(eq(devices.externalId, deviceId)).get()
+    const device = await db.query.devices.findFirst({
+      where: eq(devices.externalId, deviceId),
+    })
     if (!device) {
       return c.json({ success: false, error: { message: 'Device not found' } }, 404)
     }
@@ -126,19 +130,20 @@ const measurementsApp = new OpenAPIHono<Env>({
       return c.json({ success: false, error: { message: 'Missing deviceId' } }, 404)
     }
 
-    const device = await db.select().from(devices).where(eq(devices.externalId, deviceId)).get()
+    const device = await db.query.devices.findFirst({
+      where: eq(devices.externalId, deviceId),
+      with: {
+        measurements: {
+          orderBy: [desc(measurements.createdAt)],
+          limit: 1,
+        },
+      },
+    })
     if (!device) {
       return c.json({ success: false, error: { message: 'Device not found' } }, 404)
     }
 
-    const latestMeasurement = await db
-      .select()
-      .from(measurements)
-      .where(eq(measurements.deviceId, device.id))
-      .orderBy(desc(measurements.createdAt))
-      .limit(1)
-      .get()
-
+    const latestMeasurement = device.measurements[0]
     if (!latestMeasurement) {
       return c.json({ success: false, error: { message: 'Data not found' } }, 404)
     }
