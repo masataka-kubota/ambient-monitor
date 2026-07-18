@@ -47,3 +47,17 @@ export const measurementsRelations = relations(measurements, ({ one }) => ({
     references: [devices.id],
   }),
 }))
+
+/**
+ * Module shape passed to `drizzle(c.env.DB, { schema })`.
+ *
+ * Include tables and relations so `db.query` / `with:` stay typed.
+ * Kept as an explicit type so callers can `import type` it (avoids `typeof` on
+ * type-only imports and `import()` type annotations).
+ */
+export type DatabaseSchema = {
+  devices: typeof devices
+  measurements: typeof measurements
+  devicesRelations: typeof devicesRelations
+  measurementsRelations: typeof measurementsRelations
+}

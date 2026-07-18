@@ -23,7 +23,7 @@ function findD1Database(): string {
 
 export default defineConfig({
   out: './drizzle/migrations',
-  schema: './src/db/schema.ts',
+  schema: './src/db/schema/*.ts',
   dialect: 'sqlite',
   dbCredentials: {
     url: findD1Database(),

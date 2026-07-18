@@ -1,6 +1,6 @@
 import type { DrizzleD1Database } from 'drizzle-orm/d1'
 
-import type * as schema from '@/db/schema'
+import type { DatabaseSchema } from '@/db/schema'
 
 /**
  * Schema-typed Drizzle client for Cloudflare D1.
@@ -8,7 +8,7 @@ import type * as schema from '@/db/schema'
  * Distinct from the raw Workers binding `D1Database` (`Env.Bindings.DB`).
  * Created in `withDb` via `drizzle(c.env.DB, { schema })` and stored as `c.var.db`.
  */
-export type AppDatabase = DrizzleD1Database<typeof schema>
+export type AppDatabase = DrizzleD1Database<DatabaseSchema>
 
 export interface Env {
   Bindings: {
