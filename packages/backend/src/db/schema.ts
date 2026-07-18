@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { index, int, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export const measurements = sqliteTable(
@@ -36,3 +36,14 @@ export const devices = sqliteTable(
   },
   (table) => [index('idx_devices_external_id').on(table.externalId)]
 )
+
+export const devicesRelations = relations(devices, ({ many }) => ({
+  measurements: many(measurements),
+}))
+
+export const measurementsRelations = relations(measurements, ({ one }) => ({
+  device: one(devices, {
+    fields: [measurements.deviceId],
+    references: [devices.id],
+  }),
+}))
