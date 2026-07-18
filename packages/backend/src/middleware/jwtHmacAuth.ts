@@ -2,7 +2,7 @@ import type { z } from '@hono/zod-openapi'
 import type { Context, Next } from 'hono'
 import { verify } from 'hono/jwt'
 
-import { findDeviceByExternalId } from '@/db/findDeviceByExternalId'
+import { findDeviceByExternalId } from '@/db/repositories/devices'
 import type { UnauthorizedErrorSchema } from '@/schemas'
 import type { Env } from '@/types'
 

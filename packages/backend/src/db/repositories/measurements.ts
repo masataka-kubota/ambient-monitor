@@ -8,7 +8,7 @@ import type { AppDatabase } from '@/types'
  *
  * Missing buckets are filled with `null` metric values so the series is contiguous.
  */
-export interface MeasurementBucketRow {
+interface MeasurementBucketRow {
   /** UTC bucket start as `YYYY-MM-DD HH:MM:SS`. */
   bucketStart: string
   temperature: number | null

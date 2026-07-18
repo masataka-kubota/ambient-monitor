@@ -1,11 +1,8 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 
 import { PERIOD_INTERVAL_MINUTES } from '@/constants'
-import {
-  findDeviceByExternalId,
-  findDeviceWithLatestMeasurement,
-} from '@/db/findDeviceByExternalId'
-import { listMeasurementBuckets } from '@/db/queries/listMeasurementBuckets'
+import { findDeviceByExternalId, findDeviceWithLatestMeasurement } from '@/db/repositories/devices'
+import { listMeasurementBuckets } from '@/db/repositories/measurements'
 import { measurements } from '@/db/schema'
 import { createValidationHook } from '@/hooks'
 import { createMeasurementRoute, latestMeasurementRoute, listMeasurementsRoute } from '@/schemas'
