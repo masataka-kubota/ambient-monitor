@@ -1,4 +1,4 @@
-name: Mobile EAS Build Notification
+name: Mobile EAS Update Notification
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
     branches: ["main", "staging"]
     paths:
       - "packages/mobile/**"
-      - ".github/workflows/mobile-eas-build-notification.yml"
+      - ".github/workflows/mobile-eas-update-notification.yml"
 
 jobs:
   manage-comments:
@@ -23,9 +23,8 @@ jobs:
 
             const currentLabels = pr.labels.map(l => l.name);
 
-            const BOT_MARKER = "### 🤖 EAS Build notification";
-            const ANDROID_LABEL = "eas-build-android";
-            const IOS_LABEL = "eas-build-ios";
+            const BOT_MARKER = "### 🤖 EAS Update notification";
+            const UPDATE_LABEL = "eas-update";
 
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner: context.repo.owner,
@@ -37,10 +36,10 @@ jobs:
               c => c.user.login === "github-actions[bot]" && c.body.includes(BOT_MARKER)
             );
 
-            const hasAndroidLabel = currentLabels.includes(ANDROID_LABEL);
-            const hasIosLabel = currentLabels.includes(IOS_LABEL);
+            const hasUpdateLabel = currentLabels.includes(UPDATE_LABEL);
 
-            if (!hasAndroidLabel && !hasIosLabel) {
+            // Only keep a comment while the label is present.
+            if (!hasUpdateLabel) {
               if (currentBotComment) {
                 await github.rest.issues.deleteComment({
                   owner: context.repo.owner,
@@ -51,14 +50,13 @@ jobs:
               return;
             }
 
-            const easProfile = pr.base.ref === "main" ? "production" : "preview";
+            const easChannel = pr.base.ref === "main" ? "production" : "preview";
 
             let message = `${BOT_MARKER}\n`;
-            message += "This PR is marked for an EAS Build on merge:\n\n";
+            message += "This PR is marked for an EAS Update on merge:\n\n";
             message += `- Base branch: \`${pr.base.ref}\`\n`;
-            message += `- EAS profile on merge: \`${easProfile}\`\n\n`;
-            message += `- ${hasAndroidLabel ? "✅" : "⬜"} **Android build will be triggered after merge** 🚀\n(triggered by label: \`${ANDROID_LABEL}\`)\n`;
-            message += `- ${hasIosLabel ? "✅" : "⬜"} **iOS build will be triggered after merge** 🚀\n(triggered by label: \`${IOS_LABEL}\`)\n`;
+            message += `- EAS channel on merge: \`${easChannel}\`\n\n`;
+            message += `- ✅ **OTA update will be published after merge** 🚀\n(triggered by label: \`${UPDATE_LABEL}\`)\n`;
 
             if (currentBotComment) {
               await github.rest.issues.deleteComment({

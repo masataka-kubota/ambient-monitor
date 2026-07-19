@@ -1,8 +1,9 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { and, desc, eq, gte, sql } from 'drizzle-orm'
 
 import { PERIOD_INTERVAL_MINUTES } from '@/constants'
-import { devices, measurements } from '@/db/schema'
+import { findDeviceByExternalId, findDeviceWithLatestMeasurement } from '@/db/repositories/devices'
+import { listMeasurementBuckets } from '@/db/repositories/measurements'
+import { measurements } from '@/db/schema'
 import { createValidationHook } from '@/hooks'
 import { createMeasurementRoute, latestMeasurementRoute, listMeasurementsRoute } from '@/schemas'
 import type { Env } from '@/types'
@@ -17,7 +18,7 @@ const measurementsApp = new OpenAPIHono<Env>({
     const { 'X-Device-Id': deviceIdStr } = c.req.valid('header')
     const { temperature, humidity, pressure } = c.req.valid('json')
 
-    const device = await db.select().from(devices).where(eq(devices.externalId, deviceIdStr)).get()
+    const device = await findDeviceByExternalId(db, deviceIdStr)
 
     // Unreachable code: the JWT HMAC auth middleware ensures that a valid, active device exists.
     /* istanbul ignore next -- @preserve */
@@ -37,84 +38,25 @@ const measurementsApp = new OpenAPIHono<Env>({
   .openapi(listMeasurementsRoute, async (c) => {
     const db = c.var.db
     const { deviceId, period } = c.req.valid('query')
-    const interval = PERIOD_INTERVAL_MINUTES[period]
-    const intervalSec = interval * 60
+    const intervalMinutes = PERIOD_INTERVAL_MINUTES[period]
     const days = parseInt(period.replace('d', ''), 10)
 
     if (!deviceId) {
       return c.json({ success: false, error: { message: 'Missing deviceId' } }, 404)
     }
 
-    const device = await db.select().from(devices).where(eq(devices.externalId, deviceId)).get()
+    const device = await findDeviceByExternalId(db, deviceId)
     if (!device) {
       return c.json({ success: false, error: { message: 'Device not found' } }, 404)
     }
 
-    const dayStartSec = sql<number>`CAST(STRFTIME('%s', DATE('now', 'utc')) AS INTEGER)`
-
-    const bucket = sql<number>`
-      CAST(
-        (
-          CAST(STRFTIME('%s', ${measurements.createdAt}) AS INTEGER)
-          - ${dayStartSec}
-        ) / ${intervalSec}
-      AS INTEGER)
-    `
-
-    // Formatted as UTC TEXT
-    const bucketStart = sql<string>`
-      STRFTIME(
-        '%Y-%m-%d %H:%M:%S',
-        ${dayStartSec} + (${bucket} * ${intervalSec}),
-        'unixepoch'
-      )
-    `
-
-    const sqlRows = await db
-      .select({
-        bucketStart,
-        temperature: sql<number>`ROUND(AVG(${measurements.temperature}), 2)`,
-        humidity: sql<number>`ROUND(AVG(${measurements.humidity}), 2)`,
-        pressure: sql<number>`ROUND(AVG(${measurements.pressure}), 2)`,
-      })
-      .from(measurements)
-      .where(
-        and(
-          eq(measurements.deviceId, device.id),
-          gte(measurements.createdAt, sql`DATETIME('now', '-' || ${days} || ' days')`)
-        )
-      )
-      .groupBy(bucket)
-      .orderBy(bucket)
-      .all()
-
-    // Fill missing buckets with null
-    const rowMap = new Map(sqlRows.map((r) => [r.bucketStart, r]))
-
-    const nowSec = Math.floor(Date.now() / 1000)
-    const startSec = nowSec - days * 24 * 60 * 60
-
-    const bucketTimes: string[] = []
-    let cursor = startSec - (startSec % intervalSec)
-
-    while (cursor <= nowSec) {
-      const text = new Date(cursor * 1000).toISOString().slice(0, 19).replace('T', ' ')
-      bucketTimes.push(text)
-      cursor += intervalSec
-    }
-
-    const filled = bucketTimes.map((t) => {
-      return (
-        rowMap.get(t) ?? {
-          bucketStart: t,
-          temperature: null,
-          humidity: null,
-          pressure: null,
-        }
-      )
+    const data = await listMeasurementBuckets(db, {
+      deviceId: device.id,
+      days,
+      intervalMinutes,
     })
 
-    return c.json({ success: true, data: filled }, 200)
+    return c.json({ success: true, data }, 200)
   })
 
   // GET /measurements/latest
@@ -126,19 +68,12 @@ const measurementsApp = new OpenAPIHono<Env>({
       return c.json({ success: false, error: { message: 'Missing deviceId' } }, 404)
     }
 
-    const device = await db.select().from(devices).where(eq(devices.externalId, deviceId)).get()
+    const device = await findDeviceWithLatestMeasurement(db, deviceId)
     if (!device) {
       return c.json({ success: false, error: { message: 'Device not found' } }, 404)
     }
 
-    const latestMeasurement = await db
-      .select()
-      .from(measurements)
-      .where(eq(measurements.deviceId, device.id))
-      .orderBy(desc(measurements.createdAt))
-      .limit(1)
-      .get()
-
+    const latestMeasurement = device.measurements[0]
     if (!latestMeasurement) {
       return c.json({ success: false, error: { message: 'Data not found' } }, 404)
     }

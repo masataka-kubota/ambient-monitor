@@ -4,6 +4,7 @@ import native from 'oxlint-config-universe/native';
 export default defineConfig({
   extends: [native],
   plugins: ['jest'],
+  jsPlugins: ['@tanstack/eslint-plugin-query'],
   rules: {
     'eslint/no-unused-vars': 'error',
     'eslint/curly': 'warn',
@@ -18,6 +19,16 @@ export default defineConfig({
     'react/jsx-key': 'error',
     'react/no-array-index-key': 'warn',
     'react/jsx-curly-brace-presence': 'warn',
+
+    // --- TanStack Query rules ---
+    '@tanstack/query/exhaustive-deps': 'error',
+    '@tanstack/query/no-rest-destructuring': 'error',
+    '@tanstack/query/stable-query-client': 'error',
+    '@tanstack/query/no-unstable-deps': 'error',
+    '@tanstack/query/infinite-query-property-order': 'error',
+    '@tanstack/query/no-void-query-fn': 'error',
+    '@tanstack/query/mutation-property-order': 'error',
+    '@tanstack/query/prefer-query-options': 'error',
 
     // --- Jest rules ---
     'jest/no-disabled-tests': 'warn',
