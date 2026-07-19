@@ -1,0 +1,78 @@
+name: Mobile EAS Update On Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: ["main", "staging"]
+    paths:
+      - "packages/mobile/**"
+      - ".github/workflows/mobile-eas-update-on-merge.yml"
+      - ".github/actions/setup-safe-chain/**"
+      - ".tool-versions"
+
+concurrency:
+  group: eas-mobile-update-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  eas-update:
+    if: |
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'eas-update')
+    runs-on: ubuntu-latest
+    env:
+      # Channel and EAS environment share the same name for main/staging.
+      EAS_CHANNEL: ${{ github.event.pull_request.base.ref == 'main' && 'production' || 'preview' }}
+      EAS_ENVIRONMENT: ${{ github.event.pull_request.base.ref == 'main' && 'production' || 'preview' }}
+      UPDATE_MESSAGE: ${{ github.event.pull_request.title }}
+
+    steps:
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: ".tool-versions"
+
+      - name: 🏗 Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: ".tool-versions"
+
+      - name: 🏗 Setup EAS CLI
+        uses: expo/expo-github-action@eab7a230208c952974db8c3245cfd78402c7b385 # v9.0.0
+        with:
+          eas-version: "20.1.0"
+          packager: bun
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 🛡️ Setup safe-chain
+        uses: ./.github/actions/setup-safe-chain
+
+      - name: 📦 Install dependencies
+        run: bun install --filter mobile --frozen-lockfile
+
+      # Omit --platform (defaults to "all") and Expo also exports web static
+      # rendering, which fails here (window is not defined). Publish mobile only.
+      - name: 🚀 Publish EAS Update (iOS)
+        working-directory: packages/mobile
+        run: >
+          eas update
+          --channel "$EAS_CHANNEL"
+          --environment "$EAS_ENVIRONMENT"
+          --platform ios
+          --message "$UPDATE_MESSAGE"
+          --non-interactive
+
+      - name: 🚀 Publish EAS Update (Android)
+        working-directory: packages/mobile
+        run: >
+          eas update
+          --channel "$EAS_CHANNEL"
+          --environment "$EAS_ENVIRONMENT"
+          --platform android
+          --message "$UPDATE_MESSAGE"
+          --non-interactive

@@ -10,4 +10,10 @@
 
 - Lint/format: Oxlint / Oxfmt (`bun run lint`, `bun run format`).
 - Types from the backend workspace package: `bun run build:backend-types` when API types change.
-- EAS Build profiles live in `eas.json`. Native changes require a new binary build.
+- EAS Build profiles / Update channels live in `eas.json` (`development` / `preview` / `production`).
+- **CI labels** (on PRs into `main` / `staging`):
+  - `eas-build-android` / `eas-build-ios` — EAS Build after merge (native binary).
+  - `eas-update` — EAS Update (OTA) after merge; channel/environment are `production` on `main`, `preview` on `staging`.
+  - Use Build for native / SDK / app version (`runtimeVersion`) changes; use Update for JS and asset-only changes.
+  - Local/CI Update must pass `--platform ios` and/or `--platform android`. Omitting platform uses `all`, which also runs web static export and can fail (`window is not defined`) while this app is mobile-only.
+  - Build/Update **status comments** run only on label add/remove (not on every push). A one-shot **label reminder** runs when a non-draft mobile PR is opened / marked ready, if no EAS label is set yet.
