@@ -32,13 +32,13 @@ jobs:
             const ANDROID_LABEL = "eas-build-android";
             const IOS_LABEL = "eas-build-ios";
 
-            // Find current bot comment
-            const comments = await github.rest.issues.listComments({
+            const comments = await github.paginate(github.rest.issues.listComments, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.number,
+              per_page: 100,
             });
-            const currentBotComment = comments.data.find(
+            const currentBotComment = comments.find(
               c => c.user.login === "github-actions[bot]" && c.body.includes(BOT_MARKER)
             );
 
