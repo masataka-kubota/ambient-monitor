@@ -34,6 +34,9 @@ export const getVariantConfig = (): VariantConfig => {
 
 const variantConfig = getVariantConfig();
 
+/** EAS project ID — shared by `extra.eas.projectId` and EAS Update URL. */
+const EAS_PROJECT_ID = '63d51112-694b-4f62-9e80-5cf42bc2dbc4';
+
 const config = ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: variantConfig.appName,
@@ -106,8 +109,16 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
   },
   extra: {
     eas: {
-      projectId: '63d51112-694b-4f62-9e80-5cf42bc2dbc4',
+      projectId: EAS_PROJECT_ID,
     },
+  },
+
+  // EAS Update: runtime must match app `version` (see package.json / store version).
+  updates: {
+    url: `https://u.expo.dev/${EAS_PROJECT_ID}`,
+  },
+  runtimeVersion: {
+    policy: 'appVersion',
   },
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "mobile",
-  "version": "0.9.6",
+  "version": "0.9.5",
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
@@ -28,7 +28,7 @@
     "buffer": "^6.0.3",
     "date-fns": "^4.4.0",
     "date-fns-tz": "^3.2.0",
-    "expo": "^56.0.12",
+    "expo": "~56.0.12",
     "expo-constants": "~56.0.18",
     "expo-device": "~56.0.4",
     "expo-font": "~56.0.7",
@@ -41,6 +41,7 @@
     "expo-status-bar": "~56.0.4",
     "expo-symbols": "~56.0.6",
     "expo-system-ui": "~56.0.5",
+    "expo-updates": "~56.0.21",
     "expo-web-browser": "~56.0.5",
     "i18next": "^25.10.10",
     "jotai": "^2.20.1",
