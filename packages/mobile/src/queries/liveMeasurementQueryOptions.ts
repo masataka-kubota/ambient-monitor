@@ -21,7 +21,7 @@ export const liveMeasurementQueryOptions = (deviceId: string) =>
       const data = await res.json();
 
       if (!data.success) {
-        throw new Error('Failed to fetch measurements');
+        throw new Error('Failed to fetch latest measurement');
       }
 
       return data.data;

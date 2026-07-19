@@ -14,7 +14,7 @@ import type { MeasurementRange } from '@/types';
  */
 export const measurementsQueryOptions = (deviceId: string, range: MeasurementRange) =>
   queryOptions({
-    queryKey: ['measurements24h', deviceId, range],
+    queryKey: ['measurements', deviceId, range],
     queryFn: async () => {
       const res = await apiClient.measurements.$get({
         query: { deviceId, period: range },
@@ -23,7 +23,7 @@ export const measurementsQueryOptions = (deviceId: string, range: MeasurementRan
       const data = await res.json();
 
       if (!data.success) {
-        throw new Error('Failed to fetch last 24h measurements');
+        throw new Error(`Failed to fetch measurements for period ${range}`);
       }
 
       return data.data;
