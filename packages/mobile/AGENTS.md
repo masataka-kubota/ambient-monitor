@@ -16,3 +16,4 @@
   - `eas-update` — EAS Update (OTA) after merge; channel/environment are `production` on `main`, `preview` on `staging`.
   - Use Build for native / SDK / app version (`runtimeVersion`) changes; use Update for JS and asset-only changes.
   - Local/CI Update must pass `--platform ios` and/or `--platform android`. Omitting platform uses `all`, which also runs web static export and can fail (`window is not defined`) while this app is mobile-only.
+  - Build/Update **status comments** run only on label add/remove (not on every push). A one-shot **label reminder** runs when a non-draft mobile PR is opened / marked ready, if no EAS label is set yet.

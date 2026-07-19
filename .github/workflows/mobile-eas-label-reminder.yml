@@ -1,34 +1,35 @@
-name: Mobile EAS Update Notification
+name: Mobile EAS Label Reminder
 
 on:
   pull_request:
-    types: [labeled, unlabeled]
+    types: [opened, ready_for_review, labeled, unlabeled]
     branches: ["main", "staging"]
     paths:
       - "packages/mobile/**"
-      - ".github/workflows/mobile-eas-update-notification.yml"
+      - ".github/workflows/mobile-eas-label-reminder.yml"
 
 jobs:
-  manage-comments:
+  remind:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
       contents: read
     steps:
-      - name: 🔄 Checkout repository
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-
-      - name: 🤖 Manage PR comment
+      - name: 🤖 Remind about EAS labels
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const pr = context.payload.pull_request;
-
             const currentLabels = pr.labels.map(l => l.name);
 
-            const BOT_MARKER = "### 🤖 EAS Update notification";
-            const UPDATE_LABEL = "eas-update";
+            const BOT_MARKER = "### 🤖 EAS label reminder";
+            const EAS_LABELS = [
+              "eas-build-android",
+              "eas-build-ios",
+              "eas-update",
+            ];
 
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner: context.repo.owner,
@@ -40,10 +41,10 @@ jobs:
               c => c.user.login === "github-actions[bot]" && c.body.includes(BOT_MARKER)
             );
 
-            const hasUpdateLabel = currentLabels.includes(UPDATE_LABEL);
+            const hasEasLabel = EAS_LABELS.some(label => currentLabels.includes(label));
 
-            // Only keep a comment while the label is present.
-            if (!hasUpdateLabel) {
+            // Labels already chosen — drop the reminder.
+            if (hasEasLabel) {
               if (currentBotComment) {
                 await github.rest.issues.deleteComment({
                   owner: context.repo.owner,
@@ -54,20 +55,29 @@ jobs:
               return;
             }
 
-            const easChannel = pr.base.ref === "main" ? "production" : "preview";
-
-            let message = `${BOT_MARKER}\n`;
-            message += "This PR is marked for an EAS Update on merge:\n\n";
-            message += `- Base branch: \`${pr.base.ref}\`\n`;
-            message += `- EAS channel on merge: \`${easChannel}\`\n\n`;
-            message += `- ✅ **OTA update will be published after merge** 🚀\n(triggered by label: \`${UPDATE_LABEL}\`)\n`;
+            // Keep every script line indented so YAML does not treat "|" table rows as keys.
+            const message = [
+              BOT_MARKER,
+              "",
+              "This PR changes `packages/mobile`. If merge should trigger EAS, add a label:",
+              "",
+              "| Label | When to use |",
+              "|-------|-------------|",
+              "| `eas-update` | JS / asset-only OTA |",
+              "| `eas-build-android` | Native Android binary |",
+              "| `eas-build-ios` | Native iOS binary |",
+              "",
+              "No EAS action needed? You can ignore this comment.",
+            ].join("\n");
 
             if (currentBotComment) {
-              await github.rest.issues.deleteComment({
+              await github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                comment_id: currentBotComment.id
+                comment_id: currentBotComment.id,
+                body: message
               });
+              return;
             }
 
             await github.rest.issues.createComment({

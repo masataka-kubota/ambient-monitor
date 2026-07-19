@@ -2,7 +2,7 @@ name: Mobile EAS Build Notification
 
 on:
   pull_request:
-    types: [opened, synchronize, labeled, unlabeled]
+    types: [labeled, unlabeled]
     branches: ["main", "staging"]
     paths:
       - "packages/mobile/**"
@@ -25,7 +25,6 @@ jobs:
           script: |
             const pr = context.payload.pull_request;
 
-            // Current labels
             const currentLabels = pr.labels.map(l => l.name);
 
             const BOT_MARKER = "### 🤖 EAS Build notification";
@@ -42,20 +41,29 @@ jobs:
               c => c.user.login === "github-actions[bot]" && c.body.includes(BOT_MARKER)
             );
 
-            // Build the comment body based on currentLabels
-            let message = `${BOT_MARKER}\n`;
-
             const hasAndroidLabel = currentLabels.includes(ANDROID_LABEL);
             const hasIosLabel = currentLabels.includes(IOS_LABEL);
+
+            if (!hasAndroidLabel && !hasIosLabel) {
+              if (currentBotComment) {
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: currentBotComment.id
+                });
+              }
+              return;
+            }
+
             const easProfile = pr.base.ref === "main" ? "production" : "preview";
 
+            let message = `${BOT_MARKER}\n`;
             message += "This PR is marked for an EAS Build on merge:\n\n";
             message += `- Base branch: \`${pr.base.ref}\`\n`;
             message += `- EAS profile on merge: \`${easProfile}\`\n\n`;
             message += `- ${hasAndroidLabel ? "✅" : "⬜"} **Android build will be triggered after merge** 🚀\n(triggered by label: \`${ANDROID_LABEL}\`)\n`;
             message += `- ${hasIosLabel ? "✅" : "⬜"} **iOS build will be triggered after merge** 🚀\n(triggered by label: \`${IOS_LABEL}\`)\n`;
 
-            // Delete existing bot comment if it exists
             if (currentBotComment) {
               await github.rest.issues.deleteComment({
                 owner: context.repo.owner,
@@ -64,7 +72,6 @@ jobs:
               });
             }
 
-            // Create new bot comment
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
