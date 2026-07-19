@@ -1,13 +1,19 @@
+import { useQuery } from '@tanstack/react-query';
 import { useAtomValue } from 'jotai';
 
-import { bleDataAvailabilityAtom } from '@/atoms';
+import { bleDataAvailabilityAtom, selectedDeviceIdAtom } from '@/atoms';
 import useBleMeasurement from '@/hooks/measurements/useBleMeasurement';
-import useCloudLiveMeasurement from '@/hooks/measurements/useCloudLiveMeasurement';
+import { liveMeasurementQueryOptions } from '@/queries';
 
 const useLiveMeasurement = () => {
+  const selectedDeviceId = useAtomValue(selectedDeviceIdAtom);
   const bleDataAvailability = useAtomValue(bleDataAvailabilityAtom);
   const ble = useBleMeasurement();
-  const cloud = useCloudLiveMeasurement();
+
+  const cloud = useQuery({
+    ...liveMeasurementQueryOptions(selectedDeviceId),
+    enabled: bleDataAvailability === 'unusable',
+  });
 
   if (bleDataAvailability === 'usable') {
     return {
