@@ -1,5 +1,15 @@
 # These release notes are for developers, not for the store.
 
+## [v0.9.7] - 2026-07-20
+
+#### en
+
+- Minor maintenance and dependency updates to improve stability.
+
+#### ja
+
+- 軽微なメンテナンスと依存関係の更新を行い、安定性を改善しました。
+
 ## [v0.9.6] - 2026-07-07
 
 #### en
