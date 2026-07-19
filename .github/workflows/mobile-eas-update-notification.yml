@@ -1,0 +1,77 @@
+name: Mobile EAS Update Notification
+
+on:
+  pull_request:
+    types: [opened, synchronize, labeled, unlabeled]
+    branches: ["main", "staging"]
+    paths:
+      - "packages/mobile/**"
+      - ".github/workflows/mobile-eas-update-notification.yml"
+
+jobs:
+  manage-comments:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: 🤖 Manage PR comment
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+
+            const currentLabels = pr.labels.map(l => l.name);
+
+            const BOT_MARKER = "### 🤖 EAS Update notification";
+            const UPDATE_LABEL = "eas-update";
+
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+            });
+            const currentBotComment = comments.data.find(
+              c => c.user.login === "github-actions[bot]" && c.body.includes(BOT_MARKER)
+            );
+
+            const hasUpdateLabel = currentLabels.includes(UPDATE_LABEL);
+
+            // Only keep a comment while the label is present.
+            if (!hasUpdateLabel) {
+              if (currentBotComment) {
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: currentBotComment.id
+                });
+              }
+              return;
+            }
+
+            const easChannel = pr.base.ref === "main" ? "production" : "preview";
+
+            let message = `${BOT_MARKER}\n`;
+            message += "This PR is marked for an EAS Update on merge:\n\n";
+            message += `- Base branch: \`${pr.base.ref}\`\n`;
+            message += `- EAS channel on merge: \`${easChannel}\`\n\n`;
+            message += `- ✅ **OTA update will be published after merge** 🚀\n(triggered by label: \`${UPDATE_LABEL}\`)\n`;
+
+            if (currentBotComment) {
+              await github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: currentBotComment.id
+              });
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: message
+            });
