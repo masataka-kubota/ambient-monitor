@@ -7,7 +7,6 @@ on:
       - ".github/workflows/backend-cd.yml"
       - ".github/actions/setup-safe-chain/**"
       - ".tool-versions"
-      
     branches: ["main"]
 
 jobs:
