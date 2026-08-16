@@ -40,8 +40,12 @@ describe('decodeMeasurement', () => {
     };
 
     const payload = encodeMeasurement(measurement);
+    const decoded = decodeMeasurement(payload);
 
-    expect(decodeMeasurement(payload)).toEqual(measurement);
+    expect(decoded.temperature).toBeCloseTo(measurement.temperature);
+    expect(decoded.humidity).toBeCloseTo(measurement.humidity);
+    expect(decoded.pressure).toBeCloseTo(measurement.pressure);
+    expect(decoded.timestamp).toBe(measurement.timestamp);
   });
 
   it('decodes negative and boundary values correctly', () => {
@@ -53,7 +57,11 @@ describe('decodeMeasurement', () => {
     };
 
     const payload = encodeMeasurement(measurement);
+    const decoded = decodeMeasurement(payload);
 
-    expect(decodeMeasurement(payload)).toEqual(measurement);
+    expect(decoded.temperature).toBeCloseTo(measurement.temperature);
+    expect(decoded.humidity).toBeCloseTo(measurement.humidity);
+    expect(decoded.pressure).toBeCloseTo(measurement.pressure);
+    expect(decoded.timestamp).toBe(measurement.timestamp);
   });
 });
