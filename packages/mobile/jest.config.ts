@@ -3,6 +3,10 @@ import type { Config } from 'jest';
 const config: Config = {
   preset: 'jest-expo',
   setupFiles: ['<rootDir>/jest.setup.ts'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@/assets/(.*)$': '<rootDir>/assets/$1',
+  },
   // Bun stores packages under node_modules/.bun; without this exception
   // jest-expo cannot transform @react-native/* ESM setup files.
   // https://docs.expo.dev/develop/unit-testing/#additional-configuration-for-using-transformignorepatterns
