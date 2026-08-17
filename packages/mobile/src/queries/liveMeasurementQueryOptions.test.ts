@@ -1,3 +1,5 @@
+import { QueryClient } from '@tanstack/react-query';
+
 import { apiClient } from '@/lib';
 
 import { liveMeasurementQueryOptions } from './liveMeasurementQueryOptions';
@@ -15,8 +17,14 @@ jest.mock('@/lib', () => ({
 const mockLatestGet = apiClient.measurements.latest.$get as jest.Mock;
 
 const runQueryFn = (options: ReturnType<typeof liveMeasurementQueryOptions>) => {
-  // Implementation ignores QueryFunctionContext; avoid fabricating QueryClient/meta.
-  return (options.queryFn as () => Promise<unknown>)();
+  const ctx = {
+    client: new QueryClient(),
+    queryKey: [...options.queryKey] as string[],
+    signal: new AbortController().signal,
+    meta: undefined,
+  } as Parameters<NonNullable<typeof options.queryFn>>[0];
+
+  return options.queryFn!(ctx);
 };
 
 describe('liveMeasurementQueryOptions', () => {

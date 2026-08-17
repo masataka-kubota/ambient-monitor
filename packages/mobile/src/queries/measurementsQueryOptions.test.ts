@@ -1,3 +1,5 @@
+import { QueryClient } from '@tanstack/react-query';
+
 import { apiClient } from '@/lib';
 
 import { measurementsQueryOptions } from './measurementsQueryOptions';
@@ -13,8 +15,14 @@ jest.mock('@/lib', () => ({
 const mockGet = apiClient.measurements.$get as jest.Mock;
 
 const runQueryFn = (options: ReturnType<typeof measurementsQueryOptions>) => {
-  // Implementation ignores QueryFunctionContext; avoid fabricating QueryClient/meta.
-  return (options.queryFn as () => Promise<unknown>)();
+  const ctx = {
+    client: new QueryClient(),
+    queryKey: [...options.queryKey] as string[],
+    signal: new AbortController().signal,
+    meta: undefined,
+  } as Parameters<NonNullable<typeof options.queryFn>>[0];
+
+  return options.queryFn!(ctx);
 };
 
 describe('measurementsQueryOptions', () => {
@@ -59,8 +67,6 @@ describe('measurementsQueryOptions', () => {
 
     const options = measurementsQueryOptions(deviceId, '1d');
 
-    await expect(runQueryFn(options)).rejects.toThrow(
-      'Failed to fetch measurements for period 1d',
-    );
+    await expect(runQueryFn(options)).rejects.toThrow('Failed to fetch measurements for period 1d');
   });
 });
