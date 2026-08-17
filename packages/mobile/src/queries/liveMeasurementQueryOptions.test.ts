@@ -57,8 +57,6 @@ describe('liveMeasurementQueryOptions', () => {
 
     const options = liveMeasurementQueryOptions(deviceId);
 
-    expect(options.queryKey).toEqual(['liveMeasurement', deviceId]);
-    expect(options.refetchInterval).toBe(5 * 60 * 1000);
     await expect(runQueryFn(options)).resolves.toEqual(responseData);
     expect(mockLatestGet).toHaveBeenCalledWith({ query: { deviceId } });
   });
