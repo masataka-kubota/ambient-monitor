@@ -64,6 +64,7 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.101.2",
+    "@testing-library/react-native": "^14.0.1",
     "@types/jest": "29.5.14",
     "@types/node": "^25.9.4",
     "@types/react": "~19.2.17",
