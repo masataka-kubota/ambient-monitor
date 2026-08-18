@@ -19,6 +19,7 @@ const config: Config = {
     '!**/node_modules/**',
     '!**/expo-env.d.ts',
     '!**/.expo/**',
+    '!**/test/**',
   ],
 };
 
