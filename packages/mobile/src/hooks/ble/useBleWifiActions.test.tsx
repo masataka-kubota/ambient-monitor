@@ -1,6 +1,4 @@
-/** @jest-environment jsdom */
-
-import { act, renderHook } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react-native';
 import type { Peripheral } from 'react-native-ble-manager';
 
 import { connectedDeviceAtom } from '@/atoms';
@@ -30,6 +28,11 @@ jest.mock('./useBleWifiStatus', () => ({
 const mockFetchWifiStatus = jest.fn();
 const mockWrite = bleManager.write as jest.Mock;
 const connectedDevice = { id: 'device-1' } as Peripheral;
+
+const renderUseBleWifiActions = (device: Peripheral | null) =>
+  renderHook(() => useBleWifiActions(), {
+    wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, device]] }),
+  });
 
 /**
  * Helper function to expect a UTF-8 encoded field to be padded with zeros to
@@ -91,16 +94,11 @@ describe('useBleWifiActions', () => {
   });
 
   it('returns null and skips the write when no device is connected', async () => {
-    const { result } = renderHook(() => useBleWifiActions(), {
-      wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, null]] }),
-    });
+    const { result } = await renderUseBleWifiActions(null);
 
-    let actionResult: Awaited<ReturnType<typeof result.current.initializeWifiConfig>>;
-    await act(async () => {
-      actionResult = await result.current.initializeWifiConfig();
-    });
+    const actionResult = await act(() => result.current.initializeWifiConfig());
 
-    expect(actionResult!).toBeNull();
+    expect(actionResult).toBeNull();
     expect(mockWrite).not.toHaveBeenCalled();
     expect(mockFetchWifiStatus).not.toHaveBeenCalled();
   });
@@ -108,16 +106,11 @@ describe('useBleWifiActions', () => {
   it('initializes Wi‑Fi config by writing an empty SSID/password payload and fetching the updated status', async () => {
     mockFetchWifiStatus.mockResolvedValue({ status: 'not_configured', ssid: '' });
 
-    const { result } = renderHook(() => useBleWifiActions(), {
-      wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, connectedDevice]] }),
-    });
+    const { result } = await renderUseBleWifiActions(connectedDevice);
 
-    let actionResult: Awaited<ReturnType<typeof result.current.initializeWifiConfig>>;
-    await act(async () => {
-      actionResult = await result.current.initializeWifiConfig();
-    });
+    const actionResult = await act(() => result.current.initializeWifiConfig());
 
-    expect(actionResult!).toEqual({ status: 'not_configured', ssid: '' });
+    expect(actionResult).toEqual({ status: 'not_configured', ssid: '' });
     expect(mockWrite).toHaveBeenCalledWith(
       'device-1',
       BLE_SERVICE_UUID,
@@ -131,19 +124,16 @@ describe('useBleWifiActions', () => {
   it('updates Wi‑Fi config with the provided SSID and password and returns the refreshed status', async () => {
     mockFetchWifiStatus.mockResolvedValue({ status: 'connected', ssid: 'Home-WiFi' });
 
-    const { result } = renderHook(() => useBleWifiActions(), {
-      wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, connectedDevice]] }),
-    });
+    const { result } = await renderUseBleWifiActions(connectedDevice);
 
-    let actionResult: Awaited<ReturnType<typeof result.current.updateWifiConfig>>;
-    await act(async () => {
-      actionResult = await result.current.updateWifiConfig({
+    const actionResult = await act(() =>
+      result.current.updateWifiConfig({
         ssid: 'Home-WiFi',
         password: 'strong-pass',
-      });
-    });
+      }),
+    );
 
-    expect(actionResult!).toEqual({ status: 'connected', ssid: 'Home-WiFi' });
+    expect(actionResult).toEqual({ status: 'connected', ssid: 'Home-WiFi' });
     expect(mockWrite).toHaveBeenCalledWith(
       'device-1',
       BLE_SERVICE_UUID,
@@ -158,16 +148,11 @@ describe('useBleWifiActions', () => {
     mockWrite.mockRejectedValue(new Error('write failed'));
     const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    const { result } = renderHook(() => useBleWifiActions(), {
-      wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, connectedDevice]] }),
-    });
+    const { result } = await renderUseBleWifiActions(connectedDevice);
 
-    let actionResult: Awaited<ReturnType<typeof result.current.initializeWifiConfig>>;
-    await act(async () => {
-      actionResult = await result.current.initializeWifiConfig();
-    });
+    const actionResult = await act(() => result.current.initializeWifiConfig());
 
-    expect(actionResult!).toBeNull();
+    expect(actionResult).toBeNull();
     expect(mockFetchWifiStatus).not.toHaveBeenCalled();
     expect(consoleError).toHaveBeenCalledWith('Failed to initialize Wi-Fi', expect.any(Error));
     consoleError.mockRestore();
@@ -177,19 +162,16 @@ describe('useBleWifiActions', () => {
     mockWrite.mockRejectedValue(new Error('update write failed'));
     const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    const { result } = renderHook(() => useBleWifiActions(), {
-      wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, connectedDevice]] }),
-    });
+    const { result } = await renderUseBleWifiActions(connectedDevice);
 
-    let actionResult: Awaited<ReturnType<typeof result.current.updateWifiConfig>>;
-    await act(async () => {
-      actionResult = await result.current.updateWifiConfig({
+    const actionResult = await act(() =>
+      result.current.updateWifiConfig({
         ssid: 'Home-WiFi',
         password: 'strong-pass',
-      });
-    });
+      }),
+    );
 
-    expect(actionResult!).toBeNull();
+    expect(actionResult).toBeNull();
     expect(mockFetchWifiStatus).not.toHaveBeenCalled();
     expect(consoleError).toHaveBeenCalledWith('Failed to write WiFi config', expect.any(Error));
     consoleError.mockRestore();

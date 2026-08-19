@@ -1,6 +1,4 @@
-/** @jest-environment jsdom */
-
-import { act, renderHook } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react-native';
 import { useAtomValue } from 'jotai';
 import type { Peripheral } from 'react-native-ble-manager';
 
@@ -23,13 +21,17 @@ const connectedDevice = { id: 'device-1' } as Peripheral;
 
 const homeWifiPayload = [3, 0x48, 0x6f, 0x6d, 0x65, 0x2d, 0x57, 0x69, 0x46, 0x69];
 
-/** Helper function to use the hook and get the wifiStatus atom value. */
-const useBleWifiStatusUnderTest = () => {
-  const hook = useBleWifiStatus();
-  const wifiStatus = useAtomValue(wifiStatusAtom);
+const renderUseBleWifiStatus = (device: Peripheral | null = null) =>
+  renderHook(
+    () => {
+      const hook = useBleWifiStatus();
 
-  return { ...hook, wifiStatus };
-};
+      return { ...hook, wifiStatus: useAtomValue(wifiStatusAtom) };
+    },
+    {
+      wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, device]] }),
+    },
+  );
 
 describe('parseWifiStatusData', () => {
   it('maps a BLE payload to the expected Wi-Fi status shape', () => {
@@ -60,16 +62,11 @@ describe('useBleWifiStatus', () => {
   });
 
   it('returns null and skips the read when no device is connected', async () => {
-    const { result } = renderHook(() => useBleWifiStatusUnderTest(), {
-      wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, null]] }),
-    });
+    const { result } = await renderUseBleWifiStatus();
 
-    let fetchResult: Awaited<ReturnType<typeof result.current.fetchWifiStatus>>;
-    await act(async () => {
-      fetchResult = await result.current.fetchWifiStatus();
-    });
+    const fetchResult = await act(() => result.current.fetchWifiStatus());
 
-    expect(fetchResult!).toBeNull();
+    expect(fetchResult).toBeNull();
     expect(mockRead).not.toHaveBeenCalled();
     expect(result.current.wifiStatus).toBeNull();
   });
@@ -77,16 +74,11 @@ describe('useBleWifiStatus', () => {
   it('reads the device status and updates the Wi-Fi atom', async () => {
     mockRead.mockResolvedValue(homeWifiPayload);
 
-    const { result } = renderHook(() => useBleWifiStatusUnderTest(), {
-      wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, connectedDevice]] }),
-    });
+    const { result } = await renderUseBleWifiStatus(connectedDevice);
 
-    let fetchResult: Awaited<ReturnType<typeof result.current.fetchWifiStatus>>;
-    await act(async () => {
-      fetchResult = await result.current.fetchWifiStatus();
-    });
+    const fetchResult = await act(() => result.current.fetchWifiStatus());
 
-    expect(fetchResult!).toEqual({
+    expect(fetchResult).toEqual({
       status: 'connected',
       ssid: 'Home-WiFi',
     });
@@ -101,16 +93,11 @@ describe('useBleWifiStatus', () => {
     mockRead.mockRejectedValue(new Error('read failed'));
     const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    const { result } = renderHook(() => useBleWifiStatusUnderTest(), {
-      wrapper: createTestWrapper({ atoms: [[connectedDeviceAtom, connectedDevice]] }),
-    });
+    const { result } = await renderUseBleWifiStatus(connectedDevice);
 
-    let fetchResult: Awaited<ReturnType<typeof result.current.fetchWifiStatus>>;
-    await act(async () => {
-      fetchResult = await result.current.fetchWifiStatus();
-    });
+    const fetchResult = await act(() => result.current.fetchWifiStatus());
 
-    expect(fetchResult!).toBeNull();
+    expect(fetchResult).toBeNull();
     expect(result.current.wifiStatus).toBeNull();
     consoleError.mockRestore();
   });

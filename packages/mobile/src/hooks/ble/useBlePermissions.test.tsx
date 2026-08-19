@@ -1,6 +1,4 @@
-/** @jest-environment jsdom */
-
-import { act, renderHook } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react-native';
 import * as ExpoDevice from 'expo-device';
 import type { Permission } from 'react-native';
 import { PermissionsAndroid, Platform } from 'react-native';
@@ -25,22 +23,15 @@ const setAndroidApiLevel = (apiLevel: number | undefined) => {
 };
 
 const requestBlePermissions = async () => {
-  const { result } = renderHook(() => useBlePermissions());
+  const { result } = await renderHook(() => useBlePermissions());
 
-  let granted: boolean | undefined;
-  await act(async () => {
-    granted = await result.current.requestBlePermissions();
-  });
-
-  return granted;
+  return act(() => result.current.requestBlePermissions());
 };
 
 describe('useBlePermissions', () => {
-  let mockRequestMultiple: jest.SpiedFunction<typeof PermissionsAndroid.requestMultiple>;
-
   beforeEach(() => {
     mockExpoDevice.platformApiLevel = -1;
-    mockRequestMultiple = jest.spyOn(PermissionsAndroid, 'requestMultiple');
+    jest.spyOn(PermissionsAndroid, 'requestMultiple');
   });
 
   afterEach(() => {
@@ -51,26 +42,26 @@ describe('useBlePermissions', () => {
     jest.replaceProperty(Platform, 'OS', 'ios');
 
     await expect(requestBlePermissions()).resolves.toBe(true);
-    expect(mockRequestMultiple).not.toHaveBeenCalled();
+    expect(PermissionsAndroid.requestMultiple).not.toHaveBeenCalled();
   });
 
   it('requests ACCESS_FINE_LOCATION for Android API 23 to 30', async () => {
     setAndroidApiLevel(25);
-    mockRequestMultiple.mockResolvedValue(
+    jest.mocked(PermissionsAndroid.requestMultiple).mockResolvedValue(
       permissionResults({
         [PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION]: PermissionsAndroid.RESULTS.GRANTED,
       }),
     );
 
     await expect(requestBlePermissions()).resolves.toBe(true);
-    expect(mockRequestMultiple).toHaveBeenCalledWith([
+    expect(PermissionsAndroid.requestMultiple).toHaveBeenCalledWith([
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     ]);
   });
 
   it('requests Bluetooth permissions for Android API 31 and above', async () => {
     setAndroidApiLevel(31);
-    mockRequestMultiple.mockResolvedValue(
+    jest.mocked(PermissionsAndroid.requestMultiple).mockResolvedValue(
       permissionResults({
         [PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN]: PermissionsAndroid.RESULTS.GRANTED,
         [PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT]: PermissionsAndroid.RESULTS.GRANTED,
@@ -78,7 +69,7 @@ describe('useBlePermissions', () => {
     );
 
     await expect(requestBlePermissions()).resolves.toBe(true);
-    expect(mockRequestMultiple).toHaveBeenCalledWith([
+    expect(PermissionsAndroid.requestMultiple).toHaveBeenCalledWith([
       PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
       PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
     ]);
@@ -88,19 +79,19 @@ describe('useBlePermissions', () => {
     setAndroidApiLevel(undefined);
 
     await expect(requestBlePermissions()).resolves.toBe(true);
-    expect(mockRequestMultiple).not.toHaveBeenCalled();
+    expect(PermissionsAndroid.requestMultiple).not.toHaveBeenCalled();
   });
 
   it('returns true when Android does not require BLE permissions', async () => {
     setAndroidApiLevel(22);
 
     await expect(requestBlePermissions()).resolves.toBe(true);
-    expect(mockRequestMultiple).not.toHaveBeenCalled();
+    expect(PermissionsAndroid.requestMultiple).not.toHaveBeenCalled();
   });
 
   it('returns false when any requested permission is denied', async () => {
     setAndroidApiLevel(31);
-    mockRequestMultiple.mockResolvedValue(
+    jest.mocked(PermissionsAndroid.requestMultiple).mockResolvedValue(
       permissionResults({
         [PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN]: PermissionsAndroid.RESULTS.GRANTED,
         [PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT]: PermissionsAndroid.RESULTS.DENIED,

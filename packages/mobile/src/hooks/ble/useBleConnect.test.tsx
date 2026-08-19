@@ -1,9 +1,6 @@
-/** @jest-environment jsdom */
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { act, renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react-native';
 import { useAtomValue } from 'jotai';
-import { Suspense, type ReactNode } from 'react';
 import { Platform } from 'react-native';
 import type { Peripheral } from 'react-native-ble-manager';
 
@@ -43,59 +40,24 @@ const mockDisconnect = bleManager.disconnect as jest.Mock;
 const deviceA = { id: 'device-1', name: 'Device A' } as Peripheral;
 const deviceB = { id: 'device-2', name: 'Device B' } as Peripheral;
 
-const useBleConnectUnderTest = () => {
-  const hook = useBleConnect();
-  const connectedId = useAtomValue(connectedDeviceIdAtom);
-  const connectedDevice = useAtomValue(connectedDeviceAtom);
-  const scannedDevices = useAtomValue(scannedDevicesAtom);
+const renderUseBleConnect = (connectedId: string | null, atoms: HydratedAtom[] = []) =>
+  renderHook(
+    () => {
+      const hook = useBleConnect();
 
-  return { ...hook, connectedId, connectedDevice, scannedDevices };
-};
-
-const getHydratedConnectedId = (atoms: HydratedAtom[]) => {
-  const hydrated = atoms.find(([atom]) => atom === connectedDeviceIdAtom);
-  return hydrated ? (hydrated[1] as string | null) : null;
-};
-
-/**
- * Renders the hook after AsyncStorage and `connectedDeviceIdAtom` have settled.
- * `atomWithStorage({ getOnInit: true })` suspends and then overwrites atom state
- * from storage on mount, so tests wait for that before acting.
- */
-const renderUseBleConnect = async (atoms: HydratedAtom[] = []) => {
-  const connectedId = getHydratedConnectedId(atoms);
-  const initialAtoms: HydratedAtom[] = atoms.some(([atom]) => atom === connectedDeviceIdAtom)
-    ? atoms
-    : [[connectedDeviceIdAtom, null], ...atoms];
-
-  if (connectedId === null) {
-    await AsyncStorage.removeItem('connectedDeviceId');
-  } else {
-    await AsyncStorage.setItem('connectedDeviceId', JSON.stringify(connectedId));
-  }
-
-  const TestWrapper = createTestWrapper({ atoms: initialAtoms });
-  const Wrapper = ({ children }: { children: ReactNode }) => (
-    <Suspense fallback={null}>
-      <TestWrapper>{children}</TestWrapper>
-    </Suspense>
+      return {
+        ...hook,
+        connectedId: useAtomValue(connectedDeviceIdAtom),
+        connectedDevice: useAtomValue(connectedDeviceAtom),
+        scannedDevices: useAtomValue(scannedDevicesAtom),
+      };
+    },
+    {
+      wrapper: createTestWrapper({
+        atoms: [[connectedDeviceIdAtom, connectedId], ...atoms],
+      }),
+    },
   );
-
-  const view = await act(() => renderHook(() => useBleConnectUnderTest(), { wrapper: Wrapper }));
-
-  await waitFor(() => {
-    expect(view.result.current.connectToDevice).toEqual(expect.any(Function));
-    expect(view.result.current.connectedId).toBe(connectedId);
-  });
-
-  await act(async () => {
-    await Promise.resolve();
-  });
-
-  expect(view.result.current.connectedId).toBe(connectedId);
-
-  return view;
-};
 
 describe('getDeviceData', () => {
   beforeEach(() => {
@@ -175,7 +137,7 @@ describe('useBleConnect', () => {
   it('connects to a device, stores it as active, and removes it from the scanned list', async () => {
     mockGetDiscoveredPeripherals.mockResolvedValue([deviceA, deviceB]);
 
-    const { result } = await renderUseBleConnect([[scannedDevicesAtom, [deviceA, deviceB]]]);
+    const { result } = await renderUseBleConnect(null, [[scannedDevicesAtom, [deviceA, deviceB]]]);
 
     await act(async () => {
       await result.current.connectToDevice('device-1');
@@ -195,7 +157,7 @@ describe('useBleConnect', () => {
     mockIsPeripheralConnected.mockResolvedValue(false);
     mockGetDiscoveredPeripherals.mockResolvedValue([deviceA]);
 
-    const { result } = await renderUseBleConnect();
+    const { result } = await renderUseBleConnect(null);
 
     await act(async () => {
       await result.current.autoConnectToDevice('device-1');
@@ -212,7 +174,7 @@ describe('useBleConnect', () => {
 
     mockGetDiscoveredPeripherals.mockResolvedValue([deviceA]);
 
-    const { result } = await renderUseBleConnect();
+    const { result } = await renderUseBleConnect(null);
 
     await act(async () => {
       await result.current.connectToDevice('device-1');
@@ -226,7 +188,7 @@ describe('useBleConnect', () => {
     const consoleInfo = jest.spyOn(console, 'info').mockImplementation(() => {});
     mockIsPeripheralConnected.mockRejectedValue(new Error('Device disconnected'));
 
-    const { result } = await renderUseBleConnect();
+    const { result } = await renderUseBleConnect(null);
 
     await act(async () => {
       await result.current.autoConnectToDevice('device-1');
@@ -243,7 +205,7 @@ describe('useBleConnect', () => {
   it('does nothing when the device is already connected', async () => {
     mockIsPeripheralConnected.mockResolvedValue(true);
 
-    const { result } = await renderUseBleConnect();
+    const { result } = await renderUseBleConnect(null);
 
     await act(async () => {
       await result.current.autoConnectToDevice('device-1');
@@ -257,7 +219,7 @@ describe('useBleConnect', () => {
     const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
     mockIsPeripheralConnected.mockRejectedValue(new Error('Permission denied'));
 
-    const { result } = await renderUseBleConnect();
+    const { result } = await renderUseBleConnect(null);
 
     await act(async () => {
       await result.current.autoConnectToDevice('device-1');
@@ -272,7 +234,7 @@ describe('useBleConnect', () => {
     const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
     mockStopScan.mockRejectedValue(new Error('scan failed'));
 
-    const { result } = await renderUseBleConnect();
+    const { result } = await renderUseBleConnect(null);
 
     await act(async () => {
       await result.current.connectToDevice('device-1');
@@ -284,10 +246,7 @@ describe('useBleConnect', () => {
   });
 
   it('cleans up the BLE connection state when disconnecting', async () => {
-    const { result } = await renderUseBleConnect([
-      [connectedDeviceAtom, deviceA],
-      [connectedDeviceIdAtom, 'device-1'],
-    ]);
+    const { result } = await renderUseBleConnect('device-1', [[connectedDeviceAtom, deviceA]]);
 
     await act(async () => {
       await result.current.disconnectDevice('device-1');
@@ -307,10 +266,7 @@ describe('useBleConnect', () => {
     const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
     mockDisconnect.mockRejectedValue(new Error('disconnect failed'));
 
-    const { result } = await renderUseBleConnect([
-      [connectedDeviceAtom, deviceA],
-      [connectedDeviceIdAtom, 'device-1'],
-    ]);
+    const { result } = await renderUseBleConnect('device-1', [[connectedDeviceAtom, deviceA]]);
 
     await act(async () => {
       await result.current.disconnectDevice('device-1');
@@ -323,9 +279,9 @@ describe('useBleConnect', () => {
   });
 
   it('forgets the previously connected device without disconnecting it again', async () => {
-    const { result } = await renderUseBleConnect([[connectedDeviceIdAtom, 'device-1']]);
+    const { result } = await renderUseBleConnect('device-1');
 
-    await act(async () => {
+    await act(() => {
       result.current.forgetDevice();
     });
 
