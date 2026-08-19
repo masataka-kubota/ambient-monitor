@@ -7,6 +7,12 @@ import { connectedDeviceAtom, connectedDeviceIdAtom, scannedDevicesAtom } from '
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';
 import { bleManager } from '@/lib';
 
+/**
+ * Returns the discovered peripheral metadata for the given BLE device id.
+ *
+ * @param deviceId - The BLE peripheral id to resolve.
+ * @returns The matching peripheral information, or null when the device is not found.
+ */
 export const getDeviceData = async (deviceId: string): Promise<Peripheral | null> => {
   if (!deviceId) {
     return null;
@@ -16,7 +22,13 @@ export const getDeviceData = async (deviceId: string): Promise<Peripheral | null
   return peripherals.find((p) => p.id === deviceId) ?? null;
 };
 
-const getBleErrorMessage = (error: unknown): string => {
+/**
+ * Normalizes native BLE exceptions into a readable string for logging.
+ *
+ * @param error - The raw error thrown by the BLE manager.
+ * @returns A human-readable error string.
+ */
+export const getBleErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
     return error.message;
   }
@@ -36,15 +48,58 @@ const getBleErrorMessage = (error: unknown): string => {
   return String(error);
 };
 
-const isExpectedBleError = (error: unknown): boolean =>
+/**
+ * Determines whether a BLE error is the expected disconnect case encountered
+ * during a reconnect attempt on Android.
+ *
+ * @param error - The BLE error to evaluate.
+ * @returns True when the disconnect error is considered benign and safe to ignore.
+ */
+export const isExpectedBleError = (error: unknown): boolean =>
   getBleErrorMessage(error).toLowerCase().includes('disconnect');
 
-const useBleConnect = () => {
+export interface UseBleConnectResult {
+  /**
+   * Connects to a BLE device, retrieves its services, and updates the active device state.
+   */
+  connectToDevice: (deviceId: string) => Promise<void>;
+
+  /**
+   * Checks whether the peripheral is already connected and, if not, performs a reconnect.
+   */
+  autoConnectToDevice: (deviceId: string) => Promise<void>;
+
+  /**
+   * Disconnects from the device and clears the stored connected-device state.
+   */
+  disconnectDevice: (deviceId: string) => Promise<void>;
+
+  /**
+   * Clears the remembered connected device id without calling the native disconnect API.
+   */
+  forgetDevice: () => void;
+
+  /**
+   * Whether a BLE connection attempt is currently in progress.
+   */
+  isConnecting: boolean;
+}
+
+/**
+ * Exposes the BLE connection lifecycle helpers used by the app.
+ *
+ * @returns Methods to connect, auto-reconnect, disconnect, or forget devices,
+ * along with the current in-flight connection state.
+ */
+const useBleConnect = (): UseBleConnectResult => {
   const setConnectedIdDevice = useSetAtom(connectedDeviceIdAtom);
   const setConnectedDevice = useSetAtom(connectedDeviceAtom);
   const setScannedDevices = useSetAtom(scannedDevicesAtom);
   const [isConnecting, setIsConnecting] = useState(false);
 
+  /**
+   * Performs the actual BLE connection sequence, including service retrieval and MTU request on Android.
+   */
   const performBleConnect = useCallback(
     async (deviceId: string) => {
       await bleManager.connect(deviceId);
@@ -58,6 +113,9 @@ const useBleConnect = () => {
     [setConnectedDevice],
   );
 
+  /**
+   * Connects to a BLE device, retrieves its services, and updates the active device state.
+   */
   const connectToDevice = useCallback(
     async (deviceId: string) => {
       setIsConnecting(true);
@@ -75,6 +133,9 @@ const useBleConnect = () => {
     [performBleConnect, setConnectedIdDevice, setScannedDevices],
   );
 
+  /**
+   * Checks whether the peripheral is already connected and, if not, performs a reconnect.
+   */
   const autoConnectToDevice = useCallback(
     async (deviceId: string) => {
       try {
@@ -98,6 +159,9 @@ const useBleConnect = () => {
     [performBleConnect],
   );
 
+  /**
+   * Disconnects from the device and clears the stored connected-device state.
+   */
   const disconnectDevice = useCallback(
     async (deviceId: string) => {
       try {
@@ -112,9 +176,10 @@ const useBleConnect = () => {
     [setConnectedDevice, setConnectedIdDevice],
   );
 
-  // Forget the previously connected device.
-  // This does NOT call bleManager.disconnect because the device is already disconnected.
-  // Used in the reconnect screen to allow users to set up a new device.
+  /**
+   * Clears the remembered connected device id without calling the native disconnect API.
+   * Used in the reconnect screen to allow users to set up a new device.
+   */
   const forgetDevice = useCallback(() => {
     setConnectedIdDevice(null);
   }, [setConnectedIdDevice]);
