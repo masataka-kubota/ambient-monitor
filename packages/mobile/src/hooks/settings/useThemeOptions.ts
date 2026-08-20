@@ -3,7 +3,15 @@ import { useTranslation } from 'react-i18next';
 
 import type { ThemeOption } from '@/types';
 
-const useThemeOptions = () => {
+/**
+ * Builds the selectable theme options shown in settings.
+ *
+ * The labels are localized through i18n so the menu reflects the current
+ * language while keeping a stable option order of system, light, and dark.
+ *
+ * @returns Ordered theme choices for the app's theme selector.
+ */
+const useThemeOptions = (): ThemeOption[] => {
   const { t } = useTranslation();
 
   const themeOptions: ThemeOption[] = useMemo(
