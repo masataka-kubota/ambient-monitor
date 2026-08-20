@@ -6,7 +6,30 @@ import { scannedDevicesAtom } from '@/atoms';
 import { BLE_DEVICE_NAME, BLE_SERVICE_UUID } from '@/constants/ble';
 import { bleManager } from '@/lib';
 
-const useBleScan = () => {
+export interface UseBleScanResult {
+  /**
+   * Clears the scanned device list and starts a filtered BLE scan for nearby
+   * Ambient Monitor peripherals.
+   */
+  scanForPeripherals: () => Promise<void>;
+}
+
+/**
+ * Discovers nearby Ambient Monitor peripherals and keeps the scanned device
+ * list in sync with BLE scan events.
+ *
+ * The hook subscribes to discovery and scan-stop notifications on mount. Only
+ * peripherals whose `name` or advertised `localName` starts with
+ * `BLE_DEVICE_NAME` are added, and duplicates are ignored by device id.
+ * Subscriptions are removed automatically when the component unmounts.
+ *
+ * @returns Helpers for starting a filtered BLE scan.
+ *
+ * @example
+ * const { scanForPeripherals } = useBleScan();
+ * await scanForPeripherals();
+ */
+const useBleScan = (): UseBleScanResult => {
   const setScannedDevices = useSetAtom(scannedDevicesAtom);
 
   useEffect(() => {
@@ -21,7 +44,8 @@ const useBleScan = () => {
     });
 
     const stopSubscription = bleManager.onStopScan(() => {
-      // console.log("Scan stopped");
+      // Only log the scan stop event for debugging purposes.
+      // console.log('Scan stopped');
     });
 
     return () => {
