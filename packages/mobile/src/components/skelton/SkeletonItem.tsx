@@ -21,7 +21,7 @@ const SkeletonItem = ({
   style,
 }: SkeletonItemProps) => {
   const { activeThemeColors } = useAppTheme();
-  const { skeltonAnimatedStyle } = useSkeletonAnimation();
+  const { skeletonAnimatedStyle } = useSkeletonAnimation();
 
   const defaultBackgroundColor = backgroundColor ?? activeThemeColors.secondaryBackground;
 
@@ -34,7 +34,7 @@ const SkeletonItem = ({
           borderRadius,
           backgroundColor: defaultBackgroundColor,
         },
-        skeltonAnimatedStyle,
+        skeletonAnimatedStyle,
         style,
       ]}
     />

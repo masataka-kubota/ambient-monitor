@@ -15,7 +15,7 @@ interface CShapeGaugeSkeletonProps {
 
 const CShapeGaugeSkeleton = ({ radius, strokeWidth }: CShapeGaugeSkeletonProps) => {
   const { activeThemeColors } = useAppTheme();
-  const { skeltonAnimatedStyle } = useSkeletonAnimation();
+  const { skeletonAnimatedStyle } = useSkeletonAnimation();
 
   const size = radius * 2 + strokeWidth * 2;
   const center = radius + strokeWidth;
@@ -24,7 +24,7 @@ const CShapeGaugeSkeleton = ({ radius, strokeWidth }: CShapeGaugeSkeletonProps) 
   return (
     <View style={styles.wrapper}>
       {/* Arc */}
-      <Animated.View style={skeltonAnimatedStyle}>
+      <Animated.View style={skeletonAnimatedStyle}>
         <Svg width={size} height={size}>
           <Path
             d={path}
