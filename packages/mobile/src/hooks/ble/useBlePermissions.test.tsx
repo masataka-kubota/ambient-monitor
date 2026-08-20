@@ -10,6 +10,7 @@ jest.mock('expo-device', () => ({
 }));
 
 const mockExpoDevice = ExpoDevice as { platformApiLevel?: number };
+const originalPlatformOS = Platform.OS;
 
 type PermissionResults = Awaited<ReturnType<typeof PermissionsAndroid.requestMultiple>>;
 
@@ -30,11 +31,13 @@ const requestBlePermissions = async () => {
 
 describe('useBlePermissions', () => {
   beforeEach(() => {
+    jest.replaceProperty(Platform, 'OS', originalPlatformOS);
     mockExpoDevice.platformApiLevel = -1;
     jest.spyOn(PermissionsAndroid, 'requestMultiple');
   });
 
   afterEach(() => {
+    jest.replaceProperty(Platform, 'OS', originalPlatformOS);
     jest.restoreAllMocks();
   });
 
