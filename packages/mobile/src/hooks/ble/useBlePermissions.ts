@@ -46,7 +46,7 @@ const useBlePermissions = (): UseBlePermissionsResult => {
 
     if (androidApiLevel >= 23 && androidApiLevel <= 30) {
       permissions.push(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-    } else if (Platform.Version >= 31) {
+    } else if (androidApiLevel >= 31) {
       permissions.push(
         PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
         PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
