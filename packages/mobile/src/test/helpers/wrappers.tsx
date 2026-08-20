@@ -1,10 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Provider } from 'jotai';
+import { Provider, type WritableAtom } from 'jotai';
 import { useHydrateAtoms } from 'jotai/utils';
 import type { ReactNode } from 'react';
 
-/** Atom/value pair passed to `useHydrateAtoms` in tests. */
-export type HydratedAtom = readonly [object, unknown];
+/** Atom and initial value passed to `useHydrateAtoms` in tests. */
+// oxlint-disable-next-line typescript/no-explicit-any -- WritableAtom write args are contravariant
+export type HydrateAtomPair = readonly [WritableAtom<any, any[], any>, unknown];
 
 const createTestQueryClient = () =>
   new QueryClient({
@@ -19,15 +20,15 @@ const HydrateAtoms = ({
   initialValues,
   children,
 }: {
-  initialValues: HydratedAtom[];
+  initialValues: HydrateAtomPair[];
   children: ReactNode;
 }) => {
-  useHydrateAtoms(initialValues as unknown as Parameters<typeof useHydrateAtoms>[0]);
+  useHydrateAtoms(initialValues);
   return children;
 };
 
 export type CreateTestWrapperOptions = {
-  atoms?: HydratedAtom[];
+  atoms?: HydrateAtomPair[];
   queryClient?: QueryClient;
 };
 

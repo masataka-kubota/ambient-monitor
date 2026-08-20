@@ -6,7 +6,7 @@ import type { Peripheral } from 'react-native-ble-manager';
 import { connectedDeviceAtom, connectedDeviceIdAtom, scannedDevicesAtom } from '@/atoms';
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';
 import { bleManager } from '@/lib';
-import { createTestWrapper, type HydratedAtom } from '@/test/helpers';
+import { createTestWrapper, type HydrateAtomPair } from '@/test/helpers';
 
 import useBleConnect, {
   getBleErrorMessage,
@@ -40,7 +40,7 @@ const deviceA = { id: 'device-1', name: 'Device A' } as Peripheral;
 const deviceB = { id: 'device-2', name: 'Device B' } as Peripheral;
 const originalPlatformOS = Platform.OS;
 
-const renderUseBleConnect = (connectedId: string | null, atoms: HydratedAtom[] = []) =>
+const renderUseBleConnect = (connectedId: string | null, atoms: HydrateAtomPair[] = []) =>
   renderHook(
     () => {
       const hook = useBleConnect();
