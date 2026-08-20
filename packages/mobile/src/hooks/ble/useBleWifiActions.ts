@@ -39,7 +39,7 @@ export const WIFI_CONFIG_PAYLOAD_LEN = WIFI_SSID_MAX_LEN + WIFI_PASSWORD_MAX_LEN
  * // => Uint8Array of length 96, with the SSID and password written at fixed offsets
  */
 export const buildWifiConfigPayload = (values: WifiFormValues): Uint8Array => {
-  const buffer = Buffer.alloc(WIFI_SSID_MAX_LEN + WIFI_PASSWORD_MAX_LEN);
+  const buffer = Buffer.alloc(WIFI_CONFIG_PAYLOAD_LEN);
 
   buffer.write(values.ssid, 0, WIFI_SSID_MAX_LEN, 'utf8');
   buffer.write(values.password, WIFI_SSID_MAX_LEN, WIFI_PASSWORD_MAX_LEN, 'utf8');
