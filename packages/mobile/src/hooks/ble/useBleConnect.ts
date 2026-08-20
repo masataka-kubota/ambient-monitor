@@ -90,6 +90,11 @@ export interface UseBleConnectResult {
  *
  * @returns Methods to connect, auto-reconnect, disconnect, or forget devices,
  * along with the current in-flight connection state.
+ *
+ * @example
+ * const { connectToDevice, disconnectDevice, forgetDevice, isConnecting } =
+ *   useBleConnect();
+ * await connectToDevice('device-1');
  */
 const useBleConnect = (): UseBleConnectResult => {
   const setConnectedIdDevice = useSetAtom(connectedDeviceIdAtom);

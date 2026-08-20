@@ -43,6 +43,10 @@ interface UseBleWifiStatusResult {
  *
  * @returns An object with a `fetchWifiStatus` function that reads the BLE
  * characteristic, updates the Wi‑Fi status atom, and returns the parsed status.
+ *
+ * @example
+ * const { fetchWifiStatus } = useBleWifiStatus();
+ * const status = await fetchWifiStatus();
  */
 const useBleWifiStatus = (): UseBleWifiStatusResult => {
   const connectedDevice = useAtomValue(connectedDeviceAtom);
