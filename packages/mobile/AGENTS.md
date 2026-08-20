@@ -8,6 +8,7 @@
 
 ## Tooling
 
+- Test: Jest. use `bun run test`.
 - Lint/format: Oxlint / Oxfmt (`bun run lint`, `bun run format`).
 - Types from the backend workspace package: `bun run build:backend-types` when API types change.
 - EAS Build profiles / Update channels live in `eas.json` (`development` / `preview` / `production`).

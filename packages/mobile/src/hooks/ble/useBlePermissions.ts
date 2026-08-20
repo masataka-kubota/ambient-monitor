@@ -3,19 +3,50 @@ import { useCallback } from 'react';
 import type { Permission } from 'react-native';
 import { PermissionsAndroid, Platform } from 'react-native';
 
-const useBlePermissions = () => {
+/**
+ * Result object returned by the BLE permission hook.
+ */
+export interface UseBlePermissionsResult {
+  /**
+   * Requests the Android runtime permissions needed for BLE communication.
+   *
+   * On Android API 23-30, this checks for ACCESS_FINE_LOCATION. On Android API
+   * 31 and above, it requests BLUETOOTH_SCAN and BLUETOOTH_CONNECT.
+   *
+   * @returns True when the platform is not Android, no permission check is
+   * required, or all requested permissions are granted.
+   */
+  requestBlePermissions: () => Promise<boolean>;
+}
+
+/**
+ * Exposes the Android BLE permission flow used by the app.
+ *
+ * The hook resolves the required runtime permission list from the current
+ * platform and Android API level before requesting them from the system.
+ *
+ * @returns Helpers for requesting the BLE permissions required by the active platform.
+ *
+ * @example
+ * const { requestBlePermissions } = useBlePermissions();
+ * const granted = await requestBlePermissions();
+ */
+const useBlePermissions = (): UseBlePermissionsResult => {
   const requestBlePermissions = useCallback(async () => {
     if (Platform.OS !== 'android') {
       return true;
     }
 
     const permissions: Permission[] = [];
+    const androidApiLevel = ExpoDevice.platformApiLevel;
 
-    const version = ExpoDevice.platformApiLevel ?? -1;
+    if (androidApiLevel == null) {
+      return true;
+    }
 
-    if (version >= 23 && version <= 30) {
+    if (androidApiLevel >= 23 && androidApiLevel <= 30) {
       permissions.push(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-    } else if (Platform.Version >= 31) {
+    } else if (androidApiLevel >= 31) {
       permissions.push(
         PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
         PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
