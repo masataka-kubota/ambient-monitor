@@ -23,6 +23,10 @@ import type { WifiStatus } from '@/types';
  * // => { status: 'connected', ssid: 'Home-WiFi' }
  */
 export const parseWifiStatusData = (data: number[]): WifiStatus => {
+  if (data.length === 0) {
+    return { status: 'not_configured', ssid: '' };
+  }
+
   const buf = Buffer.from(data);
   const status = STATUS_MAP[buf.readUInt8(0)] ?? 'not_configured';
   const ssid = buf.toString('utf8', 1);

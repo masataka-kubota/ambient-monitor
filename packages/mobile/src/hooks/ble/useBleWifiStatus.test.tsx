@@ -54,6 +54,13 @@ describe('parseWifiStatusData', () => {
       ssid: '',
     });
   });
+
+  it('returns a safe default when the payload is empty', () => {
+    expect(parseWifiStatusData([])).toEqual({
+      status: 'not_configured',
+      ssid: '',
+    });
+  });
 });
 
 describe('useBleWifiStatus', () => {
