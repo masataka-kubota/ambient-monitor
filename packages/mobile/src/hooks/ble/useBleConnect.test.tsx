@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, renderHook } from '@testing-library/react-native';
 import { useAtomValue } from 'jotai';
 import { Platform } from 'react-native';
@@ -39,6 +38,7 @@ const mockDisconnect = bleManager.disconnect as jest.Mock;
 
 const deviceA = { id: 'device-1', name: 'Device A' } as Peripheral;
 const deviceB = { id: 'device-2', name: 'Device B' } as Peripheral;
+const originalPlatformOS = Platform.OS;
 
 const renderUseBleConnect = (connectedId: string | null, atoms: HydratedAtom[] = []) =>
   renderHook(
@@ -126,11 +126,12 @@ describe('isExpectedBleError', () => {
 
 describe('useBleConnect', () => {
   beforeEach(async () => {
+    jest.replaceProperty(Platform, 'OS', originalPlatformOS);
     jest.clearAllMocks();
-    await AsyncStorage.clear();
   });
 
   afterEach(() => {
+    jest.replaceProperty(Platform, 'OS', originalPlatformOS);
     jest.restoreAllMocks();
   });
 
