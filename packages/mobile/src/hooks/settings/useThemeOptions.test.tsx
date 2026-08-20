@@ -45,7 +45,7 @@ describe('useThemeOptions', () => {
 
     rerender({});
 
-    expect(result.current).toEqual(firstResult);
+    expect(result.current).toBe(firstResult);
     expect(mockT).toHaveBeenCalledTimes(3);
   });
 });
