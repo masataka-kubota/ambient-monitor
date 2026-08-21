@@ -6,7 +6,7 @@ import useBleMeasurement from '@/hooks/measurements/useBleMeasurement';
 import { liveMeasurementQueryOptions } from '@/queries';
 import type { BleMeasurement } from '@/types';
 
-type CloudLiveMeasurement = Awaited<
+export type CloudLiveMeasurement = Awaited<
   ReturnType<NonNullable<ReturnType<typeof liveMeasurementQueryOptions>['queryFn']>>
 >;
 
