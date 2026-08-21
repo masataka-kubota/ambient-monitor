@@ -32,8 +32,9 @@ type UseLiveMeasurementResult =
  * Provides the current live measurement from BLE when usable, otherwise from the cloud.
  *
  * BLE is preferred only while `bleDataAvailabilityAtom` is `usable`.
- * For `unknown` or `unusable`, the cloud query for `selectedDeviceIdAtom` is enabled
- * via `liveMeasurementQueryOptions`.
+ * For `unusable`, the cloud query for `selectedDeviceIdAtom` is enabled via
+ * `liveMeasurementQueryOptions` (for `unknown`, the hook reports `source: 'cloud'`
+ * but the query stays disabled).
  *
  * @returns Live measurement payload, loading flag, and which source produced it.
  */
