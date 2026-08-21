@@ -12,6 +12,9 @@ const createTestQueryClient = () =>
     defaultOptions: {
       queries: {
         retry: false,
+        // Prevent Jest from hanging on Query cache GC timers.
+        // https://tanstack.com/query/latest/docs/framework/react/guides/testing#set-gctime-to-infinity-with-jest
+        gcTime: Infinity,
       },
     },
   });
