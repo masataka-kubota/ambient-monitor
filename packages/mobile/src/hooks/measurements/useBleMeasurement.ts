@@ -1,6 +1,5 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
-import type { Peripheral } from 'react-native-ble-manager';
 
 import { bleMeasurementAtom, connectedDeviceAtom } from '@/atoms';
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';
@@ -63,7 +62,8 @@ export const decodeMeasurement = (payload: number[]): DecodedBleMeasurementPaylo
  * When a device is connected, reads the measurement characteristic once, starts
  * notifications, and keeps `bleMeasurementAtom` in sync. Short payloads
  * (under 12 bytes) clear the stored measurement. On disconnect, loading ends
- * and the stored measurement is cleared.
+ * and the stored measurement is cleared. In-flight reads after disconnect or
+ * unmount are ignored so stale payloads cannot repopulate state.
  *
  * @returns Current BLE measurement data and loading flag.
  * @example
@@ -103,26 +103,35 @@ const useBleMeasurement = (): UseBleMeasurementResult => {
   );
 
   /**
-   * Reads the current measurement once, then starts notifications for `device`.
-   * Failures are logged; `isLoading` is always cleared in `finally`.
+   * Reads the current measurement once, then starts notifications for `deviceId`.
+   * Skips state updates when `isCancelled()` is true (effect cleanup / disconnect).
+   * Failures are logged; `isLoading` is cleared in `finally` unless cancelled.
    *
-   * @param device - Connected peripheral to monitor.
+   * @param deviceId - Connected peripheral id to monitor.
+   * @param isCancelled - Returns whether this monitoring session was cancelled.
    */
   const startMonitoring = useCallback(
-    async (device: Peripheral) => {
+    async (deviceId: string, isCancelled: () => boolean) => {
       setIsLoading(true);
       try {
-        const payload = await bleManager.read(device.id, BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID);
+        const payload = await bleManager.read(deviceId, BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID);
+        if (isCancelled()) {
+          return;
+        }
         updateBleMeasurement(payload);
 
-        await bleManager.startNotification(device.id, BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID);
+        await bleManager.startNotification(deviceId, BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID);
       } catch (e) {
-        console.error('Monitoring error', e);
+        if (!isCancelled()) {
+          console.error('Monitoring error', e);
+        }
       } finally {
-        setIsLoading(false);
+        if (!isCancelled()) {
+          setIsLoading(false);
+        }
       }
     },
-    [setIsLoading, updateBleMeasurement],
+    [updateBleMeasurement],
   );
 
   useEffect(() => {
@@ -132,12 +141,19 @@ const useBleMeasurement = (): UseBleMeasurementResult => {
       return;
     }
 
-    startMonitoring(connectedDevice);
+    let cancelled = false;
+    const deviceId = connectedDevice.id;
+
+    startMonitoring(deviceId, () => cancelled);
 
     // Apply notification payloads that match this device + measurement characteristic.
     const subscription = bleManager.onDidUpdateValueForCharacteristic(
       (dates: DidUpdateValueForCharacteristicArgs) => {
-        const isTargetDevice = dates.peripheral === connectedDevice.id;
+        if (cancelled) {
+          return;
+        }
+
+        const isTargetDevice = dates.peripheral === deviceId;
         const isTargetService = dates.service.toLowerCase() === BLE_SERVICE_UUID.toLowerCase();
         const isTargetChar =
           dates.characteristic.toLowerCase() === MEASUREMENT_CHAR_UUID.toLowerCase();
@@ -149,9 +165,10 @@ const useBleMeasurement = (): UseBleMeasurementResult => {
     );
 
     return () => {
+      cancelled = true;
       subscription.remove();
     };
-  }, [connectedDevice, updateBleMeasurement, setBleMeasurement, startMonitoring]);
+  }, [connectedDevice, startMonitoring, updateBleMeasurement, setBleMeasurement]);
 
   return { data: bleMeasurement, isLoading };
 };

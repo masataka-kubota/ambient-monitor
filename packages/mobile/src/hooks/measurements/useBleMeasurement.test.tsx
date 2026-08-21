@@ -242,4 +242,59 @@ describe('useBleMeasurement', () => {
     consoleError.mockRestore();
     await unmount();
   });
+
+  it('discards a late read result after unmount', async () => {
+    let resolveRead: (payload: number[]) => void = () => {};
+    mockRead.mockImplementation(
+      () =>
+        new Promise<number[]>((resolve) => {
+          resolveRead = resolve;
+        }),
+    );
+
+    const { unmount } = await renderUseBleMeasurement(connectedDevice);
+
+    await waitFor(() => {
+      expect(mockRead).toHaveBeenCalled();
+    });
+
+    await unmount();
+
+    await act(async () => {
+      resolveRead(encodeMeasurementBytes(sampleMeasurement));
+    });
+
+    expect(mockStartNotification).not.toHaveBeenCalled();
+  });
+
+  it('ignores characteristic notifications after unmount', async () => {
+    const remove = jest.fn();
+    mockOnDidUpdateValueForCharacteristic.mockReturnValue({ remove });
+
+    const { result, unmount } = await renderUseBleMeasurement(connectedDevice);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    const listener = mockOnDidUpdateValueForCharacteristic.mock.calls[0][0];
+
+    await unmount();
+    expect(remove).toHaveBeenCalledTimes(1);
+
+    // The effect cleanup sets `cancelled`; invoking the stale listener must be a no-op.
+    await act(async () => {
+      listener({
+        value: encodeMeasurementBytes({
+          temperature: 1,
+          humidity: 2,
+          pressure: 3,
+          timestamp: 4,
+        }),
+        peripheral: connectedDevice.id,
+        service: BLE_SERVICE_UUID,
+        characteristic: MEASUREMENT_CHAR_UUID,
+      });
+    });
+  });
 });
