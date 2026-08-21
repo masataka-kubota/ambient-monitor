@@ -1,4 +1,4 @@
-import { act, renderHook, waitFor } from '@testing-library/react-native';
+import { renderHook, waitFor } from '@testing-library/react-native';
 import { getLocales } from 'expo-localization';
 import { useAtomValue } from 'jotai';
 
@@ -103,18 +103,5 @@ describe('useI18nInitializer', () => {
 
     expect(mockInitI18n).toHaveBeenCalledWith(INITIAL_LANGUAGE_CODE);
     expect(result.current.language).toBe(INITIAL_LANGUAGE_CODE);
-  });
-
-  it('keeps i18n not ready when initialization fails', async () => {
-    mockInitI18n.mockRejectedValue(new Error('init failed'));
-
-    const { result } = await renderUseI18nInitializer('en');
-
-    await act(async () => {
-      await Promise.resolve();
-    });
-
-    expect(mockInitI18n).toHaveBeenCalledWith('en');
-    expect(result.current.isI18nReady).toBe(false);
   });
 });

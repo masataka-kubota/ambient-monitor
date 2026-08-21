@@ -24,7 +24,7 @@ interface UseI18nInitializerResult {
  * 3. `INITIAL_LANGUAGE_CODE` otherwise
  *
  * On success the resolved code is written back to storage and `isI18nReady` becomes `true`.
- * On failure `isI18nReady` stays `false` so callers can keep the app gate closed.
+ * If initialization throws, `isI18nReady` stays `false` because readiness is only set after success.
  *
  * @returns Readiness flag for gating UI that depends on translations.
  */
@@ -34,23 +34,19 @@ const useI18nInitializer = (): UseI18nInitializerResult => {
 
   useEffect(() => {
     const run = async () => {
-      try {
-        // 1. Get device language
-        const deviceLang = getLocales()[0]?.languageCode ?? null;
-        const supportedDeviceLang = isSupportedLanguageCode(deviceLang)
-          ? deviceLang
-          : INITIAL_LANGUAGE_CODE;
+      // 1. Get device language
+      const deviceLang = getLocales()[0]?.languageCode ?? null;
+      const supportedDeviceLang = isSupportedLanguageCode(deviceLang)
+        ? deviceLang
+        : INITIAL_LANGUAGE_CODE;
 
-        // 2. Check stored language
-        const lng = storedLanguage ?? supportedDeviceLang;
+      // 2. Check stored language
+      const lng = storedLanguage ?? supportedDeviceLang;
 
-        // 3. Initialize
-        await initI18n(lng);
-        await setStoredLanguage(lng);
-        setIsI18nReady(true);
-      } catch {
-        // Keep the readiness gate closed when initialization fails.
-      }
+      // 3. Initialize
+      await initI18n(lng);
+      await setStoredLanguage(lng);
+      setIsI18nReady(true);
     };
 
     run();
