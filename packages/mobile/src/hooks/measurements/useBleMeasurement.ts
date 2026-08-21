@@ -1,9 +1,11 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useEffect, useState } from 'react';
+import type { Peripheral } from 'react-native-ble-manager';
 
 import { bleMeasurementAtom, connectedDeviceAtom } from '@/atoms';
 import { BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID } from '@/constants/ble';
 import { bleManager } from '@/lib';
+import type { BleMeasurement } from '@/types';
 
 interface DidUpdateValueForCharacteristicArgs {
   value: number[];
@@ -12,31 +14,82 @@ interface DidUpdateValueForCharacteristicArgs {
   service: string;
 }
 
-export const decodeMeasurement = (value: number[]) => {
-  const buffer = new Uint8Array(value).buffer;
+/** Parsed fields from a 12-byte BLE measurement characteristic payload. */
+export interface DecodedBleMeasurementPayload {
+  /** Temperature in Celsius. */
+  temperature: number;
+  /** Humidity in percent. */
+  humidity: number;
+  /** Pressure in hPa. */
+  pressure: number;
+  /** Unix epoch seconds from the device. */
+  timestamp: number;
+}
+
+interface UseBleMeasurementResult {
+  /** Latest decoded BLE measurement, or `null` when unavailable. */
+  data: BleMeasurement | null;
+  /** `true` while the initial read / notification setup is in progress. */
+  isLoading: boolean;
+}
+
+/**
+ * Decodes a raw BLE measurement characteristic payload.
+ *
+ * Binary layout (little-endian, 12 bytes):
+ * - offset 0: temperature (int16, scaled by 100)
+ * - offset 2: humidity (int16, scaled by 100)
+ * - offset 4: pressure (int32, Pa; divide by 100 to get hPa)
+ * - offset 8: timestamp (uint32, Unix epoch seconds)
+ *
+ * @param payload - Raw characteristic bytes.
+ * @returns Parsed measurement values in human-readable units.
+ */
+export const decodeMeasurement = (payload: number[]): DecodedBleMeasurementPayload => {
+  const buffer = new Uint8Array(payload).buffer;
   const view = new DataView(buffer);
 
   return {
     temperature: view.getInt16(0, true) / 100,
     humidity: view.getInt16(2, true) / 100,
-    pressure: view.getInt32(4, true) / 100, // Pa → hPa
+    pressure: view.getInt32(4, true) / 100,
     timestamp: view.getUint32(8, true),
   };
 };
 
-const useBleMeasurement = () => {
+/**
+ * Subscribes to live BLE measurements for the currently connected peripheral.
+ *
+ * When a device is connected, reads the measurement characteristic once, starts
+ * notifications, and keeps `bleMeasurementAtom` in sync. Short payloads
+ * (under 12 bytes) clear the stored measurement. On disconnect, loading ends
+ * and the stored measurement is cleared.
+ *
+ * @returns Current BLE measurement data and loading flag.
+ * @example
+ * ```tsx
+ * const { data, isLoading } = useBleMeasurement();
+ * ```
+ */
+const useBleMeasurement = (): UseBleMeasurementResult => {
   const connectedDevice = useAtomValue(connectedDeviceAtom);
   const [bleMeasurement, setBleMeasurement] = useAtom(bleMeasurementAtom);
   const [isLoading, setIsLoading] = useState(true);
 
+  /**
+   * Decodes a characteristic payload and writes it to `bleMeasurementAtom`.
+   * Payloads shorter than 12 bytes clear the stored measurement.
+   *
+   * @param payload - Raw characteristic bytes to decode.
+   */
   const updateBleMeasurement = useCallback(
-    (value: number[]) => {
-      if (value.length < 12) {
+    (payload: number[]) => {
+      if (payload.length < 12) {
         setBleMeasurement(null);
         return;
       }
 
-      const parsed = decodeMeasurement(value);
+      const parsed = decodeMeasurement(payload);
 
       setBleMeasurement({
         temperature: parsed.temperature,
@@ -49,33 +102,28 @@ const useBleMeasurement = () => {
     [setBleMeasurement],
   );
 
-  const startMonitoring = useCallback(async () => {
-    if (!connectedDevice) {
-      return;
-    }
+  /**
+   * Reads the current measurement once, then starts notifications for `device`.
+   * Failures are logged; `isLoading` is always cleared in `finally`.
+   *
+   * @param device - Connected peripheral to monitor.
+   */
+  const startMonitoring = useCallback(
+    async (device: Peripheral) => {
+      setIsLoading(true);
+      try {
+        const payload = await bleManager.read(device.id, BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID);
+        updateBleMeasurement(payload);
 
-    setIsLoading(true);
-    try {
-      // Read initial value
-      const bytes = await bleManager.read(
-        connectedDevice.id,
-        BLE_SERVICE_UUID,
-        MEASUREMENT_CHAR_UUID,
-      );
-      updateBleMeasurement(bytes);
-
-      // Start monitoring
-      await bleManager.startNotification(
-        connectedDevice.id,
-        BLE_SERVICE_UUID,
-        MEASUREMENT_CHAR_UUID,
-      );
-    } catch (e) {
-      console.error('Monitoring error', e);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [connectedDevice, setIsLoading, updateBleMeasurement]);
+        await bleManager.startNotification(device.id, BLE_SERVICE_UUID, MEASUREMENT_CHAR_UUID);
+      } catch (e) {
+        console.error('Monitoring error', e);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [setIsLoading, updateBleMeasurement],
+  );
 
   useEffect(() => {
     if (!connectedDevice) {
@@ -84,10 +132,9 @@ const useBleMeasurement = () => {
       return;
     }
 
-    // Start monitoring
-    startMonitoring();
+    startMonitoring(connectedDevice);
 
-    // Subscription
+    // Apply notification payloads that match this device + measurement characteristic.
     const subscription = bleManager.onDidUpdateValueForCharacteristic(
       (dates: DidUpdateValueForCharacteristicArgs) => {
         const isTargetDevice = dates.peripheral === connectedDevice.id;
