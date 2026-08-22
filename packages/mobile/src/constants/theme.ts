@@ -23,6 +23,11 @@ const navBackgroundDark = 'rgba(32, 32, 32, 1)'; // #202020
 const lightGrayDark = 'rgba(122, 122, 122, 1)'; // #7a7a7a
 const shadowDark = 'rgba(255, 255, 255, 1)'; // #ffffff
 
+/**
+ * React Navigation theme objects for light (`defaultTheme`) and dark (`darkTheme`).
+ *
+ * Consumed by navigation chrome; app component colors use `APP_THEME_COLORS`.
+ */
 export const APP_THEME_SCHEME: Record<'defaultTheme' | 'darkTheme', Theme> = {
   defaultTheme: {
     ...DefaultTheme,
@@ -48,6 +53,11 @@ export const APP_THEME_SCHEME: Record<'defaultTheme' | 'darkTheme', Theme> = {
   },
 };
 
+/**
+ * App UI color tokens for light and dark modes (text, surfaces, tint, error, etc.).
+ *
+ * Resolved by `useAppTheme` from the user / system theme preference.
+ */
 export const APP_THEME_COLORS: AppThemeColors = {
   light: {
     mainColor: black,
