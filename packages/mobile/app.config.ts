@@ -55,6 +55,9 @@ const config = ({ config }: ConfigContext): ExpoConfig => ({
       dark: './assets/icons/ios-icon-dark.png',
       tinted: './assets/icons/ios-icon-tinted.png',
     },
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
+    },
   },
 
   android: {
