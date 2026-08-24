@@ -3,12 +3,9 @@ import { useAtomValue } from 'jotai';
 
 import { bleDataAvailabilityAtom, selectedDeviceIdAtom } from '@/atoms';
 import useBleMeasurement from '@/hooks/measurements/useBleMeasurement';
+import type { CloudLiveMeasurement } from '@/queries';
 import { liveMeasurementQueryOptions } from '@/queries';
 import type { BleMeasurement } from '@/types';
-
-export type CloudLiveMeasurement = Awaited<
-  ReturnType<NonNullable<ReturnType<typeof liveMeasurementQueryOptions>['queryFn']>>
->;
 
 type UseLiveMeasurementResult =
   | {

@@ -2,12 +2,9 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { useAtomValue } from 'jotai';
 
 import { selectedDeviceIdAtom } from '@/atoms';
+import type { MeasurementsData } from '@/queries';
 import { measurementsQueryOptions } from '@/queries';
 import type { MeasurementRange } from '@/types';
-
-type MeasurementsData = Awaited<
-  ReturnType<NonNullable<ReturnType<typeof measurementsQueryOptions>['queryFn']>>
->;
 
 /**
  * Loads historical measurements for the currently selected device.

@@ -1,11 +1,8 @@
-import type { Client, InferResponseType } from 'backend';
-
+import type { MeasurementsData } from '@/queries';
 import type { MeasurementKey } from '@/types';
 
-type MeasurementListData = InferResponseType<Client['measurements']['$get'], 200>['data'];
-
 interface ToMeasurementLineChartDataParams {
-  data: MeasurementListData | undefined;
+  data: MeasurementsData | undefined;
   key: MeasurementKey;
 }
 
