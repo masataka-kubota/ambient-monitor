@@ -1,9 +1,12 @@
-import type { MeasurementListResponse } from 'backend';
+import type { InferResponseType } from 'hono/client';
+import type { Client } from 'backend';
 
 import type { MeasurementKey } from '@/types';
 
+type MeasurementListData = InferResponseType<Client['measurements']['$get'], 200>['data'];
+
 interface ToMeasurementLineChartDataParams {
-  data: MeasurementListResponse['data'] | undefined;
+  data: MeasurementListData | undefined;
   key: MeasurementKey;
 }
 
