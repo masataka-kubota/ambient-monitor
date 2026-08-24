@@ -1,5 +1,4 @@
-import type { InferResponseType } from 'hono/client';
-import type { Client } from 'backend';
+import type { Client, InferResponseType } from 'backend';
 
 import type { MeasurementKey } from '@/types';
 

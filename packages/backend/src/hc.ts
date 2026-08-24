@@ -1,4 +1,5 @@
 import { hc } from 'hono/client'
+export type { InferResponseType, InferRequestType } from 'hono/client'
 
 import type app from '@/index'
 
