@@ -1,5 +1,4 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
-import { hc } from 'hono/client'
 
 import { measurementsApp } from '@/routes'
 
@@ -12,10 +11,3 @@ const app = new OpenAPIHono()
   .route('/measurements', measurementsApp)
 
 export default app
-
-// this is a trick to calculate the type when compiling
-export type Client = ReturnType<typeof hc<typeof app>>
-export const hcWithType = (...args: Parameters<typeof hc>): Client => hc<typeof app>(...args)
-
-// client types
-export * from '@/client'
