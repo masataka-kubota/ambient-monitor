@@ -28,3 +28,8 @@ export const liveMeasurementQueryOptions = (deviceId: string) =>
     },
     refetchInterval: 5 * 60 * 1000,
   });
+
+/** Successful latest-measurement payload returned by {@link liveMeasurementQueryOptions}. */
+export type CloudLiveMeasurement = Awaited<
+  ReturnType<NonNullable<ReturnType<typeof liveMeasurementQueryOptions>['queryFn']>>
+>;

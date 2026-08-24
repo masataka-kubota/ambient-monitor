@@ -2,14 +2,15 @@ import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, View } from 'react-native';
 
+import MeasurementChartAxisLabel from '@/components/measurements/MeasurementChartAxisLabel';
 import MeasurementLineChart from '@/components/measurements/MeasurementLineChart';
+import { toMeasurementLineChartData } from '@/components/measurements/toMeasurementLineChartData';
 import { DataGraphSkeleton } from '@/components/skelton';
 import { IconTabs, ThemeText } from '@/components/ui';
 import { MEASUREMENT_SETTINGS } from '@/constants';
 import { useAppTheme } from '@/hooks/common';
 import { useMeasurements } from '@/hooks/measurements';
 import type { MeasurementKey, MeasurementRange, MeasurementTabItem } from '@/types';
-import { getChartData } from '@/utils/measurements';
 
 const { width, height } = Dimensions.get('window');
 
@@ -63,11 +64,15 @@ const DataGraph = ({ period }: DataGraphProps) => {
     return <ThemeText>No data</ThemeText>;
   }
 
-  const chartData = getChartData({
-    data,
-    key: selectedKey,
-    textColor: activeThemeColors.lightColor,
-  });
+  const textColor = activeThemeColors.lightColor;
+  const chartData = toMeasurementLineChartData({ data, key: selectedKey }).map((point) => ({
+    value: point.value,
+    hideDataPoint: point.hideDataPoint,
+    hidePointer: point.hidePointer,
+    labelComponent: () => (
+      <MeasurementChartAxisLabel bucketStart={point.bucketStart} textColor={textColor} />
+    ),
+  }));
 
   return (
     <View style={styles.container}>

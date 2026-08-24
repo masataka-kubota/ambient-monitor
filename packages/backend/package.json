@@ -1,8 +1,20 @@
 {
   "name": "backend",
   "type": "module",
-  "main": "./dist/src/index.js",
-  "types": "./dist/src/index.d.ts",
+  "main": "./dist/hc.js",
+  "types": "./dist/hc.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/hc.d.ts",
+      "import": "./dist/hc.js",
+      "default": "./dist/hc.js"
+    },
+    "./app": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "dev": "wrangler dev",
     "dev:ip": "wrangler dev --ip 0.0.0.0",
@@ -23,25 +35,25 @@
     "db:studio:remote": "drizzle-kit studio --config drizzle.config.ts"
   },
   "dependencies": {
-    "@hono/zod-openapi": "^1.4.0",
+    "@hono/zod-openapi": "^1.6.0",
     "drizzle-orm": "^0.45.2",
     "drizzle-zod": "^0.8.3",
-    "hono": "^4.12.25",
+    "hono": "^4.13.2",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.16.15",
-    "@hono/eslint-config": "^2.1.0",
-    "@types/node": "^24.13.2",
-    "@vitest/coverage-istanbul": "^4.1.8",
-    "better-sqlite3": "^12.10.0",
+    "@cloudflare/vitest-pool-workers": "^0.21.3",
+    "@hono/eslint-config": "^2.1.1",
+    "@types/node": "^24.12.0",
+    "@vitest/coverage-istanbul": "^4.1.10",
+    "better-sqlite3": "^13.0.3",
     "drizzle-kit": "^0.31.10",
     "eslint-plugin-drizzle": "^0.2.3",
-    "oxfmt": "^0.54.0",
-    "oxlint": "^1.69.0",
-    "tsc-alias": "^1.8.17",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.0",
-    "wrangler": "^4.100.0"
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
+    "tsc-alias": "^1.9.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10",
+    "wrangler": "^4.123.0"
   }
 }

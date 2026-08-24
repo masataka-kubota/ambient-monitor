@@ -22,5 +22,5 @@ if ! git diff --quiet "$base_branch" "$current_branch" -- packages/mobile; then
   cd "$repo_root/packages/mobile"
   bun run type-check
   bun run lint
-  # bun run test
+  bun run test
 fi
