@@ -2,7 +2,7 @@
 
 ## Expo
 
-- Expo SDK **56**. Before writing code, read the versioned docs: https://docs.expo.dev/versions/v56.0.0/
+- Expo SDK **57**. Before writing code, read the versioned docs: https://docs.expo.dev/versions/v57.0.0/
 - App config is `app.config.ts` (not `app.json`). Variants via `APP_VARIANT`: `development` | `preview` | `production`.
 - Prefer Expo APIs and config plugins that match the installed SDK versions (`bunx expo install` when adding Expo packages).
 
