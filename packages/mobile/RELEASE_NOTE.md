@@ -1,5 +1,17 @@
 # These release notes are for developers, not for the store.
 
+## [v0.9.7.1] - 2026-08-25
+
+#### en
+
+- Upgraded to Expo SDK 57 and refreshed related dependencies.
+- Hardened BLE live measurement and Wi‑Fi config handling.
+
+#### ja
+
+- Expo SDK 57 へアップグレードし、関連依存関係を更新しました。
+- BLE のライブ計測および Wi‑Fi 設定まわりを強化しました。
+
 ## [v0.9.7] - 2026-07-20
 
 #### en
