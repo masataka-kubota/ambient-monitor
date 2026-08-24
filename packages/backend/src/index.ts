@@ -11,3 +11,6 @@ const app = new OpenAPIHono()
   .route('/measurements', measurementsApp)
 
 export default app
+
+/** Hono app type for RPC clients (e.g. `hc<AppType>` or package `hcWithType`). */
+export type AppType = typeof app

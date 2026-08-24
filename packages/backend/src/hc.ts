@@ -1,14 +1,14 @@
 import { hc } from 'hono/client'
 
-import type app from '@/index'
+import type { AppType } from '@/index'
 
 /**
- * Typed Hono RPC client for this API (`typeof app` already applied).
+ * Typed Hono RPC client for this API (`AppType` already applied).
  *
- * Prefer this over calling `hc` with `AppType` yourself so route types stay in sync
- * with the Worker app after `build:types`.
+ * Prefer {@link hcWithType} over calling `hc` with `AppType` yourself so route types
+ * stay in sync with the Worker app after `build:types`.
  */
-export type Client = ReturnType<typeof hc<typeof app>>
+export type Client = ReturnType<typeof hc<AppType>>
 
 /**
  * Create a typed Hono RPC client for this API.
@@ -20,4 +20,4 @@ export type Client = ReturnType<typeof hc<typeof app>>
  * @param args - Same parameters as `hc` (base URL, then optional `ClientRequestOptions`)
  * @returns A {@link Client} scoped to this backend's routes
  */
-export const hcWithType = (...args: Parameters<typeof hc>): Client => hc<typeof app>(...args)
+export const hcWithType = (...args: Parameters<typeof hc>): Client => hc<AppType>(...args)
