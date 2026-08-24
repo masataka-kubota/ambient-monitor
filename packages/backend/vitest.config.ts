@@ -3,7 +3,7 @@ import path from 'node:path'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig(async () => {
-  const migrationsPath = path.join(__dirname, 'drizzle/migrations')
+  const migrationsPath = path.join(import.meta.dirname, 'drizzle/migrations')
   const migrations = await readD1Migrations(migrationsPath)
   return {
     plugins: [
@@ -16,8 +16,8 @@ export default defineConfig(async () => {
     ],
     resolve: {
       alias: {
-        '@/test': path.resolve(__dirname, 'test'),
-        '@': path.resolve(__dirname, 'src'),
+        '@/test': path.resolve(import.meta.dirname, 'test'),
+        '@': path.resolve(import.meta.dirname, 'src'),
       },
     },
     test: {
