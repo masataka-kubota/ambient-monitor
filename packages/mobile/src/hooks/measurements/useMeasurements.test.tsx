@@ -2,6 +2,7 @@ import { queryOptions } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react-native';
 
 import { selectedDeviceIdAtom } from '@/atoms';
+import type { MeasurementsData } from '@/queries';
 import { measurementsQueryOptions } from '@/queries';
 import { createTestWrapper } from '@/test/helpers';
 import type { MeasurementRange } from '@/types';
@@ -14,7 +15,7 @@ jest.mock('@/queries', () => ({
 
 const mockMeasurementsQueryOptions = jest.mocked(measurementsQueryOptions);
 
-const sampleMeasurements = [
+const sampleMeasurements: MeasurementsData = [
   {
     bucketStart: '2026-08-17T00:00:00.000Z',
     temperature: 22.5,

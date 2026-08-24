@@ -1,9 +1,8 @@
-import type { MeasurementListResponse } from 'backend';
-
+import type { MeasurementsData } from '@/queries';
 import type { MeasurementKey } from '@/types';
 
 interface ToMeasurementLineChartDataParams {
-  data: MeasurementListResponse['data'] | undefined;
+  data: MeasurementsData | undefined;
   key: MeasurementKey;
 }
 

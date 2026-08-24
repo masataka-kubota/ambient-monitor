@@ -5,11 +5,11 @@ import type { Peripheral } from 'react-native-ble-manager';
 import { bleMeasurementAtom, connectedDeviceAtom, selectedDeviceIdAtom } from '@/atoms';
 import { BLE_MEASUREMENT_STALE_THRESHOLD_MS } from '@/constants';
 import useBleMeasurement from '@/hooks/measurements/useBleMeasurement';
+import type { CloudLiveMeasurement } from '@/queries';
 import { liveMeasurementQueryOptions } from '@/queries';
 import { createTestWrapper, type HydrateAtomPair } from '@/test/helpers';
 import type { BleMeasurement } from '@/types';
 
-import type { CloudLiveMeasurement } from './useLiveMeasurement';
 import useLiveMeasurement from './useLiveMeasurement';
 
 jest.mock('@/hooks/measurements/useBleMeasurement', () => ({

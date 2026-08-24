@@ -30,3 +30,8 @@ export const measurementsQueryOptions = (deviceId: string, range: MeasurementRan
     },
     refetchInterval: 5 * 60 * 1000,
   });
+
+/** Successful `measurements` list payload returned by {@link measurementsQueryOptions}. */
+export type MeasurementsData = Awaited<
+  ReturnType<NonNullable<ReturnType<typeof measurementsQueryOptions>['queryFn']>>
+>;

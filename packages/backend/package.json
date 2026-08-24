@@ -1,8 +1,20 @@
 {
   "name": "backend",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/hc.js",
+  "types": "./dist/hc.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/hc.d.ts",
+      "import": "./dist/hc.js",
+      "default": "./dist/hc.js"
+    },
+    "./app": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "dev": "wrangler dev",
     "dev:ip": "wrangler dev --ip 0.0.0.0",
