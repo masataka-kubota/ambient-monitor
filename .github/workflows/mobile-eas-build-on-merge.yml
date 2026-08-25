@@ -7,8 +7,9 @@ on:
         description: Platform to build
         required: true
         type: choice
-        default: ios
+        default: all
         options:
+          - all
           - ios
           - android
       profile:
@@ -78,14 +79,14 @@ jobs:
 
       - name: ⚙️ Build Android
         if: |
-          (github.event_name == 'workflow_dispatch' && inputs.platform == 'android') ||
+          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'android' || inputs.platform == 'all')) ||
           (github.event_name != 'workflow_dispatch' && contains(github.event.pull_request.labels.*.name, 'eas-build-android'))
         working-directory: packages/mobile
         run: eas build --platform android --profile "$EAS_PROFILE" --non-interactive --no-wait
 
       - name: ⚙️ Build iOS
         if: |
-          (github.event_name == 'workflow_dispatch' && inputs.platform == 'ios') ||
+          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'ios' || inputs.platform == 'all')) ||
           (github.event_name != 'workflow_dispatch' && contains(github.event.pull_request.labels.*.name, 'eas-build-ios'))
         working-directory: packages/mobile
         run: eas build --platform ios --profile "$EAS_PROFILE" --non-interactive --no-wait

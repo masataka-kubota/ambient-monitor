@@ -7,8 +7,9 @@ on:
         description: Platform to publish
         required: true
         type: choice
-        default: ios
+        default: all
         options:
+          - all
           - ios
           - android
       channel:
@@ -84,7 +85,7 @@ jobs:
       # rendering, which fails here (window is not defined). Publish mobile only.
       - name: 🚀 Publish EAS Update (iOS)
         if: |
-          (github.event_name == 'workflow_dispatch' && inputs.platform == 'ios') ||
+          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'ios' || inputs.platform == 'all')) ||
           github.event_name != 'workflow_dispatch'
         working-directory: packages/mobile
         run: >
@@ -97,7 +98,7 @@ jobs:
 
       - name: 🚀 Publish EAS Update (Android)
         if: |
-          (github.event_name == 'workflow_dispatch' && inputs.platform == 'android') ||
+          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'android' || inputs.platform == 'all')) ||
           github.event_name != 'workflow_dispatch'
         working-directory: packages/mobile
         run: >
