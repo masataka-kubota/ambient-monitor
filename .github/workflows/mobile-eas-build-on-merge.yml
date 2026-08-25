@@ -29,7 +29,7 @@ on:
       - ".tool-versions"
 
 concurrency:
-  group: eas-mobile-build-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.event.pull_request.number }}
+  group: eas-mobile-build-${{ github.event_name == 'workflow_dispatch' && github.ref_name || github.event.pull_request.number }}
   cancel-in-progress: false
 
 jobs:
