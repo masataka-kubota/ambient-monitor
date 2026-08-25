@@ -49,7 +49,7 @@ jobs:
       # Channel and EAS environment share the same name for main/staging.
       EAS_CHANNEL: ${{ github.event_name == 'workflow_dispatch' && inputs.profile || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
       EAS_ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && inputs.profile || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
-      UPDATE_MESSAGE: ${{ github.event_name == 'workflow_dispatch' && inputs.message || github.event.pull_request.title }}
+      UPDATE_MESSAGE: ${{ github.event_name == 'workflow_dispatch' && (inputs.message || 'Manual EAS update') || github.event.pull_request.title }}
 
     steps:
       - name: 🔄 Checkout repository
