@@ -12,14 +12,6 @@ on:
           - both
           - ios
           - android
-      channel:
-        description: EAS channel/environment to use
-        required: true
-        type: choice
-        default: production
-        options:
-          - preview
-          - production
       message:
         description: Optional update message
         required: false
@@ -40,7 +32,10 @@ concurrency:
 jobs:
   eas-update:
     if: |
-      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'workflow_dispatch' &&
+        (github.ref_name == 'main' || github.ref_name == 'staging')
+      ) ||
       (
         github.event.pull_request.merged == true &&
         contains(github.event.pull_request.labels.*.name, 'eas-update')
@@ -48,8 +43,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Channel and EAS environment share the same name for main/staging.
-      EAS_CHANNEL: ${{ github.event_name == 'workflow_dispatch' && inputs.channel || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
-      EAS_ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && inputs.channel || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
+      EAS_CHANNEL: ${{ github.event_name == 'workflow_dispatch' && (github.ref_name == 'main' && 'production' || 'preview') || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
+      EAS_ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && (github.ref_name == 'main' && 'production' || 'preview') || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
       UPDATE_MESSAGE: ${{ github.event_name == 'workflow_dispatch' && (inputs.message || 'Manual EAS update') || github.event.pull_request.title }}
 
     steps:

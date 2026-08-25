@@ -12,14 +12,6 @@ on:
           - both
           - ios
           - android
-      profile:
-        description: EAS profile to use
-        required: true
-        type: choice
-        default: production
-        options:
-          - preview
-          - production
   pull_request:
     types: [closed]
     branches: ["main", "staging"]
@@ -36,7 +28,10 @@ concurrency:
 jobs:
   eas-build:
     if: |
-      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'workflow_dispatch' &&
+        (github.ref_name == 'main' || github.ref_name == 'staging')
+      ) ||
       (
         github.event.pull_request.merged == true &&
         (
@@ -46,7 +41,7 @@ jobs:
       )
     runs-on: ubuntu-latest
     env:
-      EAS_PROFILE: ${{ github.event_name == 'workflow_dispatch' && inputs.profile || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
+      EAS_PROFILE: ${{ github.event_name == 'workflow_dispatch' && (github.ref_name == 'main' && 'production' || 'preview') || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
 
     steps:
       - name: 🔄 Checkout repository
