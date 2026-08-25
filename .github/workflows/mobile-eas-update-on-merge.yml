@@ -11,7 +11,7 @@ on:
         options:
           - ios
           - android
-      profile:
+      channel:
         description: EAS channel/environment to use
         required: true
         type: choice
@@ -47,8 +47,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Channel and EAS environment share the same name for main/staging.
-      EAS_CHANNEL: ${{ github.event_name == 'workflow_dispatch' && inputs.profile || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
-      EAS_ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && inputs.profile || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
+      EAS_CHANNEL: ${{ github.event_name == 'workflow_dispatch' && inputs.channel || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
+      EAS_ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && inputs.channel || (github.event.pull_request.base.ref == 'main' && 'production' || 'preview') }}
       UPDATE_MESSAGE: ${{ github.event_name == 'workflow_dispatch' && (inputs.message || 'Manual EAS update') || github.event.pull_request.title }}
 
     steps:
