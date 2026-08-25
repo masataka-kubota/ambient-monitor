@@ -1,6 +1,6 @@
 import pkg from '../package.json';
 
-/** Apple CFBundleShortVersionString: at most three non-negative integers (e.g. 1.2.3). */
+/** Apple CFBundleShortVersionString: exactly three non-negative integers (MAJOR.MINOR.PATCH, e.g. 1.2.3). Apple rejects four-part values like 0.9.7.1. */
 const APP_STORE_VERSION_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 
 describe('package.json version', () => {
