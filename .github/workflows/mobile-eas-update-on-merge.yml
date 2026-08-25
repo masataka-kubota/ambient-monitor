@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       platform:
-        description: Platform to publish
+        description: Platform to publish (both = iOS + Android)
         required: true
         type: choice
-        default: ios
+        default: both
         options:
+          - both
           - ios
           - android
       channel:
@@ -80,11 +81,11 @@ jobs:
       - name: 📦 Install dependencies
         run: bun install --filter mobile --frozen-lockfile
 
-      # Omit --platform (defaults to "all") and Expo also exports web static
-      # rendering, which fails here (window is not defined). Publish mobile only.
+      # Pass --platform explicitly. EAS default "all" can include web exports,
+      # which fail here (window is not defined). Publish iOS/Android only.
       - name: 🚀 Publish EAS Update (iOS)
         if: |
-          (github.event_name == 'workflow_dispatch' && inputs.platform == 'ios') ||
+          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'ios' || inputs.platform == 'both')) ||
           github.event_name != 'workflow_dispatch'
         working-directory: packages/mobile
         run: >
@@ -97,7 +98,7 @@ jobs:
 
       - name: 🚀 Publish EAS Update (Android)
         if: |
-          (github.event_name == 'workflow_dispatch' && inputs.platform == 'android') ||
+          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'android' || inputs.platform == 'both')) ||
           github.event_name != 'workflow_dispatch'
         working-directory: packages/mobile
         run: >
