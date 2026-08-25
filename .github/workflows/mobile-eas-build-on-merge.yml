@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       platform:
-        description: Platform to build
+        description: Platform to build (both = iOS + Android)
         required: true
         type: choice
-        default: all
+        default: both
         options:
-          - all
+          - both
           - ios
           - android
       profile:
@@ -79,14 +79,14 @@ jobs:
 
       - name: ⚙️ Build Android
         if: |
-          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'android' || inputs.platform == 'all')) ||
+          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'android' || inputs.platform == 'both')) ||
           (github.event_name != 'workflow_dispatch' && contains(github.event.pull_request.labels.*.name, 'eas-build-android'))
         working-directory: packages/mobile
         run: eas build --platform android --profile "$EAS_PROFILE" --non-interactive --no-wait
 
       - name: ⚙️ Build iOS
         if: |
-          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'ios' || inputs.platform == 'all')) ||
+          (github.event_name == 'workflow_dispatch' && (inputs.platform == 'ios' || inputs.platform == 'both')) ||
           (github.event_name != 'workflow_dispatch' && contains(github.event.pull_request.labels.*.name, 'eas-build-ios'))
         working-directory: packages/mobile
         run: eas build --platform ios --profile "$EAS_PROFILE" --non-interactive --no-wait
